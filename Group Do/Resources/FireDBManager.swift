@@ -40,7 +40,11 @@ final class FireDBManager {
         let formattedEmail = emailFormatter(email: user.email)
         let userDictionary: [String:Any] = ["full_name":user.fullName, "first_name":user.firstName, "last_name":user.lastName, "email":user.email, "profilePictureName":user.profilePictureName]
         
+        //Add user to users node
         database.child("users/\(formattedEmail)").updateChildValues(userDictionary)
+        
+        //Add user to all users node used for user query on group to-do lists
+        database.child("allUsers/\(formattedEmail)").updateChildValues(userDictionary)
         
     }
     
@@ -98,7 +102,7 @@ final class FireDBManager {
         
     }
     
-    ///Download users data from database and return a [String:Any]? dictionary with the user data
+    ///Download users's data for a specific user from database and return a [String:Any]? dictionary with the data
     public func downloadUserInfo(email: String, completion: @escaping ([String:Any]?) -> Void) {
         
         let formattedEmail = emailFormatter(email: email)
@@ -172,7 +176,30 @@ final class FireDBManager {
         }
     }
     
-    
+    ///Gets all users from firebase
+    public func getAllUsers(completion: @escaping ([RealmUser]) -> Void) {
+        
+        database.child("allUsers").observeSingleEvent(of: .value) { snapshot  in
+            
+            var usersArray = Array<RealmUser>()
+            
+            for child in snapshot.children {
+                let snap = child as! DataSnapshot
+                let dict = snap.value as! [String:Any]
+                
+                let user = RealmUser()
+                user.email = dict["email"] as? String
+                user.firstName = dict["first_name"] as? String
+                user.fullName = dict["full_name"] as? String
+                user.lastName = dict["last_name"] as? String
+                user.profilePictureFileName = dict["profilePictureName"] as? String
+                
+                usersArray.append(user)
+            }
+            
+            completion(usersArray)
+        }
+    }
     
     
     

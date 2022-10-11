@@ -25,6 +25,14 @@
 		535CA5C628F2C610007C2011 /* ViewControllerExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535CA5C528F2C610007C2011 /* ViewControllerExtensions.swift */; };
 		53ACAD3D28F00ABA005C3579 /* NewItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53ACAD3C28F00ABA005C3579 /* NewItemViewController.swift */; };
 		53ACAD3F28F00D70005C3579 /* PersonalItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53ACAD3E28F00D70005C3579 /* PersonalItems.swift */; };
+		53BCCDCE28F571BA003B32A4 /* Groups.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53BCCDCD28F571BA003B32A4 /* Groups.swift */; };
+		53BCCDD028F573DF003B32A4 /* AddGroupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53BCCDCF28F573DF003B32A4 /* AddGroupViewController.swift */; };
+		53BCCDD328F5DCD9003B32A4 /* NewGroupCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53BCCDD128F5DCD9003B32A4 /* NewGroupCollectionViewCell.swift */; };
+		53BCCDD428F5DCD9003B32A4 /* NewGroupCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53BCCDD228F5DCD9003B32A4 /* NewGroupCollectionViewCell.xib */; };
+		53BCCDD728F5EE5F003B32A4 /* UsersResultsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53BCCDD528F5EE5F003B32A4 /* UsersResultsTableViewCell.swift */; };
+		53BCCDD828F5EE5F003B32A4 /* UsersResultsTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53BCCDD628F5EE5F003B32A4 /* UsersResultsTableViewCell.xib */; };
+		53BCCDDD28F5FC42003B32A4 /* GroupPaticipants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53BCCDDC28F5FC42003B32A4 /* GroupPaticipants.swift */; };
+		53BCCDDF28F5FDE1003B32A4 /* GroupItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53BCCDDE28F5FDE1003B32A4 /* GroupItems.swift */; };
 		53FD6C0028EEF13200D2C50D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53FD6BFF28EEF13200D2C50D /* AppDelegate.swift */; };
 		53FD6C0228EEF13200D2C50D /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53FD6C0128EEF13200D2C50D /* SceneDelegate.swift */; };
 		53FD6C0428EEF13200D2C50D /* PersonalCategoriesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53FD6C0328EEF13200D2C50D /* PersonalCategoriesViewController.swift */; };
@@ -54,6 +62,14 @@
 		535CA5C528F2C610007C2011 /* ViewControllerExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewControllerExtensions.swift; sourceTree = "<group>"; };
 		53ACAD3C28F00ABA005C3579 /* NewItemViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewItemViewController.swift; sourceTree = "<group>"; };
 		53ACAD3E28F00D70005C3579 /* PersonalItems.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonalItems.swift; sourceTree = "<group>"; };
+		53BCCDCD28F571BA003B32A4 /* Groups.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Groups.swift; sourceTree = "<group>"; };
+		53BCCDCF28F573DF003B32A4 /* AddGroupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddGroupViewController.swift; sourceTree = "<group>"; };
+		53BCCDD128F5DCD9003B32A4 /* NewGroupCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewGroupCollectionViewCell.swift; sourceTree = "<group>"; };
+		53BCCDD228F5DCD9003B32A4 /* NewGroupCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NewGroupCollectionViewCell.xib; sourceTree = "<group>"; };
+		53BCCDD528F5EE5F003B32A4 /* UsersResultsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsersResultsTableViewCell.swift; sourceTree = "<group>"; };
+		53BCCDD628F5EE5F003B32A4 /* UsersResultsTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = UsersResultsTableViewCell.xib; sourceTree = "<group>"; };
+		53BCCDDC28F5FC42003B32A4 /* GroupPaticipants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupPaticipants.swift; sourceTree = "<group>"; };
+		53BCCDDE28F5FDE1003B32A4 /* GroupItems.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupItems.swift; sourceTree = "<group>"; };
 		53FD6BFC28EEF13200D2C50D /* Group Do.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Group Do.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		53FD6BFF28EEF13200D2C50D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		53FD6C0128EEF13200D2C50D /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -93,6 +109,7 @@
 			isa = PBXGroup;
 			children = (
 				5341BE6428F0545D00253761 /* GroupsViewController.swift */,
+				53BCCDD928F5F298003B32A4 /* Create Group */,
 			);
 			path = "Group ToDo";
 			sourceTree = "<group>";
@@ -104,6 +121,35 @@
 				5341BE6828F0721400253761 /* RegisterViewController.swift */,
 			);
 			path = "Login & Register";
+			sourceTree = "<group>";
+		};
+		53BCCDD928F5F298003B32A4 /* Create Group */ = {
+			isa = PBXGroup;
+			children = (
+				53BCCDCF28F573DF003B32A4 /* AddGroupViewController.swift */,
+				53BCCDD128F5DCD9003B32A4 /* NewGroupCollectionViewCell.swift */,
+				53BCCDD528F5EE5F003B32A4 /* UsersResultsTableViewCell.swift */,
+			);
+			path = "Create Group";
+			sourceTree = "<group>";
+		};
+		53BCCDDA28F5FB42003B32A4 /* Personal */ = {
+			isa = PBXGroup;
+			children = (
+				534B6B2A28EF3C6B006EF12A /* PersonalCategories.swift */,
+				53ACAD3E28F00D70005C3579 /* PersonalItems.swift */,
+			);
+			path = Personal;
+			sourceTree = "<group>";
+		};
+		53BCCDDB28F5FB54003B32A4 /* Group */ = {
+			isa = PBXGroup;
+			children = (
+				53BCCDCD28F571BA003B32A4 /* Groups.swift */,
+				53BCCDDC28F5FC42003B32A4 /* GroupPaticipants.swift */,
+				53BCCDDE28F5FDE1003B32A4 /* GroupItems.swift */,
+			);
+			path = Group;
 			sourceTree = "<group>";
 		};
 		53FD6BF328EEF13200D2C50D = {
@@ -142,6 +188,8 @@
 			isa = PBXGroup;
 			children = (
 				53FD6C0528EEF13200D2C50D /* Main.storyboard */,
+				53BCCDD228F5DCD9003B32A4 /* NewGroupCollectionViewCell.xib */,
+				53BCCDD628F5EE5F003B32A4 /* UsersResultsTableViewCell.xib */,
 				53FD6C0828EEF13300D2C50D /* Assets.xcassets */,
 				53FD6C0A28EEF13300D2C50D /* LaunchScreen.storyboard */,
 			);
@@ -185,9 +233,9 @@
 		53FD6C1828EEF1F000D2C50D /* Realm Data */ = {
 			isa = PBXGroup;
 			children = (
-				534B6B2A28EF3C6B006EF12A /* PersonalCategories.swift */,
-				53ACAD3E28F00D70005C3579 /* PersonalItems.swift */,
+				53BCCDDA28F5FB42003B32A4 /* Personal */,
 				5341BE7528F09EF100253761 /* RealmUser.swift */,
+				53BCCDDB28F5FB54003B32A4 /* Group */,
 			);
 			path = "Realm Data";
 			sourceTree = "<group>";
@@ -273,6 +321,8 @@
 				5341BE6328F04DF100253761 /* GoogleService-Info.plist in Resources */,
 				53FD6C0928EEF13300D2C50D /* Assets.xcassets in Resources */,
 				53FD6C0728EEF13200D2C50D /* Main.storyboard in Resources */,
+				53BCCDD428F5DCD9003B32A4 /* NewGroupCollectionViewCell.xib in Resources */,
+				53BCCDD828F5EE5F003B32A4 /* UsersResultsTableViewCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -325,26 +375,32 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				53BCCDD028F573DF003B32A4 /* AddGroupViewController.swift in Sources */,
 				535CA5C028F2AA2E007C2011 /* ImageManager.swift in Sources */,
 				53FD6C0428EEF13200D2C50D /* PersonalCategoriesViewController.swift in Sources */,
 				5341BE7028F08BEA00253761 /* FireDBManager.swift in Sources */,
+				53BCCDDF28F5FDE1003B32A4 /* GroupItems.swift in Sources */,
 				5341BE6928F0721400253761 /* RegisterViewController.swift in Sources */,
 				535CA5C428F2C511007C2011 /* PersonalItemsModel.swift in Sources */,
 				5341BE7428F09B9000253761 /* FireStoreManager.swift in Sources */,
 				534B6B2B28EF3C6B006EF12A /* PersonalCategories.swift in Sources */,
 				534B6B2928EF07CD006EF12A /* NewCategoryViewController.swift in Sources */,
+				53BCCDD728F5EE5F003B32A4 /* UsersResultsTableViewCell.swift in Sources */,
 				535CA5C628F2C610007C2011 /* ViewControllerExtensions.swift in Sources */,
 				534B6B2D28EF4F10006EF12A /* PersonalItemsViewController.swift in Sources */,
 				53FD6C0028EEF13200D2C50D /* AppDelegate.swift in Sources */,
 				535CA5C228F2C358007C2011 /* PersonalCategoriesModel.swift in Sources */,
+				53BCCDDD28F5FC42003B32A4 /* GroupPaticipants.swift in Sources */,
 				53ACAD3F28F00D70005C3579 /* PersonalItems.swift in Sources */,
 				5341BE7228F08D6400253761 /* UserModel.swift in Sources */,
+				53BCCDD328F5DCD9003B32A4 /* NewGroupCollectionViewCell.swift in Sources */,
 				5341BE7628F09EF100253761 /* RealmUser.swift in Sources */,
 				53FD6C0228EEF13200D2C50D /* SceneDelegate.swift in Sources */,
 				53ACAD3D28F00ABA005C3579 /* NewItemViewController.swift in Sources */,
 				5341BE6728F0719800253761 /* LoginViewController.swift in Sources */,
 				5341BE6528F0545D00253761 /* GroupsViewController.swift in Sources */,
 				5341BE6B28F07BBE00253761 /* SettingsViewController.swift in Sources */,
+				53BCCDCE28F571BA003B32A4 /* Groups.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

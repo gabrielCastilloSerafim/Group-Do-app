@@ -62,6 +62,22 @@ final class ImageManager {
         }
     }
     
+    ///Deletes all images from documents directory
+    public func deleAllImagesFromUsersDir() {
+        
+        let documentsUrl =  FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+
+        do {
+            let fileURLs = try FileManager.default.contentsOfDirectory(at: documentsUrl, includingPropertiesForKeys: nil, options: .skipsHiddenFiles)
+            for fileURL in fileURLs where fileURL.pathExtension == "png" {
+                try FileManager.default.removeItem(at: fileURL)
+            }
+        } catch  {
+            print(error.localizedDescription)
+        }
+        
+    }
+    
 
     
     

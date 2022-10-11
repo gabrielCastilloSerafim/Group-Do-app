@@ -65,6 +65,9 @@ PODS:
   - Realm/Headers (10.30.0)
   - RealmSwift (10.30.0):
     - Realm (= 10.30.0)
+  - SDWebImage (5.13.4):
+    - SDWebImage/Core (= 5.13.4)
+  - SDWebImage/Core (5.13.4)
 
 DEPENDENCIES:
   - FirebaseAuth
@@ -72,6 +75,7 @@ DEPENDENCIES:
   - FirebaseStorage
   - JGProgressHUD
   - RealmSwift
+  - SDWebImage
 
 SPEC REPOS:
   trunk:
@@ -94,6 +98,7 @@ SPEC REPOS:
     - PromisesObjC
     - Realm
     - RealmSwift
+    - SDWebImage
 
 SPEC CHECKSUMS:
   FirebaseAppCheckInterop: d5ecda0c09f8069406643d6e0fa12c09d1b736e3
@@ -115,7 +120,8 @@ SPEC CHECKSUMS:
   PromisesObjC: ab77feca74fa2823e7af4249b8326368e61014cb
   Realm: 247ccacf72e656c6ee09b242f7d24d5cf99cc058
   RealmSwift: b3f5c52afa6ac480bd9c3e791c2576f55b3ecb44
+  SDWebImage: e5cc87bf736e60f49592f307bdf9e157189298a3
 
-PODFILE CHECKSUM: a1244644859a1d6b73d143daee69ff754879efbe
+PODFILE CHECKSUM: b1c9ab4f7da29fece5c85c8d4ab9e615b2762b9c
 
 COCOAPODS: 1.11.3

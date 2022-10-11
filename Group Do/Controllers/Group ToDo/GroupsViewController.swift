@@ -10,8 +10,18 @@ import FirebaseAuth
 
 class GroupsViewController: UIViewController {
 
+    @IBOutlet weak var tableView: UITableView!
+    
+    var groupsArray = Array<String>()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        tableView.delegate = self
+        tableView.dataSource = self
+        
+        groupsArray.append("Hello")
+        groupsArray.append("Bye")
 
     }
     
@@ -28,8 +38,35 @@ class GroupsViewController: UIViewController {
         }
     }
     
-    @IBAction func logOut(_ sender: Any) {
-        try! Auth.auth().signOut()
+    @IBAction func addButtonPressed(_ sender: Any) {
+        
+        
+        
+        
     }
+    
+}
+
+//MARK: - TableView Delegate & DataSource
+
+extension GroupsViewController: UITableViewDelegate, UITableViewDataSource {
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        
+        return groupsArray.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        let cell = tableView.dequeueReusableCell(withIdentifier: "groupCell", for: indexPath)
+        
+        cell.textLabel?.text = groupsArray[indexPath.row]
+        
+        return cell
+        
+    }
+    
+    
+    
     
 }

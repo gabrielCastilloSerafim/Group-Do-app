@@ -52,6 +52,7 @@ PODS:
   - GoogleUtilities/Reachability (7.8.0):
     - GoogleUtilities/Logger
   - GTMSessionFetcher/Core (2.1.0)
+  - JGProgressHUD (2.2)
   - leveldb-library (1.22.1)
   - nanopb (2.30909.0):
     - nanopb/decode (= 2.30909.0)
@@ -69,6 +70,7 @@ DEPENDENCIES:
   - FirebaseAuth
   - FirebaseDatabase
   - FirebaseStorage
+  - JGProgressHUD
   - RealmSwift
 
 SPEC REPOS:
@@ -86,6 +88,7 @@ SPEC REPOS:
     - GoogleDataTransport
     - GoogleUtilities
     - GTMSessionFetcher
+    - JGProgressHUD
     - leveldb-library
     - nanopb
     - PromisesObjC
@@ -106,12 +109,13 @@ SPEC CHECKSUMS:
   GoogleDataTransport: 1c8145da7117bd68bbbed00cf304edb6a24de00f
   GoogleUtilities: 1d20a6ad97ef46f67bbdec158ce00563a671ebb7
   GTMSessionFetcher: ffbb25ec00ebcb5201adab0a56d808f6f1902d9f
+  JGProgressHUD: d83d7a981b85d11205e19ff8ad5bb9c40571c847
   leveldb-library: 50c7b45cbd7bf543c81a468fe557a16ae3db8729
   nanopb: b552cce312b6c8484180ef47159bc0f65a1f0431
   PromisesObjC: ab77feca74fa2823e7af4249b8326368e61014cb
   Realm: 247ccacf72e656c6ee09b242f7d24d5cf99cc058
   RealmSwift: b3f5c52afa6ac480bd9c3e791c2576f55b3ecb44
 
-PODFILE CHECKSUM: 47431bd022d5c98bf754c074289b210e8b5ebd68
+PODFILE CHECKSUM: a1244644859a1d6b73d143daee69ff754879efbe
 
 COCOAPODS: 1.11.3

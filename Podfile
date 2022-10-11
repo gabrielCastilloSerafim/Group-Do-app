@@ -11,5 +11,6 @@ target 'Group Do' do
   pod 'FirebaseAuth'
   pod 'FirebaseDatabase'
   pod 'FirebaseStorage'
+  pod 'JGProgressHUD'
   
 end

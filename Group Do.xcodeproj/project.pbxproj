@@ -12,11 +12,19 @@
 		5341BE6728F0719800253761 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5341BE6628F0719800253761 /* LoginViewController.swift */; };
 		5341BE6928F0721400253761 /* RegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5341BE6828F0721400253761 /* RegisterViewController.swift */; };
 		5341BE6B28F07BBE00253761 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5341BE6A28F07BBE00253761 /* SettingsViewController.swift */; };
+		5341BE7028F08BEA00253761 /* FireDBManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5341BE6F28F08BEA00253761 /* FireDBManager.swift */; };
+		5341BE7228F08D6400253761 /* UserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5341BE7128F08D6400253761 /* UserModel.swift */; };
+		5341BE7428F09B9000253761 /* FireStoreManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5341BE7328F09B9000253761 /* FireStoreManager.swift */; };
+		5341BE7628F09EF100253761 /* RealmUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5341BE7528F09EF100253761 /* RealmUser.swift */; };
 		534B6B2928EF07CD006EF12A /* NewCategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 534B6B2828EF07CD006EF12A /* NewCategoryViewController.swift */; };
-		534B6B2B28EF3C6B006EF12A /* Personal Categories.swift in Sources */ = {isa = PBXBuildFile; fileRef = 534B6B2A28EF3C6B006EF12A /* Personal Categories.swift */; };
+		534B6B2B28EF3C6B006EF12A /* PersonalCategories.swift in Sources */ = {isa = PBXBuildFile; fileRef = 534B6B2A28EF3C6B006EF12A /* PersonalCategories.swift */; };
 		534B6B2D28EF4F10006EF12A /* PersonalItemsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 534B6B2C28EF4F10006EF12A /* PersonalItemsViewController.swift */; };
+		535CA5C028F2AA2E007C2011 /* ImageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535CA5BF28F2AA2D007C2011 /* ImageManager.swift */; };
+		535CA5C228F2C358007C2011 /* PersonalCategoriesModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535CA5C128F2C358007C2011 /* PersonalCategoriesModel.swift */; };
+		535CA5C428F2C511007C2011 /* PersonalItemsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535CA5C328F2C511007C2011 /* PersonalItemsModel.swift */; };
+		535CA5C628F2C610007C2011 /* ViewControllerExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535CA5C528F2C610007C2011 /* ViewControllerExtensions.swift */; };
 		53ACAD3D28F00ABA005C3579 /* NewItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53ACAD3C28F00ABA005C3579 /* NewItemViewController.swift */; };
-		53ACAD3F28F00D70005C3579 /* Personal Items.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53ACAD3E28F00D70005C3579 /* Personal Items.swift */; };
+		53ACAD3F28F00D70005C3579 /* PersonalItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53ACAD3E28F00D70005C3579 /* PersonalItems.swift */; };
 		53FD6C0028EEF13200D2C50D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53FD6BFF28EEF13200D2C50D /* AppDelegate.swift */; };
 		53FD6C0228EEF13200D2C50D /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53FD6C0128EEF13200D2C50D /* SceneDelegate.swift */; };
 		53FD6C0428EEF13200D2C50D /* PersonalCategoriesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53FD6C0328EEF13200D2C50D /* PersonalCategoriesViewController.swift */; };
@@ -33,11 +41,19 @@
 		5341BE6628F0719800253761 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		5341BE6828F0721400253761 /* RegisterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterViewController.swift; sourceTree = "<group>"; };
 		5341BE6A28F07BBE00253761 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
+		5341BE6F28F08BEA00253761 /* FireDBManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FireDBManager.swift; sourceTree = "<group>"; };
+		5341BE7128F08D6400253761 /* UserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserModel.swift; sourceTree = "<group>"; };
+		5341BE7328F09B9000253761 /* FireStoreManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FireStoreManager.swift; sourceTree = "<group>"; };
+		5341BE7528F09EF100253761 /* RealmUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmUser.swift; sourceTree = "<group>"; };
 		534B6B2828EF07CD006EF12A /* NewCategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewCategoryViewController.swift; sourceTree = "<group>"; };
-		534B6B2A28EF3C6B006EF12A /* Personal Categories.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Personal Categories.swift"; sourceTree = "<group>"; };
+		534B6B2A28EF3C6B006EF12A /* PersonalCategories.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonalCategories.swift; sourceTree = "<group>"; };
 		534B6B2C28EF4F10006EF12A /* PersonalItemsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonalItemsViewController.swift; sourceTree = "<group>"; };
+		535CA5BF28F2AA2D007C2011 /* ImageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageManager.swift; sourceTree = "<group>"; };
+		535CA5C128F2C358007C2011 /* PersonalCategoriesModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonalCategoriesModel.swift; sourceTree = "<group>"; };
+		535CA5C328F2C511007C2011 /* PersonalItemsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonalItemsModel.swift; sourceTree = "<group>"; };
+		535CA5C528F2C610007C2011 /* ViewControllerExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewControllerExtensions.swift; sourceTree = "<group>"; };
 		53ACAD3C28F00ABA005C3579 /* NewItemViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewItemViewController.swift; sourceTree = "<group>"; };
-		53ACAD3E28F00D70005C3579 /* Personal Items.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Personal Items.swift"; sourceTree = "<group>"; };
+		53ACAD3E28F00D70005C3579 /* PersonalItems.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonalItems.swift; sourceTree = "<group>"; };
 		53FD6BFC28EEF13200D2C50D /* Group Do.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Group Do.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		53FD6BFF28EEF13200D2C50D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		53FD6C0128EEF13200D2C50D /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -62,6 +78,34 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		5341BE6C28F0880F00253761 /* Personal ToDo */ = {
+			isa = PBXGroup;
+			children = (
+				53FD6C0328EEF13200D2C50D /* PersonalCategoriesViewController.swift */,
+				534B6B2828EF07CD006EF12A /* NewCategoryViewController.swift */,
+				534B6B2C28EF4F10006EF12A /* PersonalItemsViewController.swift */,
+				53ACAD3C28F00ABA005C3579 /* NewItemViewController.swift */,
+			);
+			path = "Personal ToDo";
+			sourceTree = "<group>";
+		};
+		5341BE6D28F0882D00253761 /* Group ToDo */ = {
+			isa = PBXGroup;
+			children = (
+				5341BE6428F0545D00253761 /* GroupsViewController.swift */,
+			);
+			path = "Group ToDo";
+			sourceTree = "<group>";
+		};
+		5341BE6E28F0885A00253761 /* Login & Register */ = {
+			isa = PBXGroup;
+			children = (
+				5341BE6628F0719800253761 /* LoginViewController.swift */,
+				5341BE6828F0721400253761 /* RegisterViewController.swift */,
+			);
+			path = "Login & Register";
+			sourceTree = "<group>";
+		};
 		53FD6BF328EEF13200D2C50D = {
 			isa = PBXGroup;
 			children = (
@@ -107,13 +151,9 @@
 		53FD6C1528EEF19D00D2C50D /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				53FD6C0328EEF13200D2C50D /* PersonalCategoriesViewController.swift */,
-				534B6B2828EF07CD006EF12A /* NewCategoryViewController.swift */,
-				534B6B2C28EF4F10006EF12A /* PersonalItemsViewController.swift */,
-				53ACAD3C28F00ABA005C3579 /* NewItemViewController.swift */,
-				5341BE6428F0545D00253761 /* GroupsViewController.swift */,
-				5341BE6628F0719800253761 /* LoginViewController.swift */,
-				5341BE6828F0721400253761 /* RegisterViewController.swift */,
+				5341BE6C28F0880F00253761 /* Personal ToDo */,
+				5341BE6D28F0882D00253761 /* Group ToDo */,
+				5341BE6E28F0885A00253761 /* Login & Register */,
 				5341BE6A28F07BBE00253761 /* SettingsViewController.swift */,
 			);
 			path = Controllers;
@@ -122,6 +162,9 @@
 		53FD6C1628EEF1C400D2C50D /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				5341BE7128F08D6400253761 /* UserModel.swift */,
+				535CA5C128F2C358007C2011 /* PersonalCategoriesModel.swift */,
+				535CA5C328F2C511007C2011 /* PersonalItemsModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -131,6 +174,10 @@
 			children = (
 				53FD6BFF28EEF13200D2C50D /* AppDelegate.swift */,
 				53FD6C0128EEF13200D2C50D /* SceneDelegate.swift */,
+				5341BE6F28F08BEA00253761 /* FireDBManager.swift */,
+				5341BE7328F09B9000253761 /* FireStoreManager.swift */,
+				535CA5BF28F2AA2D007C2011 /* ImageManager.swift */,
+				535CA5C528F2C610007C2011 /* ViewControllerExtensions.swift */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -138,8 +185,9 @@
 		53FD6C1828EEF1F000D2C50D /* Realm Data */ = {
 			isa = PBXGroup;
 			children = (
-				534B6B2A28EF3C6B006EF12A /* Personal Categories.swift */,
-				53ACAD3E28F00D70005C3579 /* Personal Items.swift */,
+				534B6B2A28EF3C6B006EF12A /* PersonalCategories.swift */,
+				53ACAD3E28F00D70005C3579 /* PersonalItems.swift */,
+				5341BE7528F09EF100253761 /* RealmUser.swift */,
 			);
 			path = "Realm Data";
 			sourceTree = "<group>";
@@ -277,13 +325,21 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				535CA5C028F2AA2E007C2011 /* ImageManager.swift in Sources */,
 				53FD6C0428EEF13200D2C50D /* PersonalCategoriesViewController.swift in Sources */,
+				5341BE7028F08BEA00253761 /* FireDBManager.swift in Sources */,
 				5341BE6928F0721400253761 /* RegisterViewController.swift in Sources */,
-				534B6B2B28EF3C6B006EF12A /* Personal Categories.swift in Sources */,
+				535CA5C428F2C511007C2011 /* PersonalItemsModel.swift in Sources */,
+				5341BE7428F09B9000253761 /* FireStoreManager.swift in Sources */,
+				534B6B2B28EF3C6B006EF12A /* PersonalCategories.swift in Sources */,
 				534B6B2928EF07CD006EF12A /* NewCategoryViewController.swift in Sources */,
+				535CA5C628F2C610007C2011 /* ViewControllerExtensions.swift in Sources */,
 				534B6B2D28EF4F10006EF12A /* PersonalItemsViewController.swift in Sources */,
 				53FD6C0028EEF13200D2C50D /* AppDelegate.swift in Sources */,
-				53ACAD3F28F00D70005C3579 /* Personal Items.swift in Sources */,
+				535CA5C228F2C358007C2011 /* PersonalCategoriesModel.swift in Sources */,
+				53ACAD3F28F00D70005C3579 /* PersonalItems.swift in Sources */,
+				5341BE7228F08D6400253761 /* UserModel.swift in Sources */,
+				5341BE7628F09EF100253761 /* RealmUser.swift in Sources */,
 				53FD6C0228EEF13200D2C50D /* SceneDelegate.swift in Sources */,
 				53ACAD3D28F00ABA005C3579 /* NewItemViewController.swift in Sources */,
 				5341BE6728F0719800253761 /* LoginViewController.swift in Sources */,

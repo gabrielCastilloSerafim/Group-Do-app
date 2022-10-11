@@ -28,5 +28,8 @@ class GroupsViewController: UIViewController {
         }
     }
     
-
+    @IBAction func logOut(_ sender: Any) {
+        try! Auth.auth().signOut()
+    }
+    
 }

@@ -158,7 +158,7 @@ extension PersonalItemsViewController: UISearchBarDelegate {
     
 }
 
-//MARK: - Database Manager
+//MARK: - Realm Manager
 
 extension PersonalItemsViewController {
     

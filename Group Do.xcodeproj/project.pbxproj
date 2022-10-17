@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5302AC3B28FD5CD7004287CF /* GroupSettingsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5302AC3928FD5CD7004287CF /* GroupSettingsTableViewCell.swift */; };
+		5302AC3C28FD5CD7004287CF /* GroupSettingsTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5302AC3A28FD5CD7004287CF /* GroupSettingsTableViewCell.xib */; };
+		5302AC3E28FDD1E4004287CF /* AddParticipantViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5302AC3D28FDD1E3004287CF /* AddParticipantViewController.swift */; };
 		5341BE6328F04DF100253761 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5341BE6228F04DF100253761 /* GoogleService-Info.plist */; };
 		5341BE6528F0545D00253761 /* GroupsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5341BE6428F0545D00253761 /* GroupsViewController.swift */; };
 		5341BE6728F0719800253761 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5341BE6628F0719800253761 /* LoginViewController.swift */; };
@@ -16,15 +19,27 @@
 		5341BE7228F08D6400253761 /* UserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5341BE7128F08D6400253761 /* UserModel.swift */; };
 		5341BE7428F09B9000253761 /* FireStoreManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5341BE7328F09B9000253761 /* FireStoreManager.swift */; };
 		5341BE7628F09EF100253761 /* RealmUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5341BE7528F09EF100253761 /* RealmUser.swift */; };
+		5345884128F7F3F800C26C27 /* ConfirmGroupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5345884028F7F3F800C26C27 /* ConfirmGroupViewController.swift */; };
+		5345884828F8469A00C26C27 /* GroupsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5345884628F8469A00C26C27 /* GroupsTableViewCell.swift */; };
+		5345884928F8469A00C26C27 /* GroupsTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5345884728F8469A00C26C27 /* GroupsTableViewCell.xib */; };
+		5345884D28F8663E00C26C27 /* GroupModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5345884C28F8663E00C26C27 /* GroupModel.swift */; };
+		5345884F28F8665D00C26C27 /* GroupItemsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5345884E28F8665D00C26C27 /* GroupItemsModel.swift */; };
 		534B6B2928EF07CD006EF12A /* NewCategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 534B6B2828EF07CD006EF12A /* NewCategoryViewController.swift */; };
 		534B6B2B28EF3C6B006EF12A /* PersonalCategories.swift in Sources */ = {isa = PBXBuildFile; fileRef = 534B6B2A28EF3C6B006EF12A /* PersonalCategories.swift */; };
 		534B6B2D28EF4F10006EF12A /* PersonalItemsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 534B6B2C28EF4F10006EF12A /* PersonalItemsViewController.swift */; };
+		5353B8E328F993E90090A62E /* GroupsItemsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5353B8E228F993E90090A62E /* GroupsItemsViewController.swift */; };
+		5353B8EA28F9A60B0090A62E /* GroupItemsCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5353B8E828F9A60B0090A62E /* GroupItemsCollectionViewCell.swift */; };
+		5353B8EB28F9A60B0090A62E /* GroupItemsCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5353B8E928F9A60B0090A62E /* GroupItemsCollectionViewCell.xib */; };
+		5353B8EE28F9A64E0090A62E /* ItemsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5353B8EC28F9A64E0090A62E /* ItemsTableViewCell.swift */; };
+		5353B8EF28F9A64E0090A62E /* ItemsTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5353B8ED28F9A64E0090A62E /* ItemsTableViewCell.xib */; };
+		5353B8F328F9B3430090A62E /* AddGroupItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5353B8F228F9B3430090A62E /* AddGroupItemViewController.swift */; };
 		535CA5C028F2AA2E007C2011 /* ImageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535CA5BF28F2AA2D007C2011 /* ImageManager.swift */; };
 		535CA5C228F2C358007C2011 /* PersonalCategoriesModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535CA5C128F2C358007C2011 /* PersonalCategoriesModel.swift */; };
 		535CA5C428F2C511007C2011 /* PersonalItemsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535CA5C328F2C511007C2011 /* PersonalItemsModel.swift */; };
 		535CA5C628F2C610007C2011 /* ViewControllerExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535CA5C528F2C610007C2011 /* ViewControllerExtensions.swift */; };
 		53ACAD3D28F00ABA005C3579 /* NewItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53ACAD3C28F00ABA005C3579 /* NewItemViewController.swift */; };
 		53ACAD3F28F00D70005C3579 /* PersonalItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53ACAD3E28F00D70005C3579 /* PersonalItems.swift */; };
+		53BBEDF228FD5B59004EC47D /* GroupSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53BBEDF128FD5B59004EC47D /* GroupSettingsViewController.swift */; };
 		53BCCDCE28F571BA003B32A4 /* Groups.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53BCCDCD28F571BA003B32A4 /* Groups.swift */; };
 		53BCCDD028F573DF003B32A4 /* AddGroupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53BCCDCF28F573DF003B32A4 /* AddGroupViewController.swift */; };
 		53BCCDD328F5DCD9003B32A4 /* NewGroupCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53BCCDD128F5DCD9003B32A4 /* NewGroupCollectionViewCell.swift */; };
@@ -44,6 +59,9 @@
 
 /* Begin PBXFileReference section */
 		0D3307D1C79A9D9BD18D4FFE /* Pods-Group Do.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Group Do.debug.xcconfig"; path = "Target Support Files/Pods-Group Do/Pods-Group Do.debug.xcconfig"; sourceTree = "<group>"; };
+		5302AC3928FD5CD7004287CF /* GroupSettingsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupSettingsTableViewCell.swift; sourceTree = "<group>"; };
+		5302AC3A28FD5CD7004287CF /* GroupSettingsTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = GroupSettingsTableViewCell.xib; path = "../Controllers/Group ToDo/GroupSettingsVC/GroupSettingsTableViewCell.xib"; sourceTree = "<group>"; };
+		5302AC3D28FDD1E3004287CF /* AddParticipantViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddParticipantViewController.swift; sourceTree = "<group>"; };
 		5341BE6228F04DF100253761 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		5341BE6428F0545D00253761 /* GroupsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupsViewController.swift; sourceTree = "<group>"; };
 		5341BE6628F0719800253761 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
@@ -53,15 +71,27 @@
 		5341BE7128F08D6400253761 /* UserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserModel.swift; sourceTree = "<group>"; };
 		5341BE7328F09B9000253761 /* FireStoreManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FireStoreManager.swift; sourceTree = "<group>"; };
 		5341BE7528F09EF100253761 /* RealmUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmUser.swift; sourceTree = "<group>"; };
+		5345884028F7F3F800C26C27 /* ConfirmGroupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmGroupViewController.swift; sourceTree = "<group>"; };
+		5345884628F8469A00C26C27 /* GroupsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupsTableViewCell.swift; sourceTree = "<group>"; };
+		5345884728F8469A00C26C27 /* GroupsTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = GroupsTableViewCell.xib; sourceTree = "<group>"; };
+		5345884C28F8663E00C26C27 /* GroupModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupModel.swift; sourceTree = "<group>"; };
+		5345884E28F8665D00C26C27 /* GroupItemsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupItemsModel.swift; sourceTree = "<group>"; };
 		534B6B2828EF07CD006EF12A /* NewCategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewCategoryViewController.swift; sourceTree = "<group>"; };
 		534B6B2A28EF3C6B006EF12A /* PersonalCategories.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonalCategories.swift; sourceTree = "<group>"; };
 		534B6B2C28EF4F10006EF12A /* PersonalItemsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonalItemsViewController.swift; sourceTree = "<group>"; };
+		5353B8E228F993E90090A62E /* GroupsItemsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupsItemsViewController.swift; sourceTree = "<group>"; };
+		5353B8E828F9A60B0090A62E /* GroupItemsCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupItemsCollectionViewCell.swift; sourceTree = "<group>"; };
+		5353B8E928F9A60B0090A62E /* GroupItemsCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = GroupItemsCollectionViewCell.xib; sourceTree = "<group>"; };
+		5353B8EC28F9A64E0090A62E /* ItemsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemsTableViewCell.swift; sourceTree = "<group>"; };
+		5353B8ED28F9A64E0090A62E /* ItemsTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ItemsTableViewCell.xib; sourceTree = "<group>"; };
+		5353B8F228F9B3430090A62E /* AddGroupItemViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddGroupItemViewController.swift; sourceTree = "<group>"; };
 		535CA5BF28F2AA2D007C2011 /* ImageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageManager.swift; sourceTree = "<group>"; };
 		535CA5C128F2C358007C2011 /* PersonalCategoriesModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonalCategoriesModel.swift; sourceTree = "<group>"; };
 		535CA5C328F2C511007C2011 /* PersonalItemsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonalItemsModel.swift; sourceTree = "<group>"; };
 		535CA5C528F2C610007C2011 /* ViewControllerExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewControllerExtensions.swift; sourceTree = "<group>"; };
 		53ACAD3C28F00ABA005C3579 /* NewItemViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewItemViewController.swift; sourceTree = "<group>"; };
 		53ACAD3E28F00D70005C3579 /* PersonalItems.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonalItems.swift; sourceTree = "<group>"; };
+		53BBEDF128FD5B59004EC47D /* GroupSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupSettingsViewController.swift; sourceTree = "<group>"; };
 		53BCCDCD28F571BA003B32A4 /* Groups.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Groups.swift; sourceTree = "<group>"; };
 		53BCCDCF28F573DF003B32A4 /* AddGroupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddGroupViewController.swift; sourceTree = "<group>"; };
 		53BCCDD128F5DCD9003B32A4 /* NewGroupCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewGroupCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -97,10 +127,8 @@
 		5341BE6C28F0880F00253761 /* Personal ToDo */ = {
 			isa = PBXGroup;
 			children = (
-				53FD6C0328EEF13200D2C50D /* PersonalCategoriesViewController.swift */,
-				534B6B2828EF07CD006EF12A /* NewCategoryViewController.swift */,
-				534B6B2C28EF4F10006EF12A /* PersonalItemsViewController.swift */,
-				53ACAD3C28F00ABA005C3579 /* NewItemViewController.swift */,
+				5353B8F628F9B4190090A62E /* PersonalCategoriesVC */,
+				5353B8F728F9B4380090A62E /* PersonalItemsVC */,
 			);
 			path = "Personal ToDo";
 			sourceTree = "<group>";
@@ -108,8 +136,10 @@
 		5341BE6D28F0882D00253761 /* Group ToDo */ = {
 			isa = PBXGroup;
 			children = (
-				5341BE6428F0545D00253761 /* GroupsViewController.swift */,
-				53BCCDD928F5F298003B32A4 /* Create Group */,
+				5353B8F428F9B3A10090A62E /* AllGroupsVC */,
+				5353B8F528F9B3D40090A62E /* GroupItemsVC */,
+				53BCCDD928F5F298003B32A4 /* CreateGroupVC */,
+				53BBEDF028FD5AA0004EC47D /* GroupSettingsVC */,
 			);
 			path = "Group ToDo";
 			sourceTree = "<group>";
@@ -123,14 +153,81 @@
 			path = "Login & Register";
 			sourceTree = "<group>";
 		};
-		53BCCDD928F5F298003B32A4 /* Create Group */ = {
+		5345884A28F865DC00C26C27 /* Personal */ = {
+			isa = PBXGroup;
+			children = (
+				535CA5C128F2C358007C2011 /* PersonalCategoriesModel.swift */,
+				535CA5C328F2C511007C2011 /* PersonalItemsModel.swift */,
+			);
+			path = Personal;
+			sourceTree = "<group>";
+		};
+		5345884B28F865E600C26C27 /* Group */ = {
+			isa = PBXGroup;
+			children = (
+				5345884C28F8663E00C26C27 /* GroupModel.swift */,
+				5345884E28F8665D00C26C27 /* GroupItemsModel.swift */,
+			);
+			path = Group;
+			sourceTree = "<group>";
+		};
+		5353B8F428F9B3A10090A62E /* AllGroupsVC */ = {
+			isa = PBXGroup;
+			children = (
+				5341BE6428F0545D00253761 /* GroupsViewController.swift */,
+				5345884628F8469A00C26C27 /* GroupsTableViewCell.swift */,
+			);
+			path = AllGroupsVC;
+			sourceTree = "<group>";
+		};
+		5353B8F528F9B3D40090A62E /* GroupItemsVC */ = {
+			isa = PBXGroup;
+			children = (
+				5353B8E228F993E90090A62E /* GroupsItemsViewController.swift */,
+				5353B8F228F9B3430090A62E /* AddGroupItemViewController.swift */,
+				5353B8E828F9A60B0090A62E /* GroupItemsCollectionViewCell.swift */,
+				5353B8EC28F9A64E0090A62E /* ItemsTableViewCell.swift */,
+			);
+			path = GroupItemsVC;
+			sourceTree = "<group>";
+		};
+		5353B8F628F9B4190090A62E /* PersonalCategoriesVC */ = {
+			isa = PBXGroup;
+			children = (
+				53FD6C0328EEF13200D2C50D /* PersonalCategoriesViewController.swift */,
+				534B6B2828EF07CD006EF12A /* NewCategoryViewController.swift */,
+			);
+			path = PersonalCategoriesVC;
+			sourceTree = "<group>";
+		};
+		5353B8F728F9B4380090A62E /* PersonalItemsVC */ = {
+			isa = PBXGroup;
+			children = (
+				534B6B2C28EF4F10006EF12A /* PersonalItemsViewController.swift */,
+				53ACAD3C28F00ABA005C3579 /* NewItemViewController.swift */,
+			);
+			path = PersonalItemsVC;
+			sourceTree = "<group>";
+		};
+		53BBEDF028FD5AA0004EC47D /* GroupSettingsVC */ = {
+			isa = PBXGroup;
+			children = (
+				53BBEDF128FD5B59004EC47D /* GroupSettingsViewController.swift */,
+				5302AC3D28FDD1E3004287CF /* AddParticipantViewController.swift */,
+				5302AC3928FD5CD7004287CF /* GroupSettingsTableViewCell.swift */,
+			);
+			path = GroupSettingsVC;
+			sourceTree = "<group>";
+		};
+		53BCCDD928F5F298003B32A4 /* CreateGroupVC */ = {
 			isa = PBXGroup;
 			children = (
 				53BCCDCF28F573DF003B32A4 /* AddGroupViewController.swift */,
+				5345884028F7F3F800C26C27 /* ConfirmGroupViewController.swift */,
 				53BCCDD128F5DCD9003B32A4 /* NewGroupCollectionViewCell.swift */,
 				53BCCDD528F5EE5F003B32A4 /* UsersResultsTableViewCell.swift */,
 			);
-			path = "Create Group";
+			path = CreateGroupVC;
 			sourceTree = "<group>";
 		};
 		53BCCDDA28F5FB42003B32A4 /* Personal */ = {
@@ -190,6 +287,10 @@
 				53FD6C0528EEF13200D2C50D /* Main.storyboard */,
 				53BCCDD228F5DCD9003B32A4 /* NewGroupCollectionViewCell.xib */,
 				53BCCDD628F5EE5F003B32A4 /* UsersResultsTableViewCell.xib */,
+				5345884728F8469A00C26C27 /* GroupsTableViewCell.xib */,
+				5353B8E928F9A60B0090A62E /* GroupItemsCollectionViewCell.xib */,
+				5353B8ED28F9A64E0090A62E /* ItemsTableViewCell.xib */,
+				5302AC3A28FD5CD7004287CF /* GroupSettingsTableViewCell.xib */,
 				53FD6C0828EEF13300D2C50D /* Assets.xcassets */,
 				53FD6C0A28EEF13300D2C50D /* LaunchScreen.storyboard */,
 			);
@@ -211,8 +312,8 @@
 			isa = PBXGroup;
 			children = (
 				5341BE7128F08D6400253761 /* UserModel.swift */,
-				535CA5C128F2C358007C2011 /* PersonalCategoriesModel.swift */,
-				535CA5C328F2C511007C2011 /* PersonalItemsModel.swift */,
+				5345884B28F865E600C26C27 /* Group */,
+				5345884A28F865DC00C26C27 /* Personal */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -317,12 +418,16 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5345884928F8469A00C26C27 /* GroupsTableViewCell.xib in Resources */,
 				53FD6C0C28EEF13300D2C50D /* LaunchScreen.storyboard in Resources */,
 				5341BE6328F04DF100253761 /* GoogleService-Info.plist in Resources */,
 				53FD6C0928EEF13300D2C50D /* Assets.xcassets in Resources */,
+				5302AC3C28FD5CD7004287CF /* GroupSettingsTableViewCell.xib in Resources */,
 				53FD6C0728EEF13200D2C50D /* Main.storyboard in Resources */,
 				53BCCDD428F5DCD9003B32A4 /* NewGroupCollectionViewCell.xib in Resources */,
+				5353B8EB28F9A60B0090A62E /* GroupItemsCollectionViewCell.xib in Resources */,
 				53BCCDD828F5EE5F003B32A4 /* UsersResultsTableViewCell.xib in Resources */,
+				5353B8EF28F9A64E0090A62E /* ItemsTableViewCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -378,29 +483,40 @@
 				53BCCDD028F573DF003B32A4 /* AddGroupViewController.swift in Sources */,
 				535CA5C028F2AA2E007C2011 /* ImageManager.swift in Sources */,
 				53FD6C0428EEF13200D2C50D /* PersonalCategoriesViewController.swift in Sources */,
+				5345884D28F8663E00C26C27 /* GroupModel.swift in Sources */,
+				5345884828F8469A00C26C27 /* GroupsTableViewCell.swift in Sources */,
 				5341BE7028F08BEA00253761 /* FireDBManager.swift in Sources */,
+				5345884128F7F3F800C26C27 /* ConfirmGroupViewController.swift in Sources */,
 				53BCCDDF28F5FDE1003B32A4 /* GroupItems.swift in Sources */,
+				5302AC3E28FDD1E4004287CF /* AddParticipantViewController.swift in Sources */,
 				5341BE6928F0721400253761 /* RegisterViewController.swift in Sources */,
 				535CA5C428F2C511007C2011 /* PersonalItemsModel.swift in Sources */,
 				5341BE7428F09B9000253761 /* FireStoreManager.swift in Sources */,
 				534B6B2B28EF3C6B006EF12A /* PersonalCategories.swift in Sources */,
 				534B6B2928EF07CD006EF12A /* NewCategoryViewController.swift in Sources */,
+				53BBEDF228FD5B59004EC47D /* GroupSettingsViewController.swift in Sources */,
 				53BCCDD728F5EE5F003B32A4 /* UsersResultsTableViewCell.swift in Sources */,
 				535CA5C628F2C610007C2011 /* ViewControllerExtensions.swift in Sources */,
 				534B6B2D28EF4F10006EF12A /* PersonalItemsViewController.swift in Sources */,
 				53FD6C0028EEF13200D2C50D /* AppDelegate.swift in Sources */,
 				535CA5C228F2C358007C2011 /* PersonalCategoriesModel.swift in Sources */,
+				5353B8E328F993E90090A62E /* GroupsItemsViewController.swift in Sources */,
 				53BCCDDD28F5FC42003B32A4 /* GroupPaticipants.swift in Sources */,
+				5353B8F328F9B3430090A62E /* AddGroupItemViewController.swift in Sources */,
 				53ACAD3F28F00D70005C3579 /* PersonalItems.swift in Sources */,
 				5341BE7228F08D6400253761 /* UserModel.swift in Sources */,
 				53BCCDD328F5DCD9003B32A4 /* NewGroupCollectionViewCell.swift in Sources */,
 				5341BE7628F09EF100253761 /* RealmUser.swift in Sources */,
 				53FD6C0228EEF13200D2C50D /* SceneDelegate.swift in Sources */,
 				53ACAD3D28F00ABA005C3579 /* NewItemViewController.swift in Sources */,
+				5302AC3B28FD5CD7004287CF /* GroupSettingsTableViewCell.swift in Sources */,
 				5341BE6728F0719800253761 /* LoginViewController.swift in Sources */,
+				5345884F28F8665D00C26C27 /* GroupItemsModel.swift in Sources */,
 				5341BE6528F0545D00253761 /* GroupsViewController.swift in Sources */,
+				5353B8EE28F9A64E0090A62E /* ItemsTableViewCell.swift in Sources */,
 				5341BE6B28F07BBE00253761 /* SettingsViewController.swift in Sources */,
 				53BCCDCE28F571BA003B32A4 /* Groups.swift in Sources */,
+				5353B8EA28F9A60B0090A62E /* GroupItemsCollectionViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

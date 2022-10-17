@@ -40,11 +40,10 @@ class LoginViewController: UIViewController {
     
     
     @IBAction func loginButtonPressed(_ sender: Any) {
-        
+        //Show spinner
+        spinner.show(in: view)
         if let email = emailTextField.text, let password = passwordTextField.text {
-            //Show spinner
-            spinner.show(in: view)
-
+            
             //Log in to firebase auth
             Auth.auth().signIn(withEmail: email, password: password) { [weak self] _, error in
                 guard error == nil else {

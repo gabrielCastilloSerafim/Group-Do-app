@@ -12,12 +12,12 @@ extension UIViewController {
     
     //MARK: - Current date string formatter
     
-    ///Returns the current date formatted in --> "YY/MM/dd" as a String.
+    ///Returns the current date formatted in --> "dd/MM/YY" as a String.
     public func currentDateString() -> String {
         
         let date = Date()
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "YY/MM/dd"
+        dateFormatter.dateFormat = "dd/MM/YY"
         let dateString = dateFormatter.string(from: date)
         
         return dateString

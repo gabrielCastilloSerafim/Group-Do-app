@@ -19,13 +19,13 @@ class NewItemViewController: UIViewController {
         // Do any additional setup after loading the view.
     }
     
-    static var completion: ((String?, String?, String?) -> Void)?
+    static var completion: ((_ itemTitle:String?, _ dueToDate:String?, _ priority:String?) -> Void)?
     
     @IBAction func addTaskPressed(_ sender: UIButton) {
         
         let date = datePicker.date
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "YY/MM/dd"
+        dateFormatter.dateFormat = "dd/MM/YY"
         // Convert Date to String
         let dateString = dateFormatter.string(from: date)
         

@@ -25,8 +25,12 @@ class SettingsViewController: UIViewController {
     }
     
     private func loadAndSetProfilePicture() {
+        
+        let realm = try! Realm()
+        let userObject = realm.objects(RealmUser.self)
+        let profilePictureFileName = userObject[0].profilePictureFileName
     
-        ImageManager.shared.loadUserProfilePictureFromDisk { image in
+        ImageManager.shared.loadPictureFromDisk(fileName: profilePictureFileName) { image in
             
             profilePicture.image = image!
         }

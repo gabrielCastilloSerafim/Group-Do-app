@@ -17,7 +17,9 @@ class GroupItems: Object {
     @objc dynamic var isDone: Bool = false
     @objc dynamic var deadLine: String?
     @objc dynamic var itemID: String?
-    @objc dynamic var parentCategoryID: String?
+    @objc dynamic var creatorName: String?
+    @objc dynamic var creatorEmail: String?
+    @objc dynamic var fromGroupID: String?
     
     let reverseRelationship = LinkingObjects(fromType: Groups.self, property: "groupItems")
 }

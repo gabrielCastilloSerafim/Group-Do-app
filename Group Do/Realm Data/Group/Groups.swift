@@ -13,6 +13,7 @@ class Groups: Object {
     @objc dynamic var groupName: String?
     @objc dynamic var creationTimeSince1970: Double = 0
     @objc dynamic var groupID: String?
+    @objc dynamic var groupPictureName: String?
     
     let groupParticipants = List<GroupParticipants>()
     let groupItems = List<GroupItems>()

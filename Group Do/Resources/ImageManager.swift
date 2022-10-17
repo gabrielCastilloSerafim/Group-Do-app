@@ -21,6 +21,7 @@ final class ImageManager {
         
         let fileName = "\(formattedEmail)_profile_picture.png"
         let fileURL = documentsDirectory.appendingPathComponent(fileName)
+        
         guard let data = image.jpegData(compressionQuality: 1) else { return }
         
         //Checks if file exists, removes it if so.
@@ -42,12 +43,37 @@ final class ImageManager {
         
     }
     
-    ///Loads user's profile picture from local storage, Has completion with UIImage ready to use, the image naming convention used was --->  "\(formattedEmail)_profile_picture.png"
-    public func loadUserProfilePictureFromDisk(completion:(UIImage?) -> Void) {
+    ///Saves an image to devices documents directory using the following convention to name the image --->  "\(groupID)_group_picture.png"
+    public func saveGroupImage(groupID: String, image: UIImage) {
         
-        let realm = try! Realm()
-        let userObject = realm.objects(RealmUser.self)
-        let fileName = userObject[0].profilePictureFileName
+        guard let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { return }
+        
+        let fileName = "\(groupID)_group_picture.png"
+        let fileURL = documentsDirectory.appendingPathComponent(fileName)
+        
+        guard let data = image.jpegData(compressionQuality: 1) else { return }
+        
+        //Checks if file exists, removes it if so.
+        if FileManager.default.fileExists(atPath: fileURL.path) {
+            do {
+                try FileManager.default.removeItem(atPath: fileURL.path)
+                print("Removed old image")
+            } catch let removeError {
+                print("couldn't remove file at path", removeError)
+            }
+        }
+        
+        do {
+            try data.write(to: fileURL)
+            print("Success saving image locally")
+        } catch let error {
+            print("error saving file with error", error)
+        }
+        
+    }
+    
+    ///Loads images from local storage, Has completion with UIImage ready to use, the image naming convention used was --->  "\(formattedEmail)_profile_picture.png"
+    public func loadPictureFromDisk(fileName: String?, completion:(UIImage?) -> Void) {
         
         let documentDirectory = FileManager.SearchPathDirectory.documentDirectory
         

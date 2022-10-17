@@ -10,6 +10,7 @@ import UIKit
 class NewGroupCollectionViewCell: UICollectionViewCell {
 
     @IBOutlet weak var imageView: UIImageView!
+    @IBOutlet weak var xButton: UIImageView!
     
     override func awakeFromNib() {
         super.awakeFromNib()

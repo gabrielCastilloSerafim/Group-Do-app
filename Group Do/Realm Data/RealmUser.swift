@@ -16,5 +16,4 @@ class RealmUser: Object {
     @objc dynamic var email: String?
     @objc dynamic var profilePictureFileName: String?
     
-    
 }

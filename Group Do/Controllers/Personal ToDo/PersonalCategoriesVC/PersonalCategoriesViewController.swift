@@ -77,12 +77,9 @@ class PersonalCategoriesViewController: UIViewController {
         }
     }
     
-    
-    
-    
 }
 
-//MARK: - Database Manager
+//MARK: - Realm Manager
 
 extension PersonalCategoriesViewController {
     
@@ -137,9 +134,6 @@ extension PersonalCategoriesViewController {
     
     
 }
-
-
-
 
 //MARK: - TableView Delegate & DataSource
 

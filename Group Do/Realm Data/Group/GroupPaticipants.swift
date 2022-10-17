@@ -9,12 +9,14 @@ import Foundation
 import RealmSwift
 
 class GroupParticipants: Object {
-  
+    
     @objc dynamic var fullName: String?
     @objc dynamic var firstName: String?
     @objc dynamic var lastName: String?
     @objc dynamic var email: String?
     @objc dynamic var profilePictureFileName: String?
+    @objc dynamic var partOfGroupID: String?
+    @objc dynamic var isAdmin: Bool = false
     
     let reverseRelationship = LinkingObjects(fromType: Groups.self, property: "groupParticipants")
 }

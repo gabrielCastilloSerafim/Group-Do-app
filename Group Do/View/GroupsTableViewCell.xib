@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21225" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_0" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21207"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="GroupsCell" rowHeight="77" id="KGk-i7-Jjw" customClass="GroupsTableViewCell" customModule="Group_Do" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="77"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" ambiguous="YES" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="77"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="BiV-Ik-LEA">
+                        <rect key="frame" x="10" y="10" width="60" height="60"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="60" id="8qw-Kv-JfV"/>
+                            <constraint firstAttribute="width" constant="60" id="tdW-jo-5PV"/>
+                        </constraints>
+                    </imageView>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8v7-cg-Ngw">
+                        <rect key="frame" x="90" y="30" width="42" height="21"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="BiV-Ik-LEA" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="10" id="UjP-Ot-LZs"/>
+                    <constraint firstItem="BiV-Ik-LEA" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="10" id="etf-yU-COo"/>
+                    <constraint firstAttribute="bottom" secondItem="BiV-Ik-LEA" secondAttribute="bottom" constant="10" id="frR-Vt-X3w"/>
+                    <constraint firstItem="8v7-cg-Ngw" firstAttribute="leading" secondItem="BiV-Ik-LEA" secondAttribute="trailing" constant="20" id="hah-td-DFr"/>
+                    <constraint firstItem="8v7-cg-Ngw" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="30" id="yUd-cj-0LF"/>
+                </constraints>
+            </tableViewCellContentView>
+            <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
+            <connections>
+                <outlet property="groupImage" destination="BiV-Ik-LEA" id="b31-Rj-y56"/>
+                <outlet property="groupNameLabel" destination="8v7-cg-Ngw" id="t98-l4-niK"/>
+            </connections>
+            <point key="canvasLocation" x="130.76923076923077" y="0.35545023696682465"/>
+        </tableViewCell>
+    </objects>
+</document>

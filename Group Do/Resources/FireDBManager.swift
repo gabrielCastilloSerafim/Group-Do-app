@@ -7,6 +7,7 @@
 
 import Foundation
 import FirebaseDatabase
+import RealmSwift
 
 final class FireDBManager {
     
@@ -200,6 +201,252 @@ final class FireDBManager {
             completion(usersArray)
         }
     }
+    
+    ///Add group and it's participants to firebase groups node and add group to users personal node
+    public func addGroupToFirebase(groupObject: Groups, participantsObject: Array<GroupParticipants>) {
+        
+        //Groups...
+        
+        let formattedGroupID = iDFormatter(id: groupObject.groupID!)
+
+        let group: [String : Any] = ["groupName":groupObject.groupName!,
+                     "creationTimeSince1970":groupObject.creationTimeSince1970,
+                     "groupID":groupObject.groupID!,
+                     "groupPictureName":groupObject.groupPictureName!
+                   ]
+        
+        //Add group to groups node on firebase
+        database.child("groups/\(formattedGroupID)").updateChildValues(group)
+        
+        //Participants...
+        
+        for participant in participantsObject {
+            
+            let parentGroupID = iDFormatter(id: participant.partOfGroupID!)
+            let formattedEmail = emailFormatter(email: participant.email!)
+            
+            let participantDictionary: [String:Any] = ["fullName":participant.fullName!,
+                                     "firstName":participant.firstName!,
+                                     "lastName":participant.lastName!,
+                                     "email":participant.email!,
+                                     "profilePictureFileName":participant.profilePictureFileName!,
+                                     "partOfGroupID":participant.partOfGroupID!,
+                                     "isAdmin":participant.isAdmin
+                                    ]
+
+            //Add group to personal users nodes
+            database.child("users/\(formattedEmail)/groups/\(formattedGroupID)").updateChildValues(group)
+            
+            //Add participants to groups node
+            database.child("groups/\(parentGroupID)/participants/\(formattedEmail)").updateChildValues(participantDictionary)
+        }
+    
+    }
+    
+    ///Add group items to firebase
+    public func addItemToFirebase(participantsArray: Array<GroupParticipants>, itemObject: GroupItems) {
+        
+        let groupID = iDFormatter(id: itemObject.fromGroupID!)
+        let itemID = iDFormatter(id: itemObject.itemID!)
+        
+        //create item dictionary
+        let itemDict:[String:Any] = ["itemTitle":itemObject.itemTitle!,
+                        "creationDate":itemObject.creationDate!,
+                        "creationTimeSince1970":itemObject.creationTimeSince1970,
+                        "priority":itemObject.priority!,
+                        "isDone":itemObject.isDone,
+                        "deadLine":itemObject.deadLine!,
+                        "itemID":itemObject.itemID!,
+                        "creatorName":itemObject.creatorName!,
+                        "creatorEmail":itemObject.creatorEmail!,
+                        "fromGroupID":itemObject.fromGroupID!
+                        ]
+        
+        //Add item to group items node
+        database.child("groups/\(groupID)/items/\(itemID)").updateChildValues(itemDict)
+        
+        //Add item to personal participants nodes
+        for participant in participantsArray {
+            
+            let participantEmail = emailFormatter(email: participant.email!)
+            
+            database.child("users/\(participantEmail)/groups/\(groupID)/items/\(itemID)").updateChildValues(itemDict)
+        }
+    }
+    
+    ///Delete group items from firebase
+    public func deleteGroupItems(participants: Array<GroupParticipants>, itemObject: GroupItems) {
+        
+        let groupID = iDFormatter(id: itemObject.fromGroupID!)
+        let itemID = iDFormatter(id: itemObject.itemID!)
+        
+        //Delete from groups node
+        database.child("groups/\(groupID)/items/\(itemID)").removeValue()
+        
+        //Delete from participant's personal group nodes
+        for participant in participants {
+            
+            let participantEmail = emailFormatter(email: participant.email!)
+            
+            database.child("users/\(participantEmail)/groups/\(groupID)/items/\(itemID)").removeValue()
+        }
+    }
+    
+    ///Get all groups that the user participates from firebase
+    public func getGroups(userEmail: String, completion: @escaping (Bool) -> Void) {
+        
+        let formattedEmail = emailFormatter(email: userEmail)
+        var itemsArray = Array<GroupItems>()
+        //Access user groups
+        database.child("users/\(formattedEmail)/groups").observeSingleEvent(of: .value) { [weak self] snapshot in
+            //Iterate thru groups
+            for child in snapshot.children {
+                let snap = child as! DataSnapshot
+                let dict = snap.value as! [String:Any]
+                
+                //Download and save group image
+                let groupID = (dict["groupID"] as? String)!
+                let formattedGroupID = self?.iDFormatter(id: groupID)
+                let groupImageName = "\(formattedGroupID!)_group_picture.png"
+                FireStoreManager.shared.getImageURL(imageName: groupImageName) { url in
+                    FireStoreManager.shared.downloadImageWithURL(imageURL: url) { groupImage in
+                        ImageManager.shared.saveGroupImage(groupID: groupID, image: groupImage)
+                        //Call completion after image is saved to user's phone
+                        completion(true)
+                    }
+                }
+                
+                //Create a group object
+                let groupObject = Groups()
+                groupObject.groupName = dict["groupName"] as? String
+                groupObject.creationTimeSince1970 = (dict["creationTimeSince1970"] as? Double)!
+                groupObject.groupID = dict["groupID"] as? String
+                groupObject.groupPictureName = dict["groupPictureName"] as? String
+                //Call complementary function to get items for group using the groupID and append it to groupItems property
+                self?.getAllItemsForGroup(groupID: groupID, completion: { arrayOfItems in
+                    itemsArray = arrayOfItems
+                })
+                //Call complementary function to get participants for group using the groupID and append it to groupItems property
+                self?.getAllGroupParticipants(groupID: groupID, completion: { arrayOfParticipants in
+                    
+                    //Since this completion block is the last async function of the main function it is the las to execute and that why we added the group on realm here.
+                    let realm = try! Realm()
+                    do {
+                        try realm.write({
+                            if realm.objects(Groups.self).filter("groupID CONTAINS %@", groupID).count == 0 {
+                                groupObject.groupParticipants.append(objectsIn: arrayOfParticipants)
+                                groupObject.groupItems.append(objectsIn: itemsArray)
+                                realm.add(groupObject)
+                            }
+                        })
+                    } catch {
+                        print(error.localizedDescription)
+                        completion(false)
+                    }
+                })
+            }
+        }
+    }
+    
+    ///Gets all items for a specific group using the groupID
+    public func getAllItemsForGroup(groupID: String, completion: @escaping (Array<GroupItems>) -> Void) {
+        
+        var itemsArray = Array<GroupItems>()
+        
+        let formattedGroupID = iDFormatter(id: groupID)
+        
+        database.child("groups/\(formattedGroupID)/items").observeSingleEvent(of: .value) { snapshot in
+            
+            for child in snapshot.children {
+                let snap = child as! DataSnapshot
+                let dict = snap.value as! [String:Any]
+                
+                let itemObject = GroupItems()
+                itemObject.itemTitle = dict["itemTitle"] as? String
+                itemObject.creationDate = dict["creationDate"] as? String
+                itemObject.creationTimeSince1970 = (dict["creationTimeSince1970"] as? Double)!
+                itemObject.priority = dict["priority"] as? String
+                itemObject.deadLine = dict["deadLine"] as? String
+                itemObject.itemID = dict["itemID"] as? String
+                itemObject.creatorName = dict["itemID"] as? String
+                itemObject.creatorEmail = dict["creatorEmail"] as? String
+                itemObject.fromGroupID = dict["fromGroupID"] as? String
+                
+                itemsArray.append(itemObject)
+            }
+            completion(itemsArray)
+        }
+        
+    }
+    
+    ///Get all participants of a group using the groupID
+    public func getAllGroupParticipants(groupID: String, completion: @escaping (Array<GroupParticipants>) -> Void) {
+        
+        let formattedGroupID = iDFormatter(id: groupID)
+        var participantsArray = Array<GroupParticipants>()
+        
+        database.child("groups/\(formattedGroupID)/participants").observeSingleEvent(of: .value) {[weak self] snapshot in
+            
+            for child in snapshot.children {
+                
+                let snap = child as! DataSnapshot
+                let dict = snap.value as! [String:Any]
+                
+                let participantObject = GroupParticipants()
+                participantObject.fullName = dict["fullName"] as? String
+                participantObject.firstName = dict["firstName"] as? String
+                participantObject.lastName = dict["lastName"] as? String
+                participantObject.email = dict["email"] as? String
+                participantObject.profilePictureFileName = dict["profilePictureFileName"] as? String
+                participantObject.partOfGroupID = dict["partOfGroupID"] as? String
+                participantObject.isAdmin = (dict["isAdmin"] as? Bool)!
+                
+                participantsArray.append(participantObject)
+                //Download the user image and save it to device
+                let userEmail = (dict["email"] as? String)!
+                let formattedUserEmail = self?.emailFormatter(email: userEmail)
+                let userProfilePictureName = "\(formattedUserEmail!)_profile_picture.png"
+                FireStoreManager.shared.getImageURL(imageName: userProfilePictureName) { url in
+                    FireStoreManager.shared.downloadImageWithURL(imageURL: url) { image in
+                        ImageManager.shared.saveImage(userEmail: userEmail, image: image)
+                    }
+                }
+            }
+            completion(participantsArray)
+        }
+    }
+    
+    ///Delete group participant from group in groups node and delete group from participant node.
+    public func removeGroupParticipant(participantToRemove: GroupParticipants) {
+        
+        let participantEmail = emailFormatter(email: participantToRemove.email!)
+        let groupID = iDFormatter(id: participantToRemove.partOfGroupID!)
+        
+        //Delete participant from group in groups node
+        database.child("groups/\(groupID)/participants/\(participantEmail)").removeValue()
+        
+        //Delete group from personal user's node
+        database.child("users/\(participantEmail)/groups/\(groupID)").removeValue()
+    }
+    
+    ///Delete group from groups node and from all participants groups node in firebase.
+    public func deleteGroup(group: Groups, participantsArray: Array<GroupParticipants>) {
+        
+        let groupID = iDFormatter(id: group.groupID!)
+        
+        //Delete group from groups node
+        database.child("groups/\(groupID)").removeValue()
+        
+        //Delete group from every participant groups node
+        for participant in participantsArray {
+            
+            let participantEmail = emailFormatter(email: participant.email!)
+            
+            database.child("users/\(participantEmail)/groups/\(groupID)").removeValue()
+        }
+    }
+    
+    
     
     
     

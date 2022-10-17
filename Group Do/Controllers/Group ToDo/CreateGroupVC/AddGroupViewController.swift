@@ -12,6 +12,7 @@ import JGProgressHUD
 
 class AddGroupViewController: UIViewController {
 
+    @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var collectionView: UICollectionView!
     
@@ -31,15 +32,27 @@ class AddGroupViewController: UIViewController {
         collectionView.register(UINib(nibName: "NewGroupCollectionViewCell" , bundle: nil), forCellWithReuseIdentifier: "customCollectionCell")
 
     }
-    
+
     @IBAction func cancelButtonPressed(_ sender: UIButton) {
-        self.dismiss(animated: true)
+        dismiss(animated: true)
     }
     
     @IBAction func nextButtonPressed(_ sender: UIButton) {
         
+        if selectedUserArray.count != 0 {
+            performSegue(withIdentifier: "NewGroupToCreateGroup", sender: self)
+        } else {
+            let alert = UIAlertController(title: "No participants added", message: "Please add group participants in order to proceed.", preferredStyle: .alert)
+            let action = UIAlertAction(title: "Dismiss", style: .default)
+            alert.addAction(action)
+            present(alert, animated: true)
+        }
     }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let destinationVC = segue.destination as! ConfirmGroupViewController
+        destinationVC.groupParticipants = selectedUserArray
+    }
 }
 
 //MARK: - TableView Delegate & Datasource
@@ -47,6 +60,7 @@ class AddGroupViewController: UIViewController {
 extension AddGroupViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        
         return usersArray.count
     }
     
@@ -68,7 +82,20 @@ extension AddGroupViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         spinner.show(in: view)
-        selectedUserArray.append(usersArray[indexPath.row])
+        
+        let participant = usersArray[indexPath.row]
+        
+        if selectedUserArray.contains(participant) {
+            print("Already has participant")
+            
+            let alert = UIAlertController(title: "User already in group", message: "Please add a different user", preferredStyle: .alert)
+            let action = UIAlertAction(title: "Dismiss", style: .default)
+            alert.addAction(action)
+            present(alert, animated: true)
+            
+        } else {
+            selectedUserArray.append(usersArray[indexPath.row])
+        }
         
         collectionView.reloadData()
     }
@@ -80,40 +107,59 @@ extension AddGroupViewController: UITableViewDelegate, UITableViewDataSource {
 extension AddGroupViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return selectedUserArray.count
+        if selectedUserArray.count == 0 {
+            return 1
+        } else {
+            return selectedUserArray.count
+        }
+        
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "customCollectionCell", for: indexPath) as! NewGroupCollectionViewCell
         
-        let user = selectedUserArray[indexPath.row]
-        let imageName = user.profilePictureFileName!
-        let email = user.email
-        
-        FireStoreManager.shared.getImageURL(imageName: imageName) { [weak self] url in
-            //Set profile picture image on cell
-            DispatchQueue.main.async {
-                cell.imageView.sd_setImage(with: url)
-                self?.spinner.dismiss(animated: true)
-            }
-            //Download profile picture image
-            URLSession.shared.dataTask(with: url) { data, response, error in
-                guard let image = UIImage(data: data!) else {
-                    return
+        if selectedUserArray.count != 0 {
+            let user = selectedUserArray[indexPath.row]
+            let imageName = user.profilePictureFileName!
+            let email = user.email
+            
+            FireStoreManager.shared.getImageURL(imageName: imageName) { [weak self] url in
+                //Set profile picture image on cell
+                DispatchQueue.main.async {
+                    cell.imageView.sd_setImage(with: url) { _, _, _, _ in
+                        cell.xButton.isHidden = false
+                    }
+                    self?.spinner.dismiss(animated: true)
                 }
-                //Save profile picture image to users phone
-                ImageManager.shared.saveImage(userEmail: email!, image: image)
-            }.resume()
+                //Download profile picture image
+                URLSession.shared.dataTask(with: url) { data, response, error in
+                    guard let image = UIImage(data: data!) else {
+                        return
+                    }
+                    //Save profile picture image to users phone
+                    ImageManager.shared.saveImage(userEmail: email!, image: image)
+                }.resume()
+            }
+        } else {
+            DispatchQueue.main.async {
+                cell.imageView.image = UIImage(systemName: "person.crop.circle.badge.plus")
+                cell.xButton.isHidden = true
+            }
         }
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
-        selectedUserArray.remove(at: indexPath.row)
-        collectionView.reloadData()
+        if usersArray.count == 0 {
+            searchBar.becomeFirstResponder()
+        }
+        if selectedUserArray.count != 0 {
+            
+            selectedUserArray.remove(at: indexPath.row)
+            collectionView.reloadData()
+        }
     }
-    
     
 }
 
@@ -130,13 +176,13 @@ extension AddGroupViewController: UISearchBarDelegate {
             
             let realm = try! Realm()
             let selfUser = realm.objects(RealmUser.self)
-            let selfUserFullName = selfUser[0].fullName
+            let selfUserEmail = selfUser[0].email
             
             var filteredUsersArray = Array<RealmUser>()
             
             for user in firebaseUsersArray {
                 
-                if user.fullName != selfUserFullName {
+                if user.email != selfUserEmail {
                     
                     if user.fullName?.lowercased().hasPrefix(searchBar.text!.lowercased()) == true {
                         filteredUsersArray.append(user)
@@ -149,7 +195,7 @@ extension AddGroupViewController: UISearchBarDelegate {
                     self?.tableView.reloadData()
                 }
             } else {
-                let alert = UIAlertController(title: "No users found", message: "Could no find user match", preferredStyle: .alert)
+                let alert = UIAlertController(title: "No users found", message: "Could not find user match", preferredStyle: .alert)
                 let action = UIAlertAction(title: "Dismiss", style: .default)
                 alert.addAction(action)
                 DispatchQueue.main.async {
@@ -159,6 +205,14 @@ extension AddGroupViewController: UISearchBarDelegate {
             }
         }
     }
-
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        if searchText.count == 0 {
+            DispatchQueue.main.async {
+                searchBar.resignFirstResponder()
+            }
+            
+        }
+    }
     
 }

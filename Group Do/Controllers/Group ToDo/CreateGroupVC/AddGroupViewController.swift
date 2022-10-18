@@ -80,8 +80,8 @@ extension AddGroupViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
         spinner.show(in: view)
+        tableView.deselectRow(at: indexPath, animated: true)
         
         let participant = usersArray[indexPath.row]
         
@@ -94,10 +94,19 @@ extension AddGroupViewController: UITableViewDelegate, UITableViewDataSource {
             present(alert, animated: true)
             
         } else {
-            selectedUserArray.append(usersArray[indexPath.row])
+            selectedUserArray.append(participant)
+            //Download and save selected user profile picture
+            let imageName = participant.profilePictureFileName!
+            let userEmail = participant.email!
+            FireStoreManager.shared.getImageURL(imageName: imageName) { url in
+                FireStoreManager.shared.downloadImageWithURL(imageURL: url) { [weak self] profileImage in
+                    ImageManager.shared.saveImage(userEmail: userEmail, image: profileImage)
+                    DispatchQueue.main.async {
+                        self?.collectionView.reloadData()
+                    }
+                }
+            }
         }
-        
-        collectionView.reloadData()
     }
     
 }
@@ -121,24 +130,11 @@ extension AddGroupViewController: UICollectionViewDelegate, UICollectionViewData
         if selectedUserArray.count != 0 {
             let user = selectedUserArray[indexPath.row]
             let imageName = user.profilePictureFileName!
-            let email = user.email
-            
-            FireStoreManager.shared.getImageURL(imageName: imageName) { [weak self] url in
-                //Set profile picture image on cell
-                DispatchQueue.main.async {
-                    cell.imageView.sd_setImage(with: url) { _, _, _, _ in
-                        cell.xButton.isHidden = false
-                    }
-                    self?.spinner.dismiss(animated: true)
-                }
-                //Download profile picture image
-                URLSession.shared.dataTask(with: url) { data, response, error in
-                    guard let image = UIImage(data: data!) else {
-                        return
-                    }
-                    //Save profile picture image to users phone
-                    ImageManager.shared.saveImage(userEmail: email!, image: image)
-                }.resume()
+            //Set image to collection cell
+            ImageManager.shared.loadPictureFromDisk(fileName: imageName) { profileImage in
+                cell.imageView.image = profileImage
+                cell.xButton.isHidden = false
+                spinner.dismiss(animated: true)
             }
         } else {
             DispatchQueue.main.async {

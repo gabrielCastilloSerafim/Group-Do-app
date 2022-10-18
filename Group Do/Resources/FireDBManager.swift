@@ -446,7 +446,38 @@ final class FireDBManager {
         }
     }
     
-    
+    ///Add new participant to group and new group to participant groups node
+    public func addNewParticipant(participantsArray: Array<GroupParticipants>, group: Groups) {
+        
+        let groupID = iDFormatter(id: group.groupID!)
+        
+        //Create group dictionary
+        let groupDictionary: [String:Any] = ["creationTimeSince1970":group.creationTimeSince1970,
+                                             "groupID":group.groupID!,
+                                             "groupName":group.groupName!,
+                                             "groupPictureName":group.groupPictureName!
+                                             ]
+        
+        for participant in participantsArray {
+            
+            let participantEmail = emailFormatter(email: participant.email!)
+            //Create new participant dictionary
+            let participantDictionary: [String:Any] = ["email":participant.email!,
+                                                       "firstName":participant.firstName!,
+                                                       "fullName":participant.fullName!,
+                                                       "isAdmin":participant.isAdmin,
+                                                       "lastName":participant.lastName!,
+                                                       "partOfGroupID":participant.partOfGroupID!,
+                                                       "profilePictureFileName":participant.profilePictureFileName!
+                                                        ]
+            
+            //Add new participant to group in groups node
+            database.child("groups/\(groupID)/participants/\(participantEmail)").updateChildValues(participantDictionary)
+            
+            //Add new groupObject to user groups node
+            database.child("users/\(participantEmail)/groups/\(groupID)").updateChildValues(groupDictionary)
+        }
+    }
     
     
     

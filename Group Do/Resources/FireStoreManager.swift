@@ -84,5 +84,8 @@ final class FireStoreManager {
         }.resume()
     }
     
+
+    
+    
     
 }

@@ -61,7 +61,6 @@ class GroupsItemsViewController: UIViewController {
         if segue.identifier == "GroupItemsToSettings" {
             
             let destinationVC = segue.destination as! GroupSettingsViewController
-            destinationVC.participantsArray = participantsArray
             destinationVC.group = selectedGroup
         }
     }

@@ -18,6 +18,7 @@ class GroupSettingsViewController: UIViewController {
     @IBOutlet weak var deleteGroupButton: UIButton!
     
     var group: Groups?
+    
     var participantsArray: Results<GroupParticipants>?
      
     override func viewDidLoad() {
@@ -26,6 +27,9 @@ class GroupSettingsViewController: UIViewController {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(UINib(nibName: "GroupSettingsTableViewCell", bundle: nil), forCellReuseIdentifier: "GroupSettingsTableViewCell")
+        
+        //Load participants from realm
+        loadParticipants(group: group!)
         //Set the number of group participants label value
         numberOfParticipantsLabel.text = String(participantsArray!.count)
         //Set the group image
@@ -50,12 +54,31 @@ class GroupSettingsViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.tabBarController?.tabBar.isHidden = true
+        loadParticipants(group: group!)
     }
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         self.tabBarController?.tabBar.isHidden = false
     }
     
+    @IBAction func addParticipantButtonPressed(_ sender: UIButton) {
+        
+        AddParticipantViewController.completion = {
+            self.tableView.reloadData()
+        }
+        
+        performSegue(withIdentifier: "settingsToAddParticipant", sender: self)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "settingsToAddParticipant" {
+            
+            let destinationVC = segue.destination as! AddParticipantViewController
+            destinationVC.group = group!
+            destinationVC.participantsArray = participantsArray!
+            
+        }
+    }
     
     @IBAction func exitGroupButtonPressed(_ sender: UIButton) {
         let realm = try! Realm()
@@ -183,5 +206,18 @@ extension GroupSettingsViewController: UITableViewDelegate, UITableViewDataSourc
         }
     }
     
+    
+}
+
+//MARK: - Realm Manager
+
+extension GroupSettingsViewController {
+    
+    func loadParticipants(group: Groups) {
+        
+        let realm = try! Realm()
+        participantsArray = realm.objects(GroupParticipants.self).filter("partOfGroupID CONTAINS %@", group.groupID!)
+        tableView.reloadData()
+    }
     
 }

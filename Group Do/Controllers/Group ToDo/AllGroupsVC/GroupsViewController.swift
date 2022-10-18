@@ -9,6 +9,7 @@ import UIKit
 import FirebaseAuth
 import RealmSwift
 
+
 class GroupsViewController: UIViewController {
 
     @IBOutlet weak var tableView: UITableView!

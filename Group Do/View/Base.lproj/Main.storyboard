@@ -481,7 +481,7 @@
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" title="Add participant"/>
                                         <connections>
-                                            <segue destination="VOG-6W-TC3" kind="presentation" id="FZb-9g-Cbe"/>
+                                            <action selector="addParticipantButtonPressed:" destination="FC9-ag-AAs" eventType="touchUpInside" id="KgT-BM-nhs"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -520,6 +520,7 @@
                         <outlet property="groupNameLAbel" destination="BoH-lr-qQt" id="8Pn-n4-OYC"/>
                         <outlet property="numberOfParticipantsLabel" destination="78R-MZ-sVd" id="Zlx-HY-UBQ"/>
                         <outlet property="tableView" destination="TNP-zF-iz5" id="KdM-ZN-vsF"/>
+                        <segue destination="VOG-6W-TC3" kind="presentation" identifier="settingsToAddParticipant" id="goe-Ax-K5G"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="GyF-gw-GqL" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

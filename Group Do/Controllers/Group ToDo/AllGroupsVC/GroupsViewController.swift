@@ -8,7 +8,8 @@
 import UIKit
 import FirebaseAuth
 import RealmSwift
-
+import FirebaseDatabase
+import SDWebImage
 
 class GroupsViewController: UIViewController {
 
@@ -16,7 +17,6 @@ class GroupsViewController: UIViewController {
     @IBOutlet weak var noGroupsLabel: UILabel!
     
     var groupsArray: Results<Groups>?
-    var updatedRealmGroups = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,8 +32,6 @@ class GroupsViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        checkLoginStatus()
-        
         if groupsArray?.count == 0 {
             noGroupsLabel.isHidden = false
         } else {
@@ -43,33 +41,45 @@ class GroupsViewController: UIViewController {
         loadGroups()
     }
     
-    private func checkLoginStatus() {
-        if Auth.auth().currentUser == nil {
-            performSegue(withIdentifier: "GroupsToLogin", sender: self)
-        } else {
-            if updatedRealmGroups == false {
-                //Download and add missing groups from firebase to realm
-                let realm = try! Realm()
-                let realmUser = realm.objects(RealmUser.self)[0]
-                let userEmail = realmUser.email!
-                FireDBManager.shared.getGroups(userEmail: userEmail) { [weak self] BoolResult in
-                    if BoolResult == true {
-                        
-                        DispatchQueue.main.async {
-                            if self?.groupsArray?.count == 0 {
-                                self?.noGroupsLabel.isHidden = false
-                            } else {
-                                self?.noGroupsLabel.isHidden = true
-                            }
-                            self?.tableView.reloadData()
-                        }
-                        self?.updatedRealmGroups = true
-                    }
-                }
-            }
-        }
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        startListeningToGroups()
     }
     
+    private func startListeningToGroups() {
+        //Download and add missing groups from firebase to realm
+        let realm = try! Realm()
+        let realmUserEmail = realm.objects(RealmUser.self)[0].email!
+        
+        FireDBManager.shared.getGroups(userEmail: realmUserEmail) { [weak self] BoolResult, groupObjectsArray  in
+            if BoolResult == true {
+                DispatchQueue.main.async {
+                    if self?.groupsArray?.count == 0 {
+                        self?.noGroupsLabel.isHidden = false
+                    } else {
+                        self?.noGroupsLabel.isHidden = true
+                    }
+                    self?.loadGroups()
+                    
+                }
+            } else {
+                if groupObjectsArray.count != 0 {
+                    
+                    for group in groupObjectsArray {
+                        FireStoreManager.shared.getImageURL(imageName: group.groupPictureName!) { [weak self] url in
+                            FireStoreManager.shared.downloadGroupImageWithURL(imageURL: url!, groupID: group.groupID!) { image in
+                                ImageManager.shared.saveGroupImage(groupID: group.groupID!, image: image!)
+                                self?.loadGroups()
+                            }
+                        }
+                    }
+                    
+                }
+                
+            }
+        }
+        
+    }
     
     @IBAction func addButtonPressed(_ sender: Any) {
         
@@ -97,10 +107,10 @@ extension GroupsViewController: UITableViewDelegate, UITableViewDataSource {
         
         let imageName = groupsArray?[indexPath.row].groupPictureName
         
-        ImageManager.shared.loadPictureFromDisk(fileName: imageName) { groupImage in
+        ImageManager.shared.loadPictureFromDisk(fileName: imageName) { [weak self] resultImage in
+            cell.groupNameLabel.text = self?.groupsArray?[indexPath.row].groupName
+            cell.groupImage.image = resultImage
             
-            cell.groupNameLabel.text = groupsArray?[indexPath.row].groupName
-            cell.groupImage.image = groupImage
         }
         
         return cell

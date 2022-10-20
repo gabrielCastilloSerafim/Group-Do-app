@@ -59,7 +59,8 @@ class SettingsViewController: UIViewController {
         ImageManager.shared.deleAllImagesFromUsersDir()
         
         //Go to Groups VC
-        tabBarController?.selectedIndex = 0
+        MainNavigationController.isLoggedIn = false
+        self.dismiss(animated: true)
     }
     
 

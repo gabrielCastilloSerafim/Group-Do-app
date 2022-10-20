@@ -70,10 +70,20 @@ extension AddGroupViewController: UITableViewDelegate, UITableViewDataSource {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "UsersTableCell", for: indexPath) as! UsersResultsTableViewCell
         
-        FireStoreManager.shared.getImageURL(imageName: imageName) { [weak self] url in
-            cell.nameLabel.text = self?.usersArray[indexPath.row].fullName
-            cell.profilePicture.sd_setImage(with: url)
-            self?.spinner.dismiss(animated: true)
+        FireStoreManager.shared.getImageURL(imageName: imageName) { [weak self] resultUrl in
+            if let url = resultUrl {
+                cell.nameLabel.text = self?.usersArray[indexPath.row].fullName
+                cell.profilePicture.sd_setImage(with: url)
+                self?.spinner.dismiss(animated: true)
+            } else {
+                //Already have image stored in device memory just grab it
+                ImageManager.shared.loadPictureFromDisk(fileName: imageName) { profileImage in
+                    cell.nameLabel.text = self?.usersArray[indexPath.row].fullName
+                    cell.profilePicture.image = profileImage
+                    self?.spinner.dismiss(animated: true)
+                }
+            }
+            
         }
         
         return cell
@@ -98,13 +108,22 @@ extension AddGroupViewController: UITableViewDelegate, UITableViewDataSource {
             //Download and save selected user profile picture
             let imageName = participant.profilePictureFileName!
             let userEmail = participant.email!
-            FireStoreManager.shared.getImageURL(imageName: imageName) { url in
-                FireStoreManager.shared.downloadImageWithURL(imageURL: url) { [weak self] profileImage in
-                    ImageManager.shared.saveImage(userEmail: userEmail, image: profileImage)
-                    DispatchQueue.main.async {
-                        self?.collectionView.reloadData()
+            FireStoreManager.shared.getImageURL(imageName: imageName) { urlResult in
+                if let url = urlResult {
+                    FireStoreManager.shared.downloadProfileImageWithURL(imageURL: url, userEmail: userEmail) { [weak self] userImage in
+                        guard let profileImage = userImage else {
+                            return
+                        }
+                        ImageManager.shared.saveImage(userEmail: userEmail, image: profileImage)
+                        DispatchQueue.main.async {
+                            self?.collectionView.reloadData()
+                        }
                     }
+                } else {
+                    //Already have image in device memory just need to reload collectionView
+                    self.collectionView.reloadData()
                 }
+                
             }
         }
     }

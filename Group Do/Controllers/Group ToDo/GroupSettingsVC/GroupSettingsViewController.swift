@@ -144,17 +144,30 @@ extension GroupSettingsViewController: UITableViewDelegate, UITableViewDataSourc
         let realm = try! Realm()
         let realmUserEmail = realm.objects(RealmUser.self)[0].email
         let participantEmail = participantsArray?[indexPath.row].email
+        let participantIsAdmin = participantsArray?[indexPath.row].isAdmin
         let imageName = participantsArray?[indexPath.row].profilePictureFileName
         
         ImageManager.shared.loadPictureFromDisk(fileName: imageName) { image in
             
             cell.profilePicture.image = image
-            //Different setup to self user participant
-            if realmUserEmail == participantEmail {
+            
+            //Different setup to admin
+            if realmUserEmail == participantEmail && participantIsAdmin == true {
                 cell.userNameLabel.text = "Me"
                 cell.deleteLabel.text = "Admin"
                 cell.deleteLabel.textColor = .black
                 cell.isUserInteractionEnabled = false
+                
+            } else if realmUserEmail == participantEmail && participantIsAdmin == false {
+                cell.userNameLabel.text = "Me"
+                cell.deleteLabel.text = ""
+                cell.isUserInteractionEnabled = false
+                
+            } else if realmUserEmail != participantEmail && participantIsAdmin == true {
+                cell.deleteLabel.text = "Admin"
+                cell.deleteLabel.textColor = .black
+                cell.isUserInteractionEnabled = false
+                
             } else {
                 cell.userNameLabel.text = participantsArray?[indexPath.row].fullName
             } 

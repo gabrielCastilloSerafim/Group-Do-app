@@ -293,12 +293,14 @@ final class FireDBManager {
     }
     
     ///Get all groups that the user participates from firebase
-    public func getGroups(userEmail: String, completion: @escaping (Bool) -> Void) {
+    public func getGroups(userEmail: String, completion: @escaping (Bool, [Groups]) -> Void) {
         
         let formattedEmail = emailFormatter(email: userEmail)
         var itemsArray = Array<GroupItems>()
+        var groupProfilePictures = [Groups]()
+        
         //Access user groups
-        database.child("users/\(formattedEmail)/groups").observeSingleEvent(of: .value) { [weak self] snapshot in
+        database.child("users/\(formattedEmail)/groups").observe(.value, with: { [weak self] snapshot in
             //Iterate thru groups
             for child in snapshot.children {
                 let snap = child as! DataSnapshot
@@ -306,30 +308,40 @@ final class FireDBManager {
                 
                 //Download and save group image
                 let groupID = (dict["groupID"] as? String)!
-                let formattedGroupID = self?.iDFormatter(id: groupID)
-                let groupImageName = "\(formattedGroupID!)_group_picture.png"
-                FireStoreManager.shared.getImageURL(imageName: groupImageName) { url in
-                    FireStoreManager.shared.downloadImageWithURL(imageURL: url) { groupImage in
-                        ImageManager.shared.saveGroupImage(groupID: groupID, image: groupImage)
-                        //Call completion after image is saved to user's phone
-                        completion(true)
+                
+                FireStoreManager.shared.getGroupImageURL(groupID: groupID) { resultUrl in
+                    if let url = resultUrl {
+                        FireStoreManager.shared.downloadGroupImageWithURL(imageURL: url, groupID: groupID) { resultImage in
+                            let image = resultImage!
+                            ImageManager.shared.saveGroupImage(groupID: groupID, image: image)
+                                //Call completion after image is saved to user's phone
+                                print("COMPLETION WITH DOWNLOADS IMAGE")
+                                completion(true, [])
+                        }
+                    } else {
+                        //Already have group image stored
+                        print("COMPLETION WITH NO DOWNLOADED IMAGE")
+                        //completion(true)
                     }
                 }
-                
                 //Create a group object
                 let groupObject = Groups()
                 groupObject.groupName = dict["groupName"] as? String
                 groupObject.creationTimeSince1970 = (dict["creationTimeSince1970"] as? Double)!
                 groupObject.groupID = dict["groupID"] as? String
                 groupObject.groupPictureName = dict["groupPictureName"] as? String
+                
+                groupProfilePictures.append(groupObject)
+                
                 //Call complementary function to get items for group using the groupID and append it to groupItems property
                 self?.getAllItemsForGroup(groupID: groupID, completion: { arrayOfItems in
                     itemsArray = arrayOfItems
                 })
+                
                 //Call complementary function to get participants for group using the groupID and append it to groupItems property
                 self?.getAllGroupParticipants(groupID: groupID, completion: { arrayOfParticipants in
                     
-                    //Since this completion block is the last async function of the main function it is the las to execute and that why we added the group on realm here.
+                    //Since this completion block is the last async function of the main function it is the last to execute and that why we added the group on realm here.
                     let realm = try! Realm()
                     do {
                         try realm.write({
@@ -337,15 +349,16 @@ final class FireDBManager {
                                 groupObject.groupParticipants.append(objectsIn: arrayOfParticipants)
                                 groupObject.groupItems.append(objectsIn: itemsArray)
                                 realm.add(groupObject)
+                                completion(false, groupProfilePictures)
                             }
                         })
                     } catch {
                         print(error.localizedDescription)
-                        completion(false)
+                        completion(false, [])
                     }
                 })
             }
-        }
+        })
     }
     
     ///Gets all items for a specific group using the groupID
@@ -406,10 +419,16 @@ final class FireDBManager {
                 let userEmail = (dict["email"] as? String)!
                 let formattedUserEmail = self?.emailFormatter(email: userEmail)
                 let userProfilePictureName = "\(formattedUserEmail!)_profile_picture.png"
-                FireStoreManager.shared.getImageURL(imageName: userProfilePictureName) { url in
-                    FireStoreManager.shared.downloadImageWithURL(imageURL: url) { image in
-                        ImageManager.shared.saveImage(userEmail: userEmail, image: image)
+                FireStoreManager.shared.getImageURL(imageName: userProfilePictureName) { resultUrl in
+                    if let url = resultUrl {
+                        FireStoreManager.shared.downloadProfileImageWithURL(imageURL: url, userEmail: userEmail) { image in
+                            guard let profilePicture = image else {
+                                return
+                            }
+                            ImageManager.shared.saveImage(userEmail: userEmail, image: profilePicture)
+                        }
                     }
+                    
                 }
             }
             completion(participantsArray)

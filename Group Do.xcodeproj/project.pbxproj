@@ -48,6 +48,7 @@
 		53BCCDD828F5EE5F003B32A4 /* UsersResultsTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53BCCDD628F5EE5F003B32A4 /* UsersResultsTableViewCell.xib */; };
 		53BCCDDD28F5FC42003B32A4 /* GroupPaticipants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53BCCDDC28F5FC42003B32A4 /* GroupPaticipants.swift */; };
 		53BCCDDF28F5FDE1003B32A4 /* GroupItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53BCCDDE28F5FDE1003B32A4 /* GroupItems.swift */; };
+		53CFDF51290089F9005C72C4 /* MainNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53CFDF50290089F9005C72C4 /* MainNavigationController.swift */; };
 		53FD6C0028EEF13200D2C50D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53FD6BFF28EEF13200D2C50D /* AppDelegate.swift */; };
 		53FD6C0228EEF13200D2C50D /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53FD6C0128EEF13200D2C50D /* SceneDelegate.swift */; };
 		53FD6C0428EEF13200D2C50D /* PersonalCategoriesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53FD6C0328EEF13200D2C50D /* PersonalCategoriesViewController.swift */; };
@@ -100,6 +101,7 @@
 		53BCCDD628F5EE5F003B32A4 /* UsersResultsTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = UsersResultsTableViewCell.xib; sourceTree = "<group>"; };
 		53BCCDDC28F5FC42003B32A4 /* GroupPaticipants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupPaticipants.swift; sourceTree = "<group>"; };
 		53BCCDDE28F5FDE1003B32A4 /* GroupItems.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupItems.swift; sourceTree = "<group>"; };
+		53CFDF50290089F9005C72C4 /* MainNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainNavigationController.swift; sourceTree = "<group>"; };
 		53FD6BFC28EEF13200D2C50D /* Group Do.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Group Do.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		53FD6BFF28EEF13200D2C50D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		53FD6C0128EEF13200D2C50D /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -321,6 +323,7 @@
 		53FD6C1728EEF1D400D2C50D /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				53CFDF50290089F9005C72C4 /* MainNavigationController.swift */,
 				53FD6BFF28EEF13200D2C50D /* AppDelegate.swift */,
 				53FD6C0128EEF13200D2C50D /* SceneDelegate.swift */,
 				5341BE6F28F08BEA00253761 /* FireDBManager.swift */,
@@ -508,6 +511,7 @@
 				53BCCDD328F5DCD9003B32A4 /* NewGroupCollectionViewCell.swift in Sources */,
 				5341BE7628F09EF100253761 /* RealmUser.swift in Sources */,
 				53FD6C0228EEF13200D2C50D /* SceneDelegate.swift in Sources */,
+				53CFDF51290089F9005C72C4 /* MainNavigationController.swift in Sources */,
 				53ACAD3D28F00ABA005C3579 /* NewItemViewController.swift in Sources */,
 				5302AC3B28FD5CD7004287CF /* GroupSettingsTableViewCell.swift in Sources */,
 				5341BE6728F0719800253761 /* LoginViewController.swift in Sources */,

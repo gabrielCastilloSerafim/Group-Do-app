@@ -24,20 +24,6 @@ class LoginViewController: UIViewController {
         
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        //Hides back button on view
-        self.navigationItem.setHidesBackButton(true, animated: false)
-        //Hides tab bar controller
-        self.tabBarController?.tabBar.isHidden = true
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        //Unhides tab bar controller
-        self.tabBarController?.tabBar.isHidden = false
-    }
-    
     
     @IBAction func loginButtonPressed(_ sender: Any) {
         //Show spinner
@@ -81,8 +67,8 @@ class LoginViewController: UIViewController {
                     }
                     
                     //Download and save user's profile picture
-                    FireStoreManager.shared.getImageURL(imageName: profilePictureName! as! String) { url in
-                        
+                    FireStoreManager.shared.getImageURL(imageName: profilePictureName! as! String) { resultUrl in
+                        guard let url = resultUrl else {return}
                         URLSession.shared.dataTask(with: url) { data, response, error in
                             guard let image = UIImage(data: data!) else {
                                 return
@@ -90,10 +76,14 @@ class LoginViewController: UIViewController {
                             //Save image to users phone
                             ImageManager.shared.saveImage(userEmail: email! as! String, image: image)
                         }.resume()
+                        
                         print("Success logging in")
+                        //Set Main nav controller login property to true to show logged in screen when dismissed
+                        MainNavigationController.isLoggedIn = true
+                        
                         DispatchQueue.main.async {
                             self?.spinner.dismiss(animated: true)
-                            self?.navigationController?.popToRootViewController(animated: false)
+                            self?.dismiss(animated: true)
                         }
                     }
                 }

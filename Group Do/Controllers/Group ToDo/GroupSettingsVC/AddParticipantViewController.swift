@@ -83,13 +83,20 @@ extension AddParticipantViewController: UITableViewDelegate, UITableViewDataSour
         
         let imageName = usersArray[indexPath.row].profilePictureFileName
         
-        FireStoreManager.shared.getImageURL(imageName: imageName!) { url in
-            cell.profilePicture.sd_setImage(with: url)
+        FireStoreManager.shared.getImageURL(imageName: imageName!) { [weak self] resultUrl in
+            if let url = resultUrl {
+                cell.profilePicture.sd_setImage(with: url)
+                cell.nameLabel.text = self?.usersArray[indexPath.row].fullName
+                self?.spinner.dismiss(animated: true)
+            } else {
+                //Already have image saved in user device just grab it
+                ImageManager.shared.loadPictureFromDisk(fileName: imageName) { profilePicture in
+                    cell.profilePicture.image = profilePicture
+                    cell.nameLabel.text = self?.usersArray[indexPath.row].fullName
+                    self?.spinner.dismiss(animated: true)
+                }
+            }
         }
-        
-        cell.nameLabel.text = usersArray[indexPath.row].fullName
-        
-        spinner.dismiss(animated: true)
         return cell
     }
     
@@ -121,13 +128,24 @@ extension AddParticipantViewController: UITableViewDelegate, UITableViewDataSour
             //Download and save profile picture
             let imageName = selectedUser.profilePictureFileName!
             let userEmail = selectedUser.email!
-            FireStoreManager.shared.getImageURL(imageName: imageName) { url in
-                FireStoreManager.shared.downloadImageWithURL(imageURL: url) { [weak self] profileImage in
-                    ImageManager.shared.saveImage(userEmail: userEmail, image: profileImage)
+            FireStoreManager.shared.getImageURL(imageName: imageName) { resultUrl in
+                if let url = resultUrl {
+                    FireStoreManager.shared.downloadProfileImageWithURL(imageURL: url, userEmail: userEmail) { [weak self] userImage in
+                        guard let profileImage = userImage else {
+                            return
+                        }
+                        ImageManager.shared.saveImage(userEmail: userEmail, image: profileImage)
+                        DispatchQueue.main.async {
+                            self?.collectionView.reloadData()
+                        }
+                    }
+                } else {
+                   //Already have image saved in device memory
                     DispatchQueue.main.async {
-                        self?.collectionView.reloadData()
+                        self.collectionView.reloadData()
                     }
                 }
+                
             }
         } else {
             spinner.dismiss(animated: true)

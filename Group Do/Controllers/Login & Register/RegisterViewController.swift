@@ -11,6 +11,7 @@ import RealmSwift
 import JGProgressHUD
 
 class RegisterViewController: UIViewController {
+    
     //Instance of spinner imported from the JGProgressHUD pod
     private let spinner = JGProgressHUD(style: .dark)
     
@@ -26,18 +27,6 @@ class RegisterViewController: UIViewController {
         
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        //Hides tab bar controller
-        self.tabBarController?.tabBar.isHidden = true
-        
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        //Unhides tab bar controller
-        self.tabBarController?.tabBar.isHidden = false
-    }
     
     @IBAction func profileButtonPressed(_ sender: UIButton) {
         
@@ -91,9 +80,14 @@ class RegisterViewController: UIViewController {
                 ImageManager.shared.saveImage(userEmail: email, image: (self?.profilePicture.image)!)
                 
                 print("Success creating user")
-                //Dismiss spinner
-                self?.spinner.dismiss(animated: true)
-                self?.navigationController?.popToRootViewController(animated: false)
+                //Set Main nav controller login property to true to show logged in screen when dismissed
+                MainNavigationController.isLoggedIn = true
+                
+                DispatchQueue.main.async {
+                    self?.spinner.dismiss(animated: true)
+                    self?.dismiss(animated: true)
+                }
+                
             }
         }
     }

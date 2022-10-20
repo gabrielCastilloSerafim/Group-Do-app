@@ -104,7 +104,27 @@ final class ImageManager {
         
     }
     
-
+    ///Delete group image from local device storage
+    public func deleteLocalGroupPhoto(groupID: String) {
+        
+        guard let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { return }
+        
+        let fileName = "\(groupID)_group_picture.png"
+        let fileURL = documentsDirectory.appendingPathComponent(fileName)
+        
+            do {
+                try FileManager.default.removeItem(atPath: fileURL.path)
+                print("Removed group photo from device memory")
+            } catch let removeError {
+                print("couldn't remove file at path", removeError)
+            }
+        
+    }
+    
+    
+    
+    
+    
     
     
 }

@@ -18,7 +18,6 @@ class GroupSettingsViewController: UIViewController {
     @IBOutlet weak var deleteGroupButton: UIButton!
     
     var group: Groups?
-    
     var participantsArray: Results<GroupParticipants>?
      
     override func viewDidLoad() {
@@ -87,6 +86,9 @@ class GroupSettingsViewController: UIViewController {
         let selfParticipant = realm.objects(GroupParticipants.self).filter("partOfGroupID CONTAINS %@", group!.groupID!).filter("email CONTAINS %@", realmUserEmail)[0]
         FireDBManager.shared.removeGroupParticipant(participantToRemove: selfParticipant)
         
+        //Delete group photo from device local memory
+        ImageManager.shared.deleteLocalGroupPhoto(groupID: group!.groupID!)
+        
         //Delete group, group items and group participants from realm
         deleteGroupFromRealm()
         //go back to root view controller
@@ -102,6 +104,12 @@ class GroupSettingsViewController: UIViewController {
             participantsList.append(participant)
         }
         FireDBManager.shared.deleteGroup(group: group!, participantsArray: participantsList)
+        
+        //Delete group image from fireStore
+        FireStoreManager.shared.deleteGroupImage(group: group!)
+        
+        //Delete group image from local device memory
+        ImageManager.shared.deleteLocalGroupPhoto(groupID: group!.groupID!)
         
         //Delete group and all related data from realm
         deleteGroupFromRealm()
@@ -151,7 +159,7 @@ extension GroupSettingsViewController: UITableViewDelegate, UITableViewDataSourc
             
             cell.profilePicture.image = image
             
-            //Different setup to admin
+            //Different setup to admin and self user
             if realmUserEmail == participantEmail && participantIsAdmin == true {
                 cell.userNameLabel.text = "Me"
                 cell.deleteLabel.text = "Admin"

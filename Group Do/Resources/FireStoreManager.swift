@@ -10,6 +10,7 @@ import FirebaseStorage
 
 final class FireStoreManager {
     
+    //Class singleton
     static let shared = FireStoreManager()
     
     //Create a reference to our storage
@@ -38,7 +39,7 @@ final class FireStoreManager {
     }
     
     ///Upload group picture to firebase FireStore using the following name convention to name the image  --->  "\(formattedGroupID)_profile_picture.png"
-    public func uploadGroupImage(image:UIImage, groupID:String) {
+    public func uploadGroupImage(image:UIImage, groupID:String, completion: @escaping (Bool) -> Void) {
         
         let formattedGroupID = FireDBManager.shared.iDFormatter(id: groupID)
         
@@ -48,14 +49,17 @@ final class FireStoreManager {
         
         guard imageData != nil else {
             print("Failed to transform image to png data")
+            completion(false)
             return
         }
         storage.child("images/\(filename)").putData(imageData!) { metadata, error in
             guard error == nil else {
                 print(error!.localizedDescription)
+                completion(false)
                 return
             }
             print("Success uploading image")
+            completion(true)
         }
     }
     
@@ -68,8 +72,6 @@ final class FireStoreManager {
         let fileURL = documentsDirectory.appendingPathComponent(fileName)
         
         if FileManager.default.fileExists(atPath: fileURL.path) == true {
-            print("FILE ALREADY EXISTS")
-            print(fileName)
             completion(nil)
             
         } else {
@@ -78,8 +80,6 @@ final class FireStoreManager {
             reference.downloadURL { result in
                 switch result {
                 case .success(let url):
-                    print("GOT IMAGE URL")
-                    print(fileName)
                     completion(url)
                 case .failure(let error):
                     print(error.localizedDescription)
@@ -98,8 +98,6 @@ final class FireStoreManager {
         let fileURL = documentsDirectory.appendingPathComponent(fileName)
         
         if FileManager.default.fileExists(atPath: fileURL.path) == true {
-            print("FILE ALREADY EXISTS")
-            print(fileName)
             completion(nil)
             
         } else {
@@ -112,8 +110,6 @@ final class FireStoreManager {
             reference.downloadURL { result in
                 switch result {
                 case .success(let url):
-                    print("GOT IMAGE URL")
-                    print(fileName)
                     completion(url)
                 case .failure(let error):
                     print(error.localizedDescription)
@@ -122,57 +118,39 @@ final class FireStoreManager {
         }
     }
     
-    
-    
-    
-    
     ///Download group image from firebase using a download URL and givesBack the image as a UIImage in the completion block
-    public func downloadGroupImageWithURL(imageURL: URL, groupID: String, completion: @escaping (UIImage?) -> Void) {
+    public func downloadGroupImageWithURL(imageURL: URL, completion: @escaping (UIImage) -> Void) {
         
-        guard let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { return }
+        URLSession.shared.dataTask(with: imageURL) { imageData, _, error in
+            guard imageData != nil, error == nil else {return}
+            completion(UIImage(data: imageData!)!)
+        }.resume()
         
-        let formattedGroupID = FireDBManager.shared.iDFormatter(id: groupID)
-        
-        let groupFileName = "\(formattedGroupID)_group_picture.png"
-        let groupFileURL = documentsDirectory.appendingPathComponent(groupFileName)
-        
-        if FileManager.default.fileExists(atPath: groupFileURL.path) {
-            completion(nil)
-            
-        } else {
-            URLSession.shared.dataTask(with: imageURL) { imageData, _, error in
-                guard imageData != nil, error == nil else {return}
-                completion(UIImage(data: imageData!)!)
-            }.resume()
-            print("DOWNLOADED GROUP PICTURE")
-        }
-         
     }
     
     ///Download profile image from firebase using a download URL and givesBack the image as a UIImage in the completion block
-    public func downloadProfileImageWithURL(imageURL: URL, userEmail: String, completion: @escaping (UIImage?) -> Void) {
+    public func downloadProfileImageWithURL(imageURL: URL, completion: @escaping (UIImage) -> Void) {
         
-        guard let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { return }
+        URLSession.shared.dataTask(with: imageURL) { imageData, _, error in
+            guard imageData != nil, error == nil else {return}
+            completion(UIImage(data: imageData!)!)
+        }.resume()
         
-        let formattedEmail = FireDBManager.shared.emailFormatter(email: userEmail)
-        
-        let profileFileName = "\(formattedEmail)_profile_picture.png"
-        let profileFileURL = documentsDirectory.appendingPathComponent(profileFileName)
-        
-        if FileManager.default.fileExists(atPath: profileFileURL.path) == true {
-            completion(nil)
-            
-        } else {
-            URLSession.shared.dataTask(with: imageURL) { imageData, _, error in
-                guard imageData != nil, error == nil else {return}
-                completion(UIImage(data: imageData!)!)
-            }.resume()
-            print("DOWNLOADED PROFILE PICTURE")
-        }
-         
     }
     
-    
+    ///Deletes a group picture file from fireStore
+    public func deleteGroupImage(group: Groups) {
+        
+        let groupId = FireDBManager.shared.iDFormatter(id: group.groupID!)
+        let imagePath = storage.child("images/\(groupId)_group_picture.png")
+        
+        imagePath.delete { error in
+            if let error = error {
+                print(error.localizedDescription)
+            }
+        }
+        
+    }
     
     
     

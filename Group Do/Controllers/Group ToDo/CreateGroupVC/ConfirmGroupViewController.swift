@@ -10,7 +10,6 @@ import RealmSwift
 
 class ConfirmGroupViewController: UIViewController {
     
-    
     @IBOutlet weak var groupPicture: UIImageView!
     @IBOutlet weak var groupName: UITextField!
     @IBOutlet weak var collectionView: UICollectionView!
@@ -32,9 +31,19 @@ class ConfirmGroupViewController: UIViewController {
         groupParticipants.insert(user, at: 0)
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.tabBarController?.tabBar.isHidden = true
+    }
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.tabBarController?.tabBar.isHidden = false
+    }
+    
+
     
     @IBAction func cancelButtonPressed(_ sender: UIButton) {
-        dismiss(animated: true)
+        navigationController?.popToRootViewController(animated: true)
     }
     
     
@@ -93,14 +102,17 @@ class ConfirmGroupViewController: UIViewController {
         //save group image to device memory
         ImageManager.shared.saveGroupImage(groupID: groupID, image: groupPicture.image!)
         
-        //Save group to firebase database
-        FireDBManager.shared.addGroupToFirebase(groupObject: newGroup, participantsObject: groupUsersArray)
+        //Goes back to root view controller
+        navigationController?.popToRootViewController(animated: true)
         
         //Save group image to firebase
-        FireStoreManager.shared.uploadGroupImage(image: groupPicture.image!, groupID: groupID)
+        FireStoreManager.shared.uploadGroupImage(image: groupPicture.image!, groupID: groupID) { boolResult in
+            if boolResult == true {
+                //Save group to firebase database and trigger listener for group participants
+                FireDBManager.shared.addGroupToFirebase(groupObject: newGroup, participantsObject: groupUsersArray)
+            }
+        }
         
-        //Goes back to root view controller
-        view.window!.rootViewController?.dismiss(animated: true)
     }
     
     @IBAction func addGroupPicturePressed(_ sender: UIButton) {

@@ -32,12 +32,18 @@ class AddGroupViewController: UIViewController {
         collectionView.register(UINib(nibName: "NewGroupCollectionViewCell" , bundle: nil), forCellWithReuseIdentifier: "customCollectionCell")
 
     }
-
-    @IBAction func cancelButtonPressed(_ sender: UIButton) {
-        dismiss(animated: true)
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.tabBarController?.tabBar.isHidden = true
+    }
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.tabBarController?.tabBar.isHidden = false
     }
     
-    @IBAction func nextButtonPressed(_ sender: UIButton) {
+    
+    @IBAction func nextButtonPressed(_ sender: UIBarButtonItem) {
         
         if selectedUserArray.count != 0 {
             performSegue(withIdentifier: "NewGroupToCreateGroup", sender: self)
@@ -47,6 +53,7 @@ class AddGroupViewController: UIViewController {
             alert.addAction(action)
             present(alert, animated: true)
         }
+        
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -110,10 +117,7 @@ extension AddGroupViewController: UITableViewDelegate, UITableViewDataSource {
             let userEmail = participant.email!
             FireStoreManager.shared.getImageURL(imageName: imageName) { urlResult in
                 if let url = urlResult {
-                    FireStoreManager.shared.downloadProfileImageWithURL(imageURL: url, userEmail: userEmail) { [weak self] userImage in
-                        guard let profileImage = userImage else {
-                            return
-                        }
+                    FireStoreManager.shared.downloadProfileImageWithURL(imageURL: url) { [weak self] profileImage in
                         ImageManager.shared.saveImage(userEmail: userEmail, image: profileImage)
                         DispatchQueue.main.async {
                             self?.collectionView.reloadData()

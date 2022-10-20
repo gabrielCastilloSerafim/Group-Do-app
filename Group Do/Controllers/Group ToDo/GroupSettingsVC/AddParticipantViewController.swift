@@ -130,10 +130,7 @@ extension AddParticipantViewController: UITableViewDelegate, UITableViewDataSour
             let userEmail = selectedUser.email!
             FireStoreManager.shared.getImageURL(imageName: imageName) { resultUrl in
                 if let url = resultUrl {
-                    FireStoreManager.shared.downloadProfileImageWithURL(imageURL: url, userEmail: userEmail) { [weak self] userImage in
-                        guard let profileImage = userImage else {
-                            return
-                        }
+                    FireStoreManager.shared.downloadProfileImageWithURL(imageURL: url) { [weak self] profileImage in
                         ImageManager.shared.saveImage(userEmail: userEmail, image: profileImage)
                         DispatchQueue.main.async {
                             self?.collectionView.reloadData()

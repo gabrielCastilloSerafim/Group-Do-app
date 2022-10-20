@@ -16,7 +16,7 @@ class GroupsViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var noGroupsLabel: UILabel!
     
-    var groupsArray: Results<Groups>?
+    private var groupsArray: Results<Groups>?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,55 +27,31 @@ class GroupsViewController: UIViewController {
         
         //Load stored groups from realm
         loadGroups()
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+        startListeningToGroups()
         
+        //Check if groups array is empty to show/hide No Groups label
         if groupsArray?.count == 0 {
             noGroupsLabel.isHidden = false
         } else {
             noGroupsLabel.isHidden = true
         }
-        //Load stored groups from realm
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         loadGroups()
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        startListeningToGroups()
-    }
-    
     private func startListeningToGroups() {
-        //Download and add missing groups from firebase to realm
+        //Download and add missing groups from firebase to realm / listen for new group creations
         let realm = try! Realm()
         let realmUserEmail = realm.objects(RealmUser.self)[0].email!
         
-        FireDBManager.shared.getGroups(userEmail: realmUserEmail) { [weak self] BoolResult, groupObjectsArray  in
+        FireDBManager.shared.getGroups(userEmail: realmUserEmail) { [weak self] BoolResult in
             if BoolResult == true {
-                DispatchQueue.main.async {
-                    if self?.groupsArray?.count == 0 {
-                        self?.noGroupsLabel.isHidden = false
-                    } else {
-                        self?.noGroupsLabel.isHidden = true
-                    }
+                DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
                     self?.loadGroups()
-                    
                 }
-            } else {
-                if groupObjectsArray.count != 0 {
-                    
-                    for group in groupObjectsArray {
-                        FireStoreManager.shared.getImageURL(imageName: group.groupPictureName!) { [weak self] url in
-                            FireStoreManager.shared.downloadGroupImageWithURL(imageURL: url!, groupID: group.groupID!) { image in
-                                ImageManager.shared.saveGroupImage(groupID: group.groupID!, image: image!)
-                                self?.loadGroups()
-                            }
-                        }
-                    }
-                    
-                }
-                
             }
         }
         
@@ -89,6 +65,7 @@ class GroupsViewController: UIViewController {
             self?.loadGroups()
         }
     }
+    
     
 }
 

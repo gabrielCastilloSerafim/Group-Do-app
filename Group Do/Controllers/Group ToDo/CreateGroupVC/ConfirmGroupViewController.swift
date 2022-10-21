@@ -100,7 +100,7 @@ class ConfirmGroupViewController: UIViewController {
         Self.createdGroupCompletion?(newGroup)
         
         //save group image to device memory
-        ImageManager.shared.saveGroupImage(groupID: groupID, image: groupPicture.image!)
+        ImageManager.shared.saveGroupImage(groupID: groupID, image: groupPicture.image!) {}
         
         //Goes back to root view controller
         navigationController?.popToRootViewController(animated: true)

@@ -44,7 +44,7 @@ final class ImageManager {
     }
     
     ///Saves an image to devices documents directory using the following convention to name the image --->  "\(groupID)_group_picture.png"
-    public func saveGroupImage(groupID: String, image: UIImage) {
+    public func saveGroupImage(groupID: String, image: UIImage, completion: @escaping () -> Void) {
         
         guard let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { return }
         
@@ -57,6 +57,7 @@ final class ImageManager {
         if FileManager.default.fileExists(atPath: fileURL.path) {
             do {
                 try FileManager.default.removeItem(atPath: fileURL.path)
+                completion()
                 print("Removed old image")
             } catch let removeError {
                 print("couldn't remove file at path", removeError)
@@ -65,6 +66,7 @@ final class ImageManager {
         
         do {
             try data.write(to: fileURL)
+            completion()
             print("Success saving image locally")
         } catch let error {
             print("error saving file with error", error)
@@ -121,7 +123,24 @@ final class ImageManager {
         
     }
     
-    
+    ///Delete profile picture image from local device storage
+    public func deleteLocalProfilePicture(userEmail: String) {
+        
+        guard let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { return }
+        
+        let formattedEmail = FireDBManager.shared.emailFormatter(email: userEmail)
+        
+        let fileName = "\(formattedEmail)_profile_picture.png"
+        let fileURL = documentsDirectory.appendingPathComponent(fileName)
+        
+            do {
+                try FileManager.default.removeItem(atPath: fileURL.path)
+                print("Removed profile picture from device memory")
+            } catch let removeError {
+                print("couldn't remove file at path", removeError)
+            }
+        
+    }
     
     
     

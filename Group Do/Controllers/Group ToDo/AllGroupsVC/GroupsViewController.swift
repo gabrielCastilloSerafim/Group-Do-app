@@ -17,9 +17,38 @@ class GroupsViewController: UIViewController {
     @IBOutlet weak var noGroupsLabel: UILabel!
     
     private var groupsArray: Results<Groups>?
+    var notificationToken: NotificationToken?
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        
+        let realm = try! Realm()
+        let results = realm.objects(Groups.self)
+  
+        notificationToken = results.observe { [weak self] (changes: RealmCollectionChange) in
+              guard let tableView = self?.tableView else { return }
+              switch changes {
+              case .initial:
+                  // Results are now populated and can be accessed without blocking the UI
+                  tableView.reloadData()
+              case .update(_, let deletions, let insertions, let modifications):
+                  // Query results have changed, so apply them to the UITableView
+                  DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
+                      tableView.performBatchUpdates({
+                          tableView.deleteRows(at: deletions.map({ IndexPath(row: $0, section: 0)}), with: .left)
+                          tableView.insertRows(at: insertions.map({ IndexPath(row: $0, section: 0) }), with: .right)
+                          tableView.reloadRows(at: modifications.map({ IndexPath(row: $0, section: 0) }), with: .automatic)
+                      })
+                  } 
+              case .error(let error):
+                  // An error occurred while opening the Realm file on the background worker thread
+                  fatalError("\(error)")
+              }
+          }
+        
+        
+
         
         tableView.delegate = self
         tableView.dataSource = self
@@ -37,11 +66,6 @@ class GroupsViewController: UIViewController {
         }
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        loadGroups()
-    }
-    
     private func startListeningToGroups() {
         //Download and add missing groups from firebase to realm / listen for new group creations
         let realm = try! Realm()
@@ -49,12 +73,9 @@ class GroupsViewController: UIViewController {
         
         FireDBManager.shared.getGroups(userEmail: realmUserEmail) { [weak self] BoolResult in
             if BoolResult == true {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
-                    self?.loadGroups()
-                }
+                print("Got image")
             }
         }
-        
     }
     
     @IBAction func addButtonPressed(_ sender: Any) {
@@ -125,7 +146,6 @@ extension GroupsViewController {
         if groupsArray?.count != 0 {
             noGroupsLabel.isHidden = true
         }
-        
         self.tableView.reloadData()
     }
 }
@@ -137,9 +157,8 @@ extension GroupsViewController: UISearchBarDelegate {
         let realm = try! Realm()
         
         groupsArray = realm.objects(Groups.self).filter("groupName CONTAINS[cd] %@", searchBar.text!).sorted(byKeyPath: "creationTimeSince1970",ascending: true)
-        DispatchQueue.main.async {
-            self.tableView.reloadData()
-        }
+        self.tableView.reloadData()
+        
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {

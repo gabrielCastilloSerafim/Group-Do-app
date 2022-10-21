@@ -10,7 +10,6 @@ import RealmSwift
 
 class GroupsItemsViewController: UIViewController {
 
-    
     @IBOutlet weak var dateNumberLabel: UILabel!
     @IBOutlet weak var dateMonthLabel: UILabel!
     @IBOutlet weak var collectionView: UICollectionView!
@@ -23,7 +22,6 @@ class GroupsItemsViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         //Load items from realm
         loadGroupItems()
         
@@ -50,7 +48,36 @@ class GroupsItemsViewController: UIViewController {
         }
         //Load participants from realm
         loadParticipants()
+        //Start listening for group deletion
+        listenForGroupDeletion()
+        //Start listening for participant changes
+        listenForParticipantChanges()
     }
+    
+    private func listenForGroupDeletion() {
+        
+        let realm = try! Realm()
+        let userEmail = realm.objects(RealmUser.self)[0].email!
+        
+        FireDBManager.shared.listenForGroupDeletion(userEmail: userEmail, groupID: selectedGroup!.groupID!) { [weak self] resultBool in
+            if resultBool == true {
+                self?.navigationController?.popToRootViewController(animated: true)
+            }
+        }
+    }
+    
+    private func listenForParticipantChanges() {
+        
+        FireDBManager.shared.listenForParticipantChanges(groupId: selectedGroup!.groupID!) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+                    self.collectionView.reloadData()
+            }
+        }
+    }
+    
+    
+    
+    
     
     @IBAction func settingButtonPressed(_ sender: UIBarButtonItem) {
         

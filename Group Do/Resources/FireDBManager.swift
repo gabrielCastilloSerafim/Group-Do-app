@@ -298,7 +298,6 @@ final class FireDBManager {
         
         //Access user's groups node and listen for changes
         database.child("users/\(formattedEmail)/groups").observe(.value, with: { [weak self] snapshot in
-            
             let realm = try! Realm()
             let groupsInSnapshot: Int = Int(snapshot.childrenCount)
             let groupsInRealm: Int = realm.objects(Groups.self).count
@@ -308,6 +307,7 @@ final class FireDBManager {
             
             //Check if number of groups in realm is greater then the number of groups in the snapshot to determine if a group was added or deleted
             if groupsInRealm > groupsInSnapshot {
+                //A group was deleted
                 //Get all group iDs from firebase to compare them to the ones in the realm
                 for child in snapshot.children {
                     let snap = child as! DataSnapshot
@@ -331,14 +331,21 @@ final class FireDBManager {
                                 realm.delete(participants)
                             })
                         } catch {
-                            completion(false)
                             print(error.localizedDescription)
                         }
                     }
                 }
                 completion(true)
                 
-            } else {
+            } else if groupsInRealm == groupsInSnapshot {
+                //A property of a group has changed
+                
+                
+                
+                
+                
+            } else if groupsInRealm < groupsInSnapshot {
+                //New group was added
                 //Iterate thru groups
                 for child in snapshot.children {
                     let snap = child as! DataSnapshot
@@ -350,13 +357,13 @@ final class FireDBManager {
                     FireStoreManager.shared.getGroupImageURL(groupID: groupID) { resultUrl in
                         if let url = resultUrl {
                             FireStoreManager.shared.downloadGroupImageWithURL(imageURL: url) { image in
-                                ImageManager.shared.saveGroupImage(groupID: groupID, image: image)
-                                //Call completion after image is saved to user's phone
-                                completion(true)
+                                ImageManager.shared.saveGroupImage(groupID: groupID, image: image) {
+                                    completion(true)
+                                }
                             }
                         } else {
                             //If fall in this case user already have image saved to device (Should never happen).
-                            completion (true)
+                            completion(true)
                         }
                     }
                     //Create a group object
@@ -386,7 +393,6 @@ final class FireDBManager {
                             })
                         } catch {
                             print(error.localizedDescription)
-                            completion(false)
                         }
                     })
                 }
@@ -449,7 +455,7 @@ final class FireDBManager {
                 participantObject.isAdmin = (dict["isAdmin"] as? Bool)!
                 
                 participantsArray.append(participantObject)
-                //Download the user image and save it to device
+                //Download the user image and save it to device if it does not exist
                 let userEmail = (dict["email"] as? String)!
                 let formattedUserEmail = self?.emailFormatter(email: userEmail)
                 let userProfilePictureName = "\(formattedUserEmail!)_profile_picture.png"
@@ -527,6 +533,107 @@ final class FireDBManager {
             database.child("users/\(participantEmail)/groups/\(groupID)").updateChildValues(groupDictionary)
         }
     }
+    
+    ///Listen for group deletions in group itemsVC
+    public func listenForGroupDeletion(userEmail: String, groupID: String, completion: @escaping (Bool) -> Void) {
+        
+        let formattedUserEmail = emailFormatter(email: userEmail)
+        
+        database.child("users/\(formattedUserEmail)/groups").observe(.value) { snapshot in
+            
+            let realm = try! Realm()
+            //Check if ream contains the group the user is currently in
+            if realm.objects(Groups.self).filter("groupID CONTAINS %@", groupID).count == 0 {
+                completion(true)
+            }
+        }
+        
+    }
+    
+    ///Listen for group participants changes
+    public func listenForParticipantChanges(groupId: String, completion: @escaping () -> Void) {
+        
+        let formattedGroupID = iDFormatter(id: groupId)
+        
+        database.child("groups/\(formattedGroupID)/participants").observe(.value) { [weak self] snapshot in
+            
+            let realm = try! Realm()
+            //If group does not exist in realm return, because the observer was triggered by a group deletion and not a participant change.
+            if realm.objects(Groups.self).filter("groupID CONTAINS %@", groupId).count == 0 {
+                return
+            }
+            
+            //First check if participant was added of deleted by comparing the realm participants to the snapshot participants
+            let numberOfRealmParticipants: Int = realm.objects(GroupParticipants.self).filter("partOfGroupID CONTAINS %@", groupId).count
+            let numberOfSnapshotParticipants: Int = Int(snapshot.childrenCount)
+            
+            if numberOfRealmParticipants > numberOfSnapshotParticipants {
+                //Find which participant was deleted and remove it from group / realm participants / and its photo from users phone
+                
+                var snapshotParticipantsEmail = Array<String>()
+                
+                for child in snapshot.children {
+                    let snap = child as! DataSnapshot
+                    let dict = snap.value as! [String: Any]
+                    let participantEmail = dict["email"] as? String
+                    
+                    snapshotParticipantsEmail.append(participantEmail!)
+                }
+                
+                let realm = try! Realm()
+                let realmParticipants = realm.objects(GroupParticipants.self).filter("partOfGroupID CONTAINS %@", groupId)
+                
+                for participant in realmParticipants {
+                    if !snapshotParticipantsEmail.contains(participant.email!) {
+                        //If participant is participant only in this group dele it's image from local device memory
+                        if realm.objects(GroupParticipants.self).filter("email CONTAINS %@", participant.email!).count == 1 {
+                            ImageManager.shared.deleteLocalProfilePicture(userEmail: participant.email!)
+                        }
+                        do {
+                            try realm.write {
+                                //Remove participant from group realm
+                                realm.delete(participant)
+                            }
+                        } catch {
+                            print(error.localizedDescription)
+                        }
+                    }
+                }
+                completion()
+                
+            } else {
+                //Participant was added to group
+                //find which participant was added to group firebase, add it to realm and call completion
+                self?.getAllGroupParticipants(groupID: groupId) { arrayOfGroupParticipants in
+                    
+                    let realm = try! Realm()
+                    let realmParticipants = realm.objects(GroupParticipants.self).filter("partOfGroupID CONTAINS %@", groupId)
+                    
+                    var realmParticipantEmail = Array<String>()
+                    
+                    for realmUser in realmParticipants {
+                        realmParticipantEmail.append(realmUser.email!)
+                    }
+                    
+                    for firebaseParticipant in arrayOfGroupParticipants {
+                        if !realmParticipantEmail.contains(firebaseParticipant.email!) {
+                            //Add firebase participant to realm
+                            do {
+                                try realm.write({
+                                    realm.add(firebaseParticipant)
+                                    print("ADDED NEW PARTICIPANT: \(firebaseParticipant)")
+                                })
+                            } catch {
+                                print(error.localizedDescription)
+                            }
+                            completion()
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
     
     
     

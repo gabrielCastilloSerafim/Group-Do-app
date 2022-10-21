@@ -43,6 +43,7 @@ class AddParticipantViewController: UIViewController {
         collectionView.register(UINib(nibName: "NewGroupCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "customCollectionCell")
     }
     
+    
     @IBAction func cancelButtonPressed(_ sender: UIButton) {
         dismiss(animated: true)
     }

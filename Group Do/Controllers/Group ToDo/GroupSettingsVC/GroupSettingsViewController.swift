@@ -19,16 +19,41 @@ class GroupSettingsViewController: UIViewController {
     
     var group: Groups?
     var participantsArray: Results<GroupParticipants>?
-     
+    var notificationToken: NotificationToken?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
+        let realm = try! Realm()
+        let results = realm.objects(GroupParticipants.self)
+  
+        notificationToken = results.observe { [weak self] (changes: RealmCollectionChange) in
+              guard let tableView = self?.tableView else { return }
+              switch changes {
+              case .initial:
+                  // Results are now populated and can be accessed without blocking the UI
+                  tableView.reloadData()
+              case .update(_, let deletions, let insertions, let modifications):
+                  // Query results have changed, so apply them to the UITableView
+                  DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
+                      tableView.performBatchUpdates({
+                          tableView.deleteRows(at: deletions.map({ IndexPath(row: $0, section: 0)}), with: .automatic)
+                          tableView.insertRows(at: insertions.map({ IndexPath(row: $0, section: 0) }), with: .automatic)
+                          tableView.reloadRows(at: modifications.map({ IndexPath(row: $0, section: 0) }), with: .automatic)
+                      })
+                  }
+              case .error(let error):
+                  // An error occurred while opening the Realm file on the background worker thread
+                  fatalError("\(error)")
+              }
+          }
+        
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(UINib(nibName: "GroupSettingsTableViewCell", bundle: nil), forCellReuseIdentifier: "GroupSettingsTableViewCell")
         
         //Load participants from realm
-        loadParticipants(group: group!)
+        loadParticipants()
         //Set the number of group participants label value
         numberOfParticipantsLabel.text = String(participantsArray!.count)
         //Set the group image
@@ -39,7 +64,6 @@ class GroupSettingsViewController: UIViewController {
         //Set the group name
         groupNameLAbel.text = group?.groupName
         //Check if user is admin to show/hide exit group/delete group buttons
-        let realm = try! Realm()
         let realmUserEmail = realm.objects(RealmUser.self)[0].email
         let realmGroupAdminEmail = realm.objects(GroupParticipants.self).filter("partOfGroupID CONTAINS %@", group!.groupID!).filter("isAdmin == true")[0].email
         if realmUserEmail == realmGroupAdminEmail {
@@ -53,17 +77,21 @@ class GroupSettingsViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.tabBarController?.tabBar.isHidden = true
-        loadParticipants(group: group!)
+        loadParticipants()
+
     }
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         self.tabBarController?.tabBar.isHidden = false
+        notificationToken?.invalidate()
     }
     
     @IBAction func addParticipantButtonPressed(_ sender: UIButton) {
         
         AddParticipantViewController.completion = {
             self.tableView.reloadData()
+            //Reload number of participants
+            self.numberOfParticipantsLabel.text = String(self.participantsArray!.count)
         }
         
         performSegue(withIdentifier: "settingsToAddParticipant", sender: self)
@@ -78,6 +106,7 @@ class GroupSettingsViewController: UIViewController {
             
         }
     }
+    
     
     @IBAction func exitGroupButtonPressed(_ sender: UIButton) {
         let realm = try! Realm()
@@ -164,17 +193,18 @@ extension GroupSettingsViewController: UITableViewDelegate, UITableViewDataSourc
                 cell.userNameLabel.text = "Me"
                 cell.deleteLabel.text = "Admin"
                 cell.deleteLabel.textColor = .black
-                cell.isUserInteractionEnabled = false
+                //cell.isUserInteractionEnabled = false
                 
             } else if realmUserEmail == participantEmail && participantIsAdmin == false {
                 cell.userNameLabel.text = "Me"
                 cell.deleteLabel.text = ""
-                cell.isUserInteractionEnabled = false
+                //cell.isUserInteractionEnabled = false
                 
             } else if realmUserEmail != participantEmail && participantIsAdmin == true {
+                cell.userNameLabel.text = participantsArray?[indexPath.row].fullName
                 cell.deleteLabel.text = "Admin"
                 cell.deleteLabel.textColor = .black
-                cell.isUserInteractionEnabled = false
+                //cell.isUserInteractionEnabled = false
                 
             } else {
                 cell.userNameLabel.text = participantsArray?[indexPath.row].fullName
@@ -210,9 +240,9 @@ extension GroupSettingsViewController: UITableViewDelegate, UITableViewDataSourc
                 } catch {
                     print(error.localizedDescription)
                 }
-                
-                self?.tableView.deleteRows(at: [indexPath], with: .left)
+                tableView.deleteRows(at: [indexPath], with: .left)
                 self?.numberOfParticipantsLabel.text = String((self?.participantsArray!.count)!)
+                
             }
             let cancelAction = UIAlertAction(title: "Cancel", style: .default)
             alert.addAction(confirmAction)
@@ -234,11 +264,14 @@ extension GroupSettingsViewController: UITableViewDelegate, UITableViewDataSourc
 
 extension GroupSettingsViewController {
     
-    func loadParticipants(group: Groups) {
+    func loadParticipants() {
         
         let realm = try! Realm()
-        participantsArray = realm.objects(GroupParticipants.self).filter("partOfGroupID CONTAINS %@", group.groupID!)
-        tableView.reloadData()
+        participantsArray = realm.objects(GroupParticipants.self).filter("partOfGroupID CONTAINS %@", group!.groupID!)
+        
+        DispatchQueue.main.async {
+            self.tableView.reloadData()
+        }
     }
     
 }

@@ -67,17 +67,14 @@ class RegisterViewController: UIViewController {
                     print(error.localizedDescription)
                 }
                 
-                //Create user object in firebase
-                let firebaseUser = UserModel(fullName: userFullName, firstName: firstName, lastName: lastName, email: email, profilePictureName: profilePictureFileName)
-                
                 //Add user to firebase database
-                FireDBManager.shared.addUserToFirebaseDB(user: firebaseUser)
+                FireDBManager.shared.addUserToFirebaseDB(userObject: realmUser)
                 
                 //Save user profile picture to firebaseStore
                 FireStoreManager.shared.uploadImage(image: (self?.profilePicture.image!)!, email: email)
                 
                 //Save profile picture to local users documents folder
-                ImageManager.shared.saveImage(userEmail: email, image: (self?.profilePicture.image)!)
+                ImageManager.shared.saveProfileImage(userEmail: email, image: (self?.profilePicture.image)!)
                 
                 print("Success creating user")
                 //Set Main nav controller login property to true to show logged in screen when dismissed

@@ -62,7 +62,7 @@ class AddParticipantViewController: UIViewController {
         }
         
         //Add new group participant to firebase
-        FireDBManager.shared.addNewParticipant(participantsArray: participantsToAddToDatabase, group: group)
+        //FireDBManager.shared.addNewParticipant(participantsArray: participantsToAddToDatabase, group: group)
         
         Self.completion!()
         dismiss(animated: true)
@@ -132,7 +132,7 @@ extension AddParticipantViewController: UITableViewDelegate, UITableViewDataSour
             FireStoreManager.shared.getImageURL(imageName: imageName) { resultUrl in
                 if let url = resultUrl {
                     FireStoreManager.shared.downloadProfileImageWithURL(imageURL: url) { [weak self] profileImage in
-                        ImageManager.shared.saveImage(userEmail: userEmail, image: profileImage)
+                        ImageManager.shared.saveProfileImage(userEmail: userEmail, image: profileImage)
                         DispatchQueue.main.async {
                             self?.collectionView.reloadData()
                         }

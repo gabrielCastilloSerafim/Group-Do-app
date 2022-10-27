@@ -113,7 +113,7 @@ class GroupSettingsViewController: UIViewController {
         //Delete user from group participants in group node and delete group from user's groups node in firebase
         let realmUserEmail = realm.objects(RealmUser.self)[0].email!
         let selfParticipant = realm.objects(GroupParticipants.self).filter("partOfGroupID CONTAINS %@", group!.groupID!).filter("email CONTAINS %@", realmUserEmail)[0]
-        FireDBManager.shared.removeGroupParticipant(participantToRemove: selfParticipant)
+        //FireDBManager.shared.removeGroupParticipant(participantToRemove: selfParticipant)
         
         //Delete group photo from device local memory
         ImageManager.shared.deleteLocalGroupPhoto(groupID: group!.groupID!)
@@ -126,13 +126,13 @@ class GroupSettingsViewController: UIViewController {
     
     @IBAction func deleteGroupButtonPressed(_ sender: UIButton) {
         //Delete group from firebase groups node and from all users group node
-        var participantsList = Array<GroupParticipants>()
+        var participantsArray = Array<GroupParticipants>()
         let realm = try! Realm()
         let participants = realm.objects(GroupParticipants.self).filter("partOfGroupID CONTAINS %@", group!.groupID!)
         for participant in participants {
-            participantsList.append(participant)
+            participantsArray.append(participant)
         }
-        FireDBManager.shared.deleteGroup(group: group!, participantsArray: participantsList)
+        FireDBManager.shared.deleteGroupFromFirebase(group: group!, participantsArray: participantsArray)
         
         //Delete group image from fireStore
         FireStoreManager.shared.deleteGroupImage(group: group!)
@@ -230,7 +230,7 @@ extension GroupSettingsViewController: UITableViewDelegate, UITableViewDataSourc
                 let realm = try! Realm()
                 let participant = (self?.participantsArray?[indexPath.row])!
                 //Delete group participant from firebase
-                FireDBManager.shared.removeGroupParticipant(participantToRemove: participant)
+                //FireDBManager.shared.removeGroupParticipant(participantToRemove: participant)
                 
                 //Delete group from realm and delete cell from tableview
                 do {

@@ -30,9 +30,21 @@ extension FireDBManager {
         return formattedId
     }
     
+    //MARK: - Add New User To Database
+    
+    ///Returns a [String: Any] dictionary containing all the properties of a realm user
+    func realmUserObjectToDict(with user: RealmUser) -> [String: Any] {
+        let userDictionary: [String:Any] = ["full_name":user.fullName!,
+                                            "first_name":user.firstName!,
+                                            "last_name":user.lastName!,
+                                            "email":user.email!,
+                                            "profilePictureName":user.profilePictureFileName!]
+        return userDictionary
+    }
+    
     //MARK: - Personal Categories
     
-    ///Returns a [String:Any] dictionary containing all the properties of a PersonalCategories object
+    ///Returns a [String: Any] dictionary containing all the properties of a PersonalCategories object
     func personalCategoryObjectToDict(with categoryObject: PersonalCategories) -> [String: Any] {
         
         let categoryObjectDictionary: [String: Any] = ["categoryName":categoryObject.categoryName!,
@@ -61,6 +73,60 @@ extension FireDBManager {
         realmPersonalCategoriesObj.categoryID = categoryID
         
         return realmPersonalCategoriesObj
+    }
+    
+    ///Checks if category that is being added already exists in realm and returns a boolean true if it does and a boolean false if it does not
+    func checkIfPersonalCategoryExistsInRealm(with addedCategory: PersonalCategories) -> Bool {
+        
+        let realm = try! Realm()
+        if realm.objects(PersonalCategories.self).filter("categoryID CONTAINS %@", addedCategory.categoryID!).count != 0 {
+            return true
+        } else {
+            return false
+        }
+    }
+    
+    ///Adds new personal category to realm
+    func addCategoryToRealm(for addedCategory: PersonalCategories) {
+        
+        let realm = try! Realm()
+        do {
+            try realm.write({
+                if realm.objects(PersonalCategories.self).filter("categoryID CONTAINS %@", addedCategory.categoryID!).count == 0 {
+                    realm.add(addedCategory)
+                }
+            })
+        } catch {
+            print(error.localizedDescription)
+        }
+    }
+    
+    ///Checks if category that has to be deleted already exists in realm, if it does returns a boolean true, if it does not returns false
+    func checkIfCategoryStillExistInRealm(for categoryID: String) -> Bool {
+        
+        let realm = try! Realm()
+        if realm.objects(PersonalCategories.self).filter("categoryID CONTAINS %@", categoryID).count != 0 {
+            return true
+        } else {
+            return false
+        }
+    }
+    
+    ///Deletes passed in category from realm 
+    func deleteCategoryFromRealm(with deletedCategoryID: String) {
+        
+        let realm = try! Realm()
+        do {
+            try realm.write({
+                    let realmCategoryObject = realm.objects(PersonalCategories.self).filter("categoryID CONTAINS %@", deletedCategoryID)
+                    realm.delete(realmCategoryObject)
+                    
+                    let allRelatedItems = realm.objects(PersonalItems.self).filter("parentCategoryID CONTAINS %@", deletedCategoryID)
+                    realm.delete(allRelatedItems)
+            })
+        } catch {
+            print(error.localizedDescription)
+        }
     }
     
     //MARK: - Personal Items
@@ -108,16 +174,83 @@ extension FireDBManager {
         return realmItemObject
     }
     
+    ///Checks if realm already contains items that we are trying to add returns a boolean true if it does and a boolean false if it does not
+    func checkIfRealmContainsItem(for itemObject: PersonalItems) -> Bool {
+        
+        let realm = try! Realm()
+        if realm.objects(PersonalItems.self).filter("itemID CONTAINS %@", itemObject.itemID!).count != 0 {
+            return true
+        } else {
+            return false
+        }
+    }
+    
+    ///Adds group item to realm by appending it to the parent category itemsRelationship array property
+    func addPersonalItemToRealm(using newItemObject: PersonalItems) {
+        
+        let realm = try! Realm()
+        do {
+            try realm.write({
+                let parentCategory = realm.objects(PersonalCategories.self).filter("categoryID CONTAINS %@", newItemObject.parentCategoryID!)[0]
+                parentCategory.itemsRelationship.append(newItemObject)
+            })
+        } catch {
+            print(error.localizedDescription)
+        }
+    }
+    
+    ///Check if item still exists in realm and returns a Boolean true if it does and a boolean false if it does not
+    func checkIfPersonalItemsAlreadyExists(with deletedItemObject: PersonalItems) -> Bool{
+        
+        let realm = try! Realm()
+        if realm.objects(PersonalItems.self).filter("itemID CONTAINS %@", deletedItemObject.itemID!).count != 0 {
+            return true
+        } else {
+            return false
+        }
+    }
+    
+    ///Deletes personal item from realm
+    func deletePersonalItemFromRealm(for deletedItemObject: PersonalItems) {
+        
+        let realm = try! Realm()
+        do {
+            try realm.write({
+                let realmItemObjectToDelete = realm.objects(PersonalItems.self).filter("itemID CONTAINS %@", deletedItemObject.itemID!)[0]
+                realm.delete(realmItemObjectToDelete)
+            })
+        } catch {
+            print(error.localizedDescription)
+        }
+    }
+    
+    ///Updates realm
+    func updatePersonalItemInRealm(with updatedItem: PersonalItems) {
+        
+        let realm = try! Realm()
+        let realmItemToUpdate = realm.objects(PersonalItems.self).filter("itemID CONTAINS %@", updatedItem.itemID!)[0]
+        do {
+            try realm.write({
+                realmItemToUpdate.isDone = updatedItem.isDone
+            })
+        } catch {
+            print(error.localizedDescription)
+        }
+    }
+    
+    
     //MARK: - Create New Group
     
-    ///Returns a [String:Any] dictionary containing all the properties of a Groups object
-    func groupObjectToDict(with groupObject: Groups) -> [String:Any] {
+    ///Returns a [String:Any] dictionary containing all the properties of a Groups object including the participants array
+    func groupObjectToDict(with groupObject: Groups, and participantsArray: [[String:Any]]) -> [String : Any] {
         
-        let group: [String : Any] = ["groupName":groupObject.groupName!,
+        let group: [String : Any] = [
+                                     "groupName":groupObject.groupName!,
                                      "creationTimeSince1970":groupObject.creationTimeSince1970,
                                      "groupID":groupObject.groupID!,
-                                     "groupPictureName":groupObject.groupPictureName!
-        ]
+                                     "groupPictureName":groupObject.groupPictureName!,
+                                           "participants":participantsArray
+                                    ]
         return group
     }
     
@@ -163,50 +296,142 @@ extension FireDBManager {
         return groupObject
     }
     
-    ///Filters all participants snapshot to contain only participants of the passed in group and use it to create an array of participant objects
-    func getGroupParticipantObjectsArray(addedGroup: Groups, snapshot: DataSnapshot) -> Array<GroupParticipants>? {
+    ///Creates and returns an array of participant objects from snapshot
+    func getGroupParticipantObjectsArray(snapshot: DataSnapshot) -> Array<GroupParticipants>? {
         
-        let addedGroupID = addedGroup.groupID!
         var groupParticipantsArray = Array<GroupParticipants>()
         
-        guard let arrayOfParticipantsDict = snapshot.value as? [String:[String:Any]] else {return nil}
+        guard let arrayOfParticipantsDict = snapshot.value as? [[String:Any]] else {return nil}
         
         for dictionary in  arrayOfParticipantsDict {
             
-            if dictionary.value ["partOfGroupID"] as! String == addedGroupID {
-                
-                let participantObject = GroupParticipants()
-                
-                guard let fullName = dictionary.value ["fullName"] as? String,
-                      let firstName = dictionary.value ["firstName"] as? String,
-                      let lastName = dictionary.value ["lastName"] as? String,
-                      let email = dictionary.value ["email"] as? String,
-                      let profilePictureFileName = dictionary.value ["profilePictureFileName"] as? String,
-                      let partOfGroupID = dictionary.value ["partOfGroupID"] as? String,
-                      let isAdmin = dictionary.value ["isAdmin"] as? Bool
-                else {return nil}
-                
-                participantObject.fullName = fullName
-                participantObject.firstName = firstName
-                participantObject.lastName = lastName
-                participantObject.email = email
-                participantObject.profilePictureFileName = profilePictureFileName
-                participantObject.partOfGroupID = partOfGroupID
-                participantObject.isAdmin = isAdmin
-                
-                groupParticipantsArray.append(participantObject)
-            }
+            let participantObject = GroupParticipants()
+            
+            guard let fullName = dictionary ["fullName"] as? String,
+                  let firstName = dictionary ["firstName"] as? String,
+                  let lastName = dictionary ["lastName"] as? String,
+                  let email = dictionary ["email"] as? String,
+                  let profilePictureFileName = dictionary ["profilePictureFileName"] as? String,
+                  let partOfGroupID = dictionary ["partOfGroupID"] as? String,
+                  let isAdmin = dictionary ["isAdmin"] as? Bool
+            else {return nil}
+            
+            participantObject.fullName = fullName
+            participantObject.firstName = firstName
+            participantObject.lastName = lastName
+            participantObject.email = email
+            participantObject.profilePictureFileName = profilePictureFileName
+            participantObject.partOfGroupID = partOfGroupID
+            participantObject.isAdmin = isAdmin
+            
+            groupParticipantsArray.append(participantObject)
+            
         }
         return groupParticipantsArray
     }
     
     ///Checks if a group object already exists in realm using the groupID and returns a Boolean true if it does or false if it does not.
-    func groupExistsInRealm(with groupID: String) {
+    func groupExistsInRealm(with groupID: String) -> Bool {
         
         let realm = try! Realm()
         
+        if realm.objects(Groups.self).filter("groupID CONTAINS %@", groupID).count != 0 {
+            return true
+        } else {
+            return false
+        }
+    }
+    
+    ///Downloads and saves all group participants profile pictures to device's local storage
+    func downloadAndSaveParticipantsPictures(with participantsArray: [GroupParticipants], completion: () -> Void) {
         
+        for participant in participantsArray {
+            let participantEmail = participant.email!
+            //Get image url
+            FireStoreManager.shared.getProfilePictureImageURL(userEmail: participantEmail) { url in
+                guard let url = url else {return}
+                //Download profile picture
+                FireStoreManager.shared.downloadProfileImageWithURL(imageURL: url) { image in
+                    //Save downloaded image to device
+                    ImageManager.shared.saveProfileImage(userEmail: participantEmail, image: image)
+                }
+            }
+        }
+        completion()
+    }
+    
+    ///Saves the added group to realm properly appending the participants array to it
+    func saveNewGroupToRealm(with groupObject: Groups, and groupParticipantObjectsArray: [GroupParticipants] ) {
+        
+        let realm = try! Realm()
+        do {
+            try realm.write({
+                groupObject.groupParticipants.append(objectsIn: groupParticipantObjectsArray)
+                realm.add(groupObject)
+            })
+        } catch {
+            print(error.localizedDescription)
+        }
+    }
+    
+    ///Checks if group that we are trying to delete still exists in realm and returns a Boolean true if it does and false if it does not
+    func checkIfGroupStillExists(for groupID: String) -> Bool {
+        
+        let realm = try! Realm()
+        if realm.objects(Groups.self).filter("groupID CONTAINS %@", groupID).count != 0 {
+            return true
+        } else {
+            return false
+        }
         
     }
+    
+    ///Deletes group object from realm
+    func deleteGroupFromRealm(_ groupObject: Groups) {
+        
+        let realm = try! Realm()
+        let realmGroupObject = realm.objects(Groups.self).filter("groupID CONTAINS %@", groupObject.groupID!)[0]
+        
+        do {
+            try realm.write({
+                realm.delete(realmGroupObject)
+            })
+        } catch {
+            print(error.localizedDescription)
+        }
+    }
+    
+    ///Deletes participants related to passed in parameter group from realm
+    func deleteGroupParticipantsFromRealm(for groupObject: Groups) {
+     
+        let realm = try! Realm()
+        let groupParticipants = realm.objects(GroupParticipants.self).filter("partOfGroupID CONTAINS %@", groupObject.groupID!)
+        do {
+            try realm.write({
+                realm.delete(groupParticipants)
+            })
+        } catch {
+            print(error.localizedDescription)
+        }
+    }
+    
+    ///Deletes items related to passed in parameter group from realm
+    func deleteGroupItemsFromRealm(for groupObject: Groups) {
+        
+        let realm = try! Realm()
+        let groupItems = realm.objects(GroupItems.self).filter("fromGroupID CONTAINS %@", groupObject.groupID!)
+        do {
+            try realm.write({
+                realm.delete(groupItems)
+            })
+        } catch {
+            print(error.localizedDescription)
+        }
+    }
+    
+    
+    
+    
+    
     
 }

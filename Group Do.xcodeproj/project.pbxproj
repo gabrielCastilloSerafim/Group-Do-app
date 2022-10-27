@@ -20,7 +20,6 @@
 		5341BE6928F0721400253761 /* RegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5341BE6828F0721400253761 /* RegisterViewController.swift */; };
 		5341BE6B28F07BBE00253761 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5341BE6A28F07BBE00253761 /* SettingsViewController.swift */; };
 		5341BE7028F08BEA00253761 /* FireDBManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5341BE6F28F08BEA00253761 /* FireDBManager.swift */; };
-		5341BE7228F08D6400253761 /* UserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5341BE7128F08D6400253761 /* UserModel.swift */; };
 		5341BE7428F09B9000253761 /* FireStoreManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5341BE7328F09B9000253761 /* FireStoreManager.swift */; };
 		5341BE7628F09EF100253761 /* RealmUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5341BE7528F09EF100253761 /* RealmUser.swift */; };
 		5345884128F7F3F800C26C27 /* ConfirmGroupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5345884028F7F3F800C26C27 /* ConfirmGroupViewController.swift */; };
@@ -78,7 +77,6 @@
 		5341BE6828F0721400253761 /* RegisterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterViewController.swift; sourceTree = "<group>"; };
 		5341BE6A28F07BBE00253761 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		5341BE6F28F08BEA00253761 /* FireDBManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FireDBManager.swift; sourceTree = "<group>"; };
-		5341BE7128F08D6400253761 /* UserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserModel.swift; sourceTree = "<group>"; };
 		5341BE7328F09B9000253761 /* FireStoreManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FireStoreManager.swift; sourceTree = "<group>"; };
 		5341BE7528F09EF100253761 /* RealmUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmUser.swift; sourceTree = "<group>"; };
 		5345884028F7F3F800C26C27 /* ConfirmGroupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmGroupViewController.swift; sourceTree = "<group>"; };
@@ -426,7 +424,6 @@
 		53C6EE572907F1DD001A6667 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				5341BE7128F08D6400253761 /* UserModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -694,7 +691,6 @@
 				5353B8F328F9B3430090A62E /* AddGroupItemViewController.swift in Sources */,
 				53ACAD3F28F00D70005C3579 /* PersonalItems.swift in Sources */,
 				53C6EE62290828F3001A6667 /* AllGroupsLogic.swift in Sources */,
-				5341BE7228F08D6400253761 /* UserModel.swift in Sources */,
 				5328A71529094D170001B9DD /* ConfirmGroupLogic.swift in Sources */,
 				53BCCDD328F5DCD9003B32A4 /* NewGroupCollectionViewCell.swift in Sources */,
 				5341BE7628F09EF100253761 /* RealmUser.swift in Sources */,

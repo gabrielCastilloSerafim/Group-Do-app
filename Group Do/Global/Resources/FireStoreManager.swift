@@ -89,6 +89,31 @@ final class FireStoreManager {
         }
     }
     
+    ///Gets download URL to profile picture image in firebase storage using its unique profile picture image name
+    public func getProfilePictureImageURL(userEmail: String, completion: @escaping (URL?) -> Void) {
+        
+        guard let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { return }
+        let formattedEmail = FireDBManager.shared.emailFormatter(email: userEmail)
+        let fileName = "\(formattedEmail)_profile_picture.png"
+        let fileURL = documentsDirectory.appendingPathComponent(fileName)
+        
+        if FileManager.default.fileExists(atPath: fileURL.path) == true {
+            completion(nil)
+            
+        } else {
+            let reference = storage.child("images/\(fileName)")
+            
+            reference.downloadURL { result in
+                switch result {
+                case .success(let url):
+                    completion(url)
+                case .failure(let error):
+                    print(error.localizedDescription)
+                }
+            }
+        }
+    }
+    
     ///Gets download URL to group image in firebase storage using its unique group image name
     public func getGroupImageURL(groupID: String, completion: @escaping (URL?) -> Void) {
         

@@ -114,7 +114,7 @@ extension AddGroupViewController: UITableViewDelegate, UITableViewDataSource {
             FireStoreManager.shared.getImageURL(imageName: imageName) { urlResult in
                 if let url = urlResult {
                     FireStoreManager.shared.downloadProfileImageWithURL(imageURL: url) { [weak self] profileImage in
-                        ImageManager.shared.saveImage(userEmail: userEmail, image: profileImage)
+                        ImageManager.shared.saveProfileImage(userEmail: userEmail, image: profileImage)
                         DispatchQueue.main.async {
                             self?.collectionView.reloadData()
                         }

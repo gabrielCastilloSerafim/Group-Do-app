@@ -74,7 +74,7 @@ class LoginViewController: UIViewController {
                                 return
                             }
                             //Save image to users phone
-                            ImageManager.shared.saveImage(userEmail: email! as! String, image: image)
+                            ImageManager.shared.saveProfileImage(userEmail: email! as! String, image: image)
                         }.resume()
                         
                         print("Success logging in")

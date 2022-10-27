@@ -17,8 +17,9 @@ class GroupsItemsViewController: UIViewController {
     @IBOutlet weak var noItemsLabel: UILabel!
     
     var selectedGroup: Groups?
-    var itemsArray: Results<GroupItems>?
     var participantsArray: Results<GroupParticipants>?
+    var itemsArray: Results<GroupItems>?
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -49,31 +50,31 @@ class GroupsItemsViewController: UIViewController {
         //Load participants from realm
         loadParticipants()
         //Start listening for group deletion
-        listenForGroupDeletion()
+        //listenForGroupDeletion()
         //Start listening for participant changes
-        listenForParticipantChanges()
+        //listenForParticipantChanges()
     }
     
-    private func listenForGroupDeletion() {
-        
-        let realm = try! Realm()
-        let userEmail = realm.objects(RealmUser.self)[0].email!
-        
-        FireDBManager.shared.listenForGroupDeletion(userEmail: userEmail, groupID: selectedGroup!.groupID!) { [weak self] resultBool in
-            if resultBool == true {
-                self?.navigationController?.popToRootViewController(animated: true)
-            }
-        }
-    }
+//    private func listenForGroupDeletion() {
+//
+//        let realm = try! Realm()
+//        let userEmail = realm.objects(RealmUser.self)[0].email!
+//
+//        FireDBManager.shared.listenForGroupDeletion(userEmail: userEmail, groupID: selectedGroup!.groupID!) { [weak self] resultBool in
+//            if resultBool == true {
+//                self?.navigationController?.popToRootViewController(animated: true)
+//            }
+//        }
+//    }
     
-    private func listenForParticipantChanges() {
-        
-        FireDBManager.shared.listenForParticipantChanges(groupId: selectedGroup!.groupID!) {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
-                    self.collectionView.reloadData()
-            }
-        }
-    }
+//    private func listenForParticipantChanges() {
+//        
+//        FireDBManager.shared.listenForParticipantChanges(groupId: selectedGroup!.groupID!) {
+//            DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+//                    self.collectionView.reloadData()
+//            }
+//        }
+//    }
     
     
     
@@ -148,7 +149,7 @@ class GroupsItemsViewController: UIViewController {
                 participantsList.append(participant)
             }
             
-            FireDBManager.shared.addItemToFirebase(participantsArray: participantsList, itemObject: newItem)
+            //FireDBManager.shared.addItemToFirebase(participantsArray: participantsList, itemObject: newItem)
             
             self?.noItemsLabel.isHidden = true
             self?.tableView.reloadData()
@@ -188,7 +189,7 @@ extension GroupsItemsViewController: UITableViewDelegate, UITableViewDataSource 
                 for participant in groupParticipants {
                     participantsArray.append(participant)
                 }
-                FireDBManager.shared.deleteGroupItems(participants: participantsArray, itemObject: groupItemObject)
+                //FireDBManager.shared.deleteGroupItems(participants: participantsArray, itemObject: groupItemObject)
                 
                 //Delete item from realm
                 do {
@@ -251,16 +252,14 @@ extension GroupsItemsViewController {
     
     func loadParticipants() {
         
-        let realm = try! Realm()
-        participantsArray = realm.objects(GroupParticipants.self).filter("partOfGroupID CONTAINS %@", selectedGroup!.groupID!)
+        participantsArray = selectedGroup?.groupParticipants.sorted(byKeyPath: "isAdmin", ascending: false)
         
         collectionView.reloadData()
     }
     
     func loadGroupItems() {
         
-        let realm = try! Realm()
-        itemsArray = realm.objects(GroupItems.self).filter("fromGroupID CONTAINS %@", selectedGroup!.groupID!).sorted(byKeyPath: "creationTimeSince1970", ascending: false)
+        itemsArray = selectedGroup?.groupItems.sorted(byKeyPath: "creationTimeSince1970", ascending: false)
         
         tableView.reloadData()
     }

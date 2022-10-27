@@ -15,7 +15,7 @@ final class ImageManager {
     private init() {}
     
     ///Saves an image to devices documents directory using the following convention to name the image --->  "\(formattedEmail)_profile_picture.png"
-    public func saveImage(userEmail: String, image: UIImage) {
+    public func saveProfileImage(userEmail: String, image: UIImage) {
         
         guard let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { return }
         

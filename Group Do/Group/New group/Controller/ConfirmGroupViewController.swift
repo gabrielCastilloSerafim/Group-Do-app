@@ -63,7 +63,7 @@ class ConfirmGroupViewController: UIViewController {
         //Save group image to firebase
         FireStoreManager.shared.uploadGroupImage(image: groupPicture.image!, groupID: groupID) { boolResult in
             if boolResult == true {
-                //Only when image finishes uploading save group to firebase database and trigger listener for group participants
+                //Only when image finishes uploading save group to firebase database
                 FireDBManager.shared.addGroupToFirebase(groupObject: newGroupObject, participantsObjectArray: groupParticipantsObjectsArray)
             }
         }

@@ -36,6 +36,8 @@ class GroupsViewController: UIViewController {
         let realm = try! Realm()
         let userEmail = realm.objects(RealmUser.self)[0].email!
         FireDBManager.shared.listenForGroupAdditions(userEmail: userEmail)
+        //Start listening to group deletions on firebase
+        FireDBManager.shared.listenForGroupDeletions(userEmail: userEmail)
         
     }
     
@@ -47,7 +49,7 @@ class GroupsViewController: UIViewController {
         //Start listening for changes in the realm database and handle those changes by updating tableView accordingly
         let realm = try! Realm()
         let results = realm.objects(Groups.self).sorted(byKeyPath: "creationTimeSince1970", ascending: false)
-  
+        
         notificationToken = results.observe { [weak self] (changes: RealmCollectionChange) in
               guard let tableView = self?.tableView else { return }
               switch changes {

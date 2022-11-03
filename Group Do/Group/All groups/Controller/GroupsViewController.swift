@@ -35,10 +35,18 @@ class GroupsViewController: UIViewController {
         //Start listening to group additions on firebase
         let realm = try! Realm()
         let userEmail = realm.objects(RealmUser.self)[0].email!
+        //Start listening for group additions in firebase
         FireDBManager.shared.listenForGroupAdditions(userEmail: userEmail)
         //Start listening to group deletions on firebase
         FireDBManager.shared.listenForGroupDeletions(userEmail: userEmail)
-        
+        //Start listening for groupItems addition
+        FireDBManager.shared.listenForGroupItemAddition(userEmail: userEmail)
+        //Start listening for groupItems deletion
+        FireDBManager.shared.listenForGroupItemsDeletions(userEmail: userEmail)
+        //Start listening for groupParticipants deletion
+        FireDBManager.shared.listenForParticipantDeletions(userEmail: userEmail)
+        //Start listening for groupParticipants addition
+        FireDBManager.shared.listenForParticipantAdditions(userEmail: userEmail)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -59,9 +67,9 @@ class GroupsViewController: UIViewController {
               case .update(_, let deletions, let insertions, let modifications):
                   // Query results have changed, so apply them to the UITableView
                       tableView.performBatchUpdates({
-                          tableView.deleteRows(at: deletions.map({IndexPath(row: $0, section: 0)}), with: .left)
-                          tableView.insertRows(at: insertions.map({IndexPath(row: $0, section: 0)}), with: .automatic)
-                          tableView.reloadRows(at: modifications.map({IndexPath(row: $0, section: 0)}), with: .automatic)
+                          tableView.deleteRows(at: deletions.map({IndexPath(row: $0, section: 0)}), with: .fade)
+                          tableView.insertRows(at: insertions.map({IndexPath(row: $0, section: 0)}), with: .top)
+                          tableView.reloadRows(at: modifications.map({IndexPath(row: $0, section: 0)}), with: .none)
                           tableView.reloadData()
                           self?.checkNoGroupsLabel()
                       })

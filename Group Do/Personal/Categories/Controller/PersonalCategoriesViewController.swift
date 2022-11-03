@@ -51,9 +51,9 @@ class PersonalCategoriesViewController: UIViewController {
               case .update(_, let deletions, let insertions, let modifications):
                   // Query results have changed, so apply them to the UITableView
                       tableView.performBatchUpdates({
-                          tableView.deleteRows(at: deletions.map({IndexPath(row: $0, section: 0)}), with: .left)
-                          tableView.insertRows(at: insertions.map({IndexPath(row: $0, section: 0)}), with: .automatic)
-                          tableView.reloadRows(at: modifications.map({IndexPath(row: $0, section: 0)}), with: .automatic)
+                          tableView.deleteRows(at: deletions.map({IndexPath(row: $0, section: 0)}), with: .fade)
+                          tableView.insertRows(at: insertions.map({IndexPath(row: $0, section: 0)}), with: .top)
+                          tableView.reloadRows(at: modifications.map({IndexPath(row: $0, section: 0)}), with: .none)
                           tableView.reloadData()
                           self?.checkNoCategoriesLabel()
                       })

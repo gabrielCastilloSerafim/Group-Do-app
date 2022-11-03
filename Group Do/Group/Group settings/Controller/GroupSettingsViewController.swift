@@ -17,82 +17,85 @@ class GroupSettingsViewController: UIViewController {
     @IBOutlet weak var exitGroupButton: UIButton!
     @IBOutlet weak var deleteGroupButton: UIButton!
     
-    var group: Groups?
+    var groupSettingLogic = GroupSettingLogic()
+    var selectedGroup: Groups? {
+        didSet {
+            participantsArray = selectedGroup?.groupParticipants.sorted(byKeyPath: "isAdmin", ascending: false)
+        }
+    }
     var participantsArray: Results<GroupParticipants>?
     var notificationToken: NotificationToken?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let realm = try! Realm()
-        let results = realm.objects(GroupParticipants.self)
-  
-        notificationToken = results.observe { [weak self] (changes: RealmCollectionChange) in
-              guard let tableView = self?.tableView else { return }
-              switch changes {
-              case .initial:
-                  // Results are now populated and can be accessed without blocking the UI
-                  tableView.reloadData()
-              case .update(_, let deletions, let insertions, let modifications):
-                  // Query results have changed, so apply them to the UITableView
-                  DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
-                      tableView.performBatchUpdates({
-                          tableView.deleteRows(at: deletions.map({ IndexPath(row: $0, section: 0)}), with: .automatic)
-                          tableView.insertRows(at: insertions.map({ IndexPath(row: $0, section: 0) }), with: .automatic)
-                          tableView.reloadRows(at: modifications.map({ IndexPath(row: $0, section: 0) }), with: .automatic)
-                      })
-                  }
-              case .error(let error):
-                  // An error occurred while opening the Realm file on the background worker thread
-                  fatalError("\(error)")
-              }
-          }
-        
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(UINib(nibName: "GroupSettingsTableViewCell", bundle: nil), forCellReuseIdentifier: "GroupSettingsTableViewCell")
         
-        //Load participants from realm
-        loadParticipants()
         //Set the number of group participants label value
         numberOfParticipantsLabel.text = String(participantsArray!.count)
+        
         //Set the group image
-        let groupPictureName = group?.groupPictureName
+        let groupPictureName = selectedGroup?.groupPictureName
         ImageManager.shared.loadPictureFromDisk(fileName: groupPictureName) { image in
             groupImage.image = image
         }
         //Set the group name
-        groupNameLAbel.text = group?.groupName
-        //Check if user is admin to show/hide exit group/delete group buttons
-        let realmUserEmail = realm.objects(RealmUser.self)[0].email
-        let realmGroupAdminEmail = realm.objects(GroupParticipants.self).filter("partOfGroupID CONTAINS %@", group!.groupID!).filter("isAdmin == true")[0].email
-        if realmUserEmail == realmGroupAdminEmail {
+        groupNameLAbel.text = selectedGroup?.groupName
+        
+        //Check if user is the group admin to show/hide exit group/delete group buttons
+        if groupSettingLogic.checkIfUserIsGroupAdmin(selectedGroup: selectedGroup!) == true {
             exitGroupButton.isHidden = true
         } else {
             deleteGroupButton.isHidden = true
         }
     }
     
-    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
         self.tabBarController?.tabBar.isHidden = true
-        loadParticipants()
-
+        refreshParticipantCounter()
+        
+        let realm = try! Realm()
+        let results = realm.objects(GroupParticipants.self).filter("partOfGroupID CONTAINS %@", selectedGroup!.groupID!).sorted(byKeyPath: "isAdmin", ascending: false)
+        
+        notificationToken = results.observe { [weak self] (changes: RealmCollectionChange) in
+            guard let tableView = self?.tableView else { return }
+            switch changes {
+            case .initial:
+                // Results are now populated and can be accessed without blocking the UI
+                tableView.reloadData()
+            case .update(_, let deletions, let insertions, let modifications):
+                // Query results have changed, so apply them to the UITableView
+                tableView.performBatchUpdates({
+                    tableView.deleteRows(at: deletions.map({ IndexPath(row: $0, section: 0)}), with: .fade)
+                    tableView.insertRows(at: insertions.map({ IndexPath(row: $0, section: 0)}), with: .top)
+                    tableView.reloadRows(at: modifications.map({ IndexPath(row: $0, section: 0)}), with: .none)
+                    tableView.reloadData()
+                    self?.refreshParticipantCounter()
+                })
+            case .error(let error):
+                // An error occurred while opening the Realm file on the background worker thread
+                fatalError("\(error)")
+            }
+        }
     }
+    
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+        
         self.tabBarController?.tabBar.isHidden = false
         notificationToken?.invalidate()
     }
     
+    ///Refreshes the number for the participant counter label and updates the UI
+    private func refreshParticipantCounter() {
+        numberOfParticipantsLabel.text = String((participantsArray?.count)!)
+    }
+    
     @IBAction func addParticipantButtonPressed(_ sender: UIButton) {
-        
-        AddParticipantViewController.completion = {
-            self.tableView.reloadData()
-            //Reload number of participants
-            self.numberOfParticipantsLabel.text = String(self.participantsArray!.count)
-        }
         
         performSegue(withIdentifier: "settingsToAddParticipant", sender: self)
     }
@@ -101,70 +104,50 @@ class GroupSettingsViewController: UIViewController {
         if segue.identifier == "settingsToAddParticipant" {
             
             let destinationVC = segue.destination as! AddParticipantViewController
-            destinationVC.group = group!
-            destinationVC.participantsArray = participantsArray!
-            
+            destinationVC.selectedGroup = selectedGroup!
         }
     }
     
-    
     @IBAction func exitGroupButtonPressed(_ sender: UIButton) {
+        //In this case the user is not the group admin and is going to be able only to exit the group deleting the group related data from personal account and device storage.
+        
+        //Delete user from group participants in firebase
+        groupSettingLogic.deleteExitUserFromFirebase(selectedGroup: selectedGroup!, allGroupParticipants: participantsArray!)
+        
+        //Delete group entire group from user that exited group in firebase
         let realm = try! Realm()
-        //Delete user from group participants in group node and delete group from user's groups node in firebase
-        let realmUserEmail = realm.objects(RealmUser.self)[0].email!
-        let selfParticipant = realm.objects(GroupParticipants.self).filter("partOfGroupID CONTAINS %@", group!.groupID!).filter("email CONTAINS %@", realmUserEmail)[0]
-        //FireDBManager.shared.removeGroupParticipant(participantToRemove: selfParticipant)
+        let participantThatExited = realm.objects(RealmUser.self).first
+        guard let participantThatExited = participantThatExited else {return}
+        FireDBManager.shared.deleteEntireGroupForExitedUser(exitedParticipant: participantThatExited, exitedGroup: selectedGroup!, participantsArray: participantsArray!)
         
         //Delete group photo from device local memory
-        ImageManager.shared.deleteLocalGroupPhoto(groupID: group!.groupID!)
+        ImageManager.shared.deleteLocalGroupPhoto(groupID: selectedGroup!.groupID!)
         
         //Delete group, group items and group participants from realm
-        deleteGroupFromRealm()
+        groupSettingLogic.deleteGroupFromRealm(selectedGroup: selectedGroup!)
+        
         //go back to root view controller
         navigationController?.popToRootViewController(animated: true)
     }
     
     @IBAction func deleteGroupButtonPressed(_ sender: UIButton) {
-        //Delete group from firebase groups node and from all users group node
-        var participantsArray = Array<GroupParticipants>()
-        let realm = try! Realm()
-        let participants = realm.objects(GroupParticipants.self).filter("partOfGroupID CONTAINS %@", group!.groupID!)
-        for participant in participants {
-            participantsArray.append(participant)
-        }
-        FireDBManager.shared.deleteGroupFromFirebase(group: group!, participantsArray: participantsArray)
+        //In this case the user is the group admin and is going to be able to delete the entire group from firebase
+        
+        //Delete entire group from firebase
+        groupSettingLogic.deleteEntireGroupFromFirebase(selectedGroup: selectedGroup!, participantsArray: participantsArray!)
         
         //Delete group image from fireStore
-        FireStoreManager.shared.deleteGroupImage(group: group!)
+        FireStoreManager.shared.deleteGroupImage(group: selectedGroup!)
         
         //Delete group image from local device memory
-        ImageManager.shared.deleteLocalGroupPhoto(groupID: group!.groupID!)
+        ImageManager.shared.deleteLocalGroupPhoto(groupID: selectedGroup!.groupID!)
         
-        //Delete group and all related data from realm
-        deleteGroupFromRealm()
+        //Delete group, group items and group participants from realm
+        groupSettingLogic.deleteGroupFromRealm(selectedGroup: selectedGroup!)
         
         //go back to root view controller
         navigationController?.popToRootViewController(animated: true)
     }
-    
-    private func deleteGroupFromRealm() {
-        let realm = try! Realm()
-        let realmGroup = realm.objects(Groups.self).filter("groupID CONTAINS %@", group!.groupID!)[0]
-        let realmGroupParticipants = realm.objects(GroupParticipants.self).filter("partOfGroupID CONTAINS %@", group!.groupID!)
-        let realmGroupItems = realm.objects(GroupItems.self).filter("fromGroupID CONTAINS %@", group!.groupID!)
-        do {
-            try realm.write({
-                realm.delete(realmGroup)
-                realm.delete(realmGroupParticipants)
-                realm.delete(realmGroupItems)
-            })
-        } catch {
-            print(error.localizedDescription)
-        }
-    }
-    
-    
-    
 }
 
 //MARK: - TableView Delegate & Datasource
@@ -193,21 +176,34 @@ extension GroupSettingsViewController: UITableViewDelegate, UITableViewDataSourc
                 cell.userNameLabel.text = "Me"
                 cell.deleteLabel.text = "Admin"
                 cell.deleteLabel.textColor = .black
-                //cell.isUserInteractionEnabled = false
+                cell.isUserInteractionEnabled = false
                 
             } else if realmUserEmail == participantEmail && participantIsAdmin == false {
                 cell.userNameLabel.text = "Me"
                 cell.deleteLabel.text = ""
-                //cell.isUserInteractionEnabled = false
+                cell.isUserInteractionEnabled = false
                 
             } else if realmUserEmail != participantEmail && participantIsAdmin == true {
                 cell.userNameLabel.text = participantsArray?[indexPath.row].fullName
                 cell.deleteLabel.text = "Admin"
                 cell.deleteLabel.textColor = .black
-                //cell.isUserInteractionEnabled = false
+                cell.isUserInteractionEnabled = false
                 
             } else {
+                let realm = try! Realm()
+                let realmUserEmail = realm.objects(RealmUser.self)[0].email
+                let realmGroupAdminEmail = realm.objects(GroupParticipants.self).filter("partOfGroupID CONTAINS %@", selectedGroup!.groupID!).filter("isAdmin == true")[0].email
+                
                 cell.userNameLabel.text = participantsArray?[indexPath.row].fullName
+                //Check if user is admin to enable delete button
+                if realmUserEmail == realmGroupAdminEmail {
+                    cell.deleteLabel.text = "Remove"
+                    cell.deleteLabel.textColor = .red
+                    cell.isUserInteractionEnabled = true
+                } else {
+                    cell.deleteLabel.text = ""
+                    cell.isUserInteractionEnabled = false
+                }
             } 
         }
         return cell
@@ -216,62 +212,21 @@ extension GroupSettingsViewController: UITableViewDelegate, UITableViewDataSourc
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
-        let realm = try! Realm()
-        let realmUserEmail = realm.objects(RealmUser.self)[0].email
-        let realmGroupAdminEmail = realm.objects(GroupParticipants.self).filter("partOfGroupID CONTAINS %@", group!.groupID!).filter("isAdmin == true")[0].email
+        let participantToDelete = (participantsArray?[indexPath.row])!
         
-        //Check if person trying to dele members is the group admin
-        if realmUserEmail == realmGroupAdminEmail {
-            //Create an confirmation alert to show when trying to delete a participant
-            let alert = UIAlertController(title: "Delete participant", message: "By clicking Confirm the selected participant will be excluded from group", preferredStyle: .alert)
-            //Add a confirm action with completion block
-            let confirmAction = UIAlertAction(title: "Confirm", style: .destructive) { [weak self] _ in
-                
-                let realm = try! Realm()
-                let participant = (self?.participantsArray?[indexPath.row])!
-                //Delete group participant from firebase
-                //FireDBManager.shared.removeGroupParticipant(participantToRemove: participant)
-                
-                //Delete group from realm and delete cell from tableview
-                do {
-                    try realm.write({
-                        realm.delete(participant)
-                    })
-                } catch {
-                    print(error.localizedDescription)
-                }
-                tableView.deleteRows(at: [indexPath], with: .left)
-                self?.numberOfParticipantsLabel.text = String((self?.participantsArray!.count)!)
-                
-            }
-            let cancelAction = UIAlertAction(title: "Cancel", style: .default)
-            alert.addAction(confirmAction)
-            alert.addAction(cancelAction)
-            self.present(alert, animated: true)
-        } else {
-            let alert = UIAlertController(title: "Only group administrator can delete participants", message: "You can exit the group by clicking exit", preferredStyle: .alert)
-            let action = UIAlertAction(title: "Dismiss", style: .default)
-            alert.addAction(action)
-            self.present(alert, animated: true)
-            
-        }
+        //Create an alert to show as a confirmation when the user is trying to remove a participant
+        let alert = groupSettingLogic.createAlertAction()
+        
+        //Add a completion block to alert that removes the user from groups in firebase and deletes the user from realm as well
+        alert.addAction(groupSettingLogic.createAlertCompletion(participantToDelete: participantToDelete, selectedGroup: selectedGroup!))
+        
+        //Add a cancel action to alert
+        alert.addAction( UIAlertAction(title: "Cancel", style: .default))
+        
+        //Present alert action
+        self.present(alert, animated: true)
     }
     
     
-}
-
-//MARK: - Realm Manager
-
-extension GroupSettingsViewController {
-    
-    func loadParticipants() {
-        
-        let realm = try! Realm()
-        participantsArray = realm.objects(GroupParticipants.self).filter("partOfGroupID CONTAINS %@", group!.groupID!)
-        
-        DispatchQueue.main.async {
-            self.tableView.reloadData()
-        }
-    }
     
 }

@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import RealmSwift
 
 class AddGroupItemViewController: UIViewController {
     
@@ -13,37 +14,34 @@ class AddGroupItemViewController: UIViewController {
     @IBOutlet weak var datePicker: UIDatePicker!
     @IBOutlet weak var itemTitleTextField: UITextField!
     
+    var selectedGroup: Groups?{
+        didSet {
+            participantArray = selectedGroup?.groupParticipants
+        }
+    }
+    var participantArray: List<GroupParticipants>?
+    var newGroupItemsLogic = NewGroupItemLogic()
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
     }
-    
-    static var completion: ((_ itemTitle: String?, _ dueToDate: String?, _ priority: String?) -> Void)?
 
     @IBAction func addTaskButtonPressed(_ sender: Any) {
         
         let itemTitle = itemTitleTextField.text!
+        let deadLine = newGroupItemsLogic.getDeadLineString(for: datePicker.date)
+        let priorityString = newGroupItemsLogic.getPriorityString(for: prioritySelector.selectedSegmentIndex)
         
-        let date = datePicker.date
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "dd/MM/YY"
-        let dateString = dateFormatter.string(from: date)
+        //Create new group item object
+        let newItemObject = newGroupItemsLogic.createGroupItemObject(itemTitle: itemTitle, selectedGroup: selectedGroup!, priorityString: priorityString, deadLine: deadLine)
         
-        var priorityString = ""
+        //Add new group item object to realm
+        newGroupItemsLogic.addGroupItemToRealm(selectedGroup: selectedGroup!, newItemObject: newItemObject)
         
-        let selectedPriorityIndex = prioritySelector.selectedSegmentIndex
-        switch selectedPriorityIndex {
-        case 0:
-            priorityString = "Low"
-        case 1:
-            priorityString = "Medium"
-        default:
-            priorityString = "High"
-        }
-        
-        Self.completion!(itemTitle, dateString, priorityString)
+        //Add group item to Firebase
+        newGroupItemsLogic.addGroupItemToFirebase(participantsArray: participantArray!, newItemObject: newItemObject)
         
         dismiss(animated: true)
     }

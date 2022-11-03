@@ -15,21 +15,22 @@ class AddParticipantViewController: UIViewController {
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var tableView: UITableView!
     
-    static var completion: (() -> Void)?
-    
+    var addParticipantLogic = AddParticipantLogic()
     let spinner = JGProgressHUD(style: .dark)
-    
-    var usersArray = Array<RealmUser>()
-    var selectedUsersArray = Array<GroupParticipants>()
-    var participantsArray: Results<GroupParticipants>? {
+    var selectedGroup: Groups? {
         didSet {
-            selectedUsersArray.append(contentsOf: participantsArray!)
-            previousParticipantsCount = participantsArray!.count
+            let realmParticipantsArray = selectedGroup?.groupParticipants.sorted(byKeyPath: "isAdmin", ascending: false)
+            for participant in realmParticipantsArray! {
+                participantsArray.append(participant)
+            }
+            DispatchQueue.main.async {
+                self.collectionView.reloadData()
+            }
         }
     }
-    var participantsToAddToDatabase = Array<GroupParticipants>()
-    var group = Groups()
-    var previousParticipantsCount = 0
+    var participantsArray = [GroupParticipants]()
+    var searchResultsArray = [RealmUser]()
+    var newSelectedParticipantsArray = [GroupParticipants]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -49,22 +50,17 @@ class AddParticipantViewController: UIViewController {
     }
     
     @IBAction func addButtonPressed(_ sender: UIButton) {
-        //Update Realm
-        let realm = try! Realm()
-        let groupObject = realm.objects(Groups.self).filter("groupID CONTAINS %@", group.groupID!)[0]
-        do {
-            try realm.write({
-                groupObject.groupParticipants.append(objectsIn: participantsToAddToDatabase)
-                realm.add(groupObject)
-            })
-        } catch {
-            print(error.localizedDescription)
-        }
+        //Update realm with the new participants on group
+        addParticipantLogic.addNewParticipantsToRealm(for: selectedGroup!, with: newSelectedParticipantsArray)
         
-        //Add new group participant to firebase
-        //FireDBManager.shared.addNewParticipant(participantsArray: participantsToAddToDatabase, group: group)
+        let oldParticipantsArray = participantsArray.filter { !newSelectedParticipantsArray.contains($0)}
         
-        Self.completion!()
+        //Add new participants to old participant's all participants nodes in firebase
+        FireDBManager.shared.addNewParticipantsToGroup(oldParticipants: oldParticipantsArray, newParticipants: newSelectedParticipantsArray)
+        
+        //Add complete group object to users that are being added to the group on firebase
+        FireDBManager.shared.addGroupToNewParticipants(selectedGroup: selectedGroup!, newParticipantsArray: newSelectedParticipantsArray, oldParticipantsArray: oldParticipantsArray)
+        
         dismiss(animated: true)
     }
     
@@ -76,24 +72,26 @@ class AddParticipantViewController: UIViewController {
 extension AddParticipantViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return usersArray.count
+        return searchResultsArray.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
         let cell = tableView.dequeueReusableCell(withIdentifier: "UsersTableCell", for: indexPath) as! UsersResultsTableViewCell
         
-        let imageName = usersArray[indexPath.row].profilePictureFileName
+        let imageName = searchResultsArray[indexPath.row].profilePictureFileName
+        let userName = searchResultsArray[indexPath.row].fullName
         
         FireStoreManager.shared.getImageURL(imageName: imageName!) { [weak self] resultUrl in
             if let url = resultUrl {
                 cell.profilePicture.sd_setImage(with: url)
-                cell.nameLabel.text = self?.usersArray[indexPath.row].fullName
+                cell.nameLabel.text = userName
                 self?.spinner.dismiss(animated: true)
             } else {
                 //Already have image saved in user device just grab it
                 ImageManager.shared.loadPictureFromDisk(fileName: imageName) { profilePicture in
                     cell.profilePicture.image = profilePicture
-                    cell.nameLabel.text = self?.usersArray[indexPath.row].fullName
+                    cell.nameLabel.text = userName
                     self?.spinner.dismiss(animated: true)
                 }
             }
@@ -102,58 +100,35 @@ extension AddParticipantViewController: UITableViewDelegate, UITableViewDataSour
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
         spinner.show(in: view)
         tableView.deselectRow(at: indexPath, animated: true)
         
-        var contains = false
-        let selectedUser = usersArray[indexPath.row]
+        let selectedUser = searchResultsArray[indexPath.row]
+        let selectedUserEmail = selectedUser.email!
         
-        let participantObject = GroupParticipants()
-        participantObject.fullName = selectedUser.fullName
-        participantObject.firstName = selectedUser.firstName
-        participantObject.lastName = selectedUser.lastName
-        participantObject.email = selectedUser.email
-        participantObject.profilePictureFileName = selectedUser.profilePictureFileName
-        participantObject.partOfGroupID = group.groupID
-        participantObject.isAdmin = false
-        
-        for participant in selectedUsersArray {
-            if participantObject.email == participant.email {
-                contains = true
+        //Check if the user that was selected is already a group participant
+        if participantsArray.contains(where: {$0.email! == selectedUserEmail}) == false {
+            
+            let participantObject = addParticipantLogic.getGroupParticipant(using: selectedUser, and: selectedGroup!)
+            
+            newSelectedParticipantsArray.append(participantObject)
+            participantsArray.append(participantObject)
+            
+            DispatchQueue.main.async {
+                self.spinner.dismiss(animated: true)
+                self.collectionView.reloadData()
             }
-        }
-        
-        if contains == false {
-            selectedUsersArray.append(participantObject)
-            participantsToAddToDatabase.append(participantObject)
-            //Download and save profile picture
-            let imageName = selectedUser.profilePictureFileName!
-            let userEmail = selectedUser.email!
-            FireStoreManager.shared.getImageURL(imageName: imageName) { resultUrl in
-                if let url = resultUrl {
-                    FireStoreManager.shared.downloadProfileImageWithURL(imageURL: url) { [weak self] profileImage in
-                        ImageManager.shared.saveProfileImage(userEmail: userEmail, image: profileImage)
-                        DispatchQueue.main.async {
-                            self?.collectionView.reloadData()
-                        }
-                    }
-                } else {
-                   //Already have image saved in device memory
-                    DispatchQueue.main.async {
-                        self.collectionView.reloadData()
-                    }
-                }
-                
-            }
+            
         } else {
-            spinner.dismiss(animated: true)
-            let alert = UIAlertController(title: "User is already a participant", message: "You can only add a participant once.", preferredStyle: .alert)
-            let action = UIAlertAction(title: "Dismiss", style: .default)
-            alert.addAction(action)
-            self.present(alert, animated: true)
-            contains = false
+            //Present alert action saying that the user already is part of the group
+            let alert = addParticipantLogic.getAlert()
+            
+            DispatchQueue.main.async {
+                self.spinner.dismiss(animated: true)
+                self.present(alert, animated: true)
+            }
         }
-        
     }
     
 }
@@ -162,31 +137,40 @@ extension AddParticipantViewController: UITableViewDelegate, UITableViewDataSour
 
 extension AddParticipantViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return selectedUsersArray.count
+        return participantsArray.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "customCollectionCell", for: indexPath) as! NewGroupCollectionViewCell
         
-        let imageName = selectedUsersArray[indexPath.row].profilePictureFileName
+        let participant = participantsArray[indexPath.row]
+        let imageName = participant.profilePictureFileName
         
-        ImageManager.shared.loadPictureFromDisk(fileName: imageName) { profileImage in
+        ImageManager.shared.loadPictureFromDisk(fileName: imageName) { [weak self] profileImage in
+            
             cell.imageView.image = profileImage
+            
+            if self!.newSelectedParticipantsArray.contains(participant) {
+                cell.xButton.isHidden = false
+            } else {
+                cell.xButton.isHidden = true
+            }
             spinner.dismiss(animated: true)
         }
-        
-        if indexPath.row < previousParticipantsCount {
-            cell.xButton.isHidden = true
-            cell.isUserInteractionEnabled = false
-        }
-        
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        selectedUsersArray.remove(at: indexPath.row)
-        participantsToAddToDatabase.remove(at: indexPath.row - previousParticipantsCount)
-        collectionView.reloadData()
+        
+        let participantToRemove = participantsArray[indexPath.row]
+        
+        newSelectedParticipantsArray.removeAll(where: {$0 == participantToRemove})
+        participantsArray.remove(at: indexPath.row)
+        
+        DispatchQueue.main.async {
+            collectionView.reloadData()
+        }
     }
     
 }
@@ -198,31 +182,15 @@ extension AddParticipantViewController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         spinner.show(in: view)
         
-        FireDBManager.shared.getAllUsers { [weak self] realmUsersList in
+        addParticipantLogic.getFilteredParticipantsArray(participantsArray: participantsArray) { [weak self] filteredParticipantsArray in
             
-            var filteredUserList = Array<RealmUser>()
-            let realm = try! Realm()
-            let selfUserEmail = realm.objects(RealmUser.self)[0].email
+            self?.searchResultsArray = filteredParticipantsArray
             
-            for user in realmUsersList {
-                
-                if user.fullName?.hasPrefix(searchBar.text!) == true && user.email != selfUserEmail {
-                    filteredUserList.append(user)
-                }
-            }
-            
-            if filteredUserList.isEmpty {
+            DispatchQueue.main.async {
+                searchBar.resignFirstResponder()
                 self?.spinner.dismiss(animated: true)
-                let alert = UIAlertController(title: "No users found", message: "There are no matches for the introduced text.", preferredStyle: .alert)
-                let action = UIAlertAction(title: "Dismiss", style: .default)
-                alert.addAction(action)
-                self?.present(alert, animated: true)
+                self?.tableView.reloadData()
             }
-            
-            self?.usersArray = filteredUserList
-            
-            searchBar.resignFirstResponder()
-            self?.tableView.reloadData()
         }
     }
     

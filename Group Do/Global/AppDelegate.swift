@@ -8,7 +8,6 @@
 import UIKit
 import FirebaseCore
 import FirebaseDatabase
-import RealmSwift
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {

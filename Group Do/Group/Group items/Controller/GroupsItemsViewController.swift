@@ -16,15 +16,20 @@ class GroupsItemsViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var noItemsLabel: UILabel!
     
-    var selectedGroup: Groups?
+    var groupItemsLogic = GroupItemsLogic()
+    var selectedGroup: Groups? {
+        didSet {
+            participantsArray = selectedGroup?.groupParticipants.sorted(byKeyPath: "isAdmin", ascending: false)
+            itemsArray = selectedGroup?.groupItems.sorted(byKeyPath: "creationTimeSince1970", ascending: false)
+        }
+    }
     var participantsArray: Results<GroupParticipants>?
     var itemsArray: Results<GroupItems>?
-    
+    private var itemsNotificationToken: NotificationToken?
+    private var participantNotificationToken: NotificationToken?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        //Load items from realm
-        loadGroupItems()
         
         collectionView.delegate = self
         collectionView.dataSource = self
@@ -34,128 +39,101 @@ class GroupsItemsViewController: UIViewController {
         tableView.dataSource = self
         tableView.register(UINib(nibName: "ItemsTableViewCell", bundle: nil), forCellReuseIdentifier: "ItemsTableViewCell")
         
-        let date = Date()
-        dateMonthLabel.text = date.monthName()
-        dateNumberLabel.text = date.currentDay()
+        //Setup dates, month and number label
+        dateMonthLabel.text = groupItemsLogic.getMonthName()
+        dateNumberLabel.text = groupItemsLogic.getCurrentDay()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        //Check if itemsArray is empty to show noItemsLabel
+     
+        checkNoItemsLabel()
+        
+        //Start listening for changes in the realm database and handle those changes by updating tableView or the collectionView accordingly
+        let realm = try! Realm()
+        //listen for item updates
+        let itemResults = realm.objects(GroupItems.self).filter("fromGroupID CONTAINS %@", selectedGroup!.groupID!).sorted(byKeyPath: "creationTimeSince1970", ascending: false)
+        itemsNotificationToken = itemResults.observe { [weak self] (changes: RealmCollectionChange) in
+            guard let tableView = self?.tableView else { return }
+            switch changes {
+            case .initial:
+                // Results are now populated and can be accessed without blocking the UI
+                tableView.reloadData()
+            case .update(_, let deletions, let insertions, let modifications):
+                // Query results have changed, so apply them to the UITableView
+                tableView.performBatchUpdates({
+                    tableView.deleteRows(at: deletions.map({IndexPath(row: $0, section: 0)}), with: .fade)
+                    tableView.insertRows(at: insertions.map({IndexPath(row: $0, section: 0)}), with: .top)
+                    tableView.reloadRows(at: modifications.map({IndexPath(row: $0, section: 0)}), with: .none)
+                    tableView.reloadData()
+                    self?.checkNoItemsLabel()
+                })
+            case .error(let error):
+                // An error occurred while opening the Realm file on the background worker thread
+                fatalError("\(error)")
+            }
+        }
+        
+        //Listen for participant updates
+        let participantResults = realm.objects(GroupParticipants.self).filter("partOfGroupID CONTAINS %@", selectedGroup!.groupID!).sorted(byKeyPath: "isAdmin", ascending: false)
+        participantNotificationToken = participantResults.observe { [weak self] (changes: RealmCollectionChange) in
+              guard let collectionView = self?.collectionView else { return }
+              switch changes {
+              case .initial:
+                  // Results are now populated and can be accessed without blocking the UI
+                  collectionView.reloadData()
+              case .update(_, let deletions, let insertions, let modifications):
+                  // Query results have changed, so apply them to the UITableView
+                  collectionView.performBatchUpdates({
+                      collectionView.deleteItems(at: deletions.map({IndexPath(item: $0, section: 0)}))
+                      collectionView.insertItems(at: insertions.map({IndexPath(item: $0, section: 0)}))
+                      collectionView.reloadItems(at: modifications.map({IndexPath(item: $0, section: 0)}))
+                          //self?.checkNoGroupsLabel()
+                      })
+              case .error(let error):
+                  // An error occurred while opening the Realm file on the background worker thread
+                  fatalError("\(error)")
+              }
+          }
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        itemsNotificationToken?.invalidate()
+        participantNotificationToken?.invalidate()
+    }
+    
+    ///Checks if the no items label needs to be hidden or not and updates the UI
+    private func checkNoItemsLabel() {
         if itemsArray?.count == 0 {
             noItemsLabel.isHidden = false
         } else {
             noItemsLabel.isHidden = true
         }
-        //Load participants from realm
-        loadParticipants()
-        //Start listening for group deletion
-        //listenForGroupDeletion()
-        //Start listening for participant changes
-        //listenForParticipantChanges()
     }
-    
-//    private func listenForGroupDeletion() {
-//
-//        let realm = try! Realm()
-//        let userEmail = realm.objects(RealmUser.self)[0].email!
-//
-//        FireDBManager.shared.listenForGroupDeletion(userEmail: userEmail, groupID: selectedGroup!.groupID!) { [weak self] resultBool in
-//            if resultBool == true {
-//                self?.navigationController?.popToRootViewController(animated: true)
-//            }
-//        }
-//    }
-    
-//    private func listenForParticipantChanges() {
-//        
-//        FireDBManager.shared.listenForParticipantChanges(groupId: selectedGroup!.groupID!) {
-//            DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
-//                    self.collectionView.reloadData()
-//            }
-//        }
-//    }
-    
-    
-    
-    
     
     @IBAction func settingButtonPressed(_ sender: UIBarButtonItem) {
         
         performSegue(withIdentifier: "GroupItemsToSettings", sender: self)
     }
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "GroupItemsToSettings" {
-            
-            let destinationVC = segue.destination as! GroupSettingsViewController
-            destinationVC.group = selectedGroup
-        }
-    }
-    
     @IBAction func addItemButtonPressed(_ sender: UIButton) {
         
         performSegue(withIdentifier: "NewGroupItem", sender: self)
-        
-        AddGroupItemViewController.completion = { [weak self] itemTitle, dateString, priorityString in
-            
-            //Create item object
-            let date = Date()
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "dd/MM/YY"
-            let creationDate = dateFormatter.string(from: date)
-            
-            let timeSince1970 = date.timeIntervalSince1970
-            
-            let newItemID = "\(itemTitle!)\(timeSince1970)"
-            
-            let realm = try! Realm()
-            let userObject = realm.objects(RealmUser.self)[0]
-            let userName = userObject.fullName
-            let userEmail = userObject.email
-            
-            let fromGroupID = self?.selectedGroup?.groupID
-            
-            let newItem = GroupItems()
-            newItem.itemTitle = itemTitle
-            newItem.creationDate = creationDate
-            newItem.creationTimeSince1970 = timeSince1970
-            newItem.priority = priorityString
-            newItem.isDone = false
-            newItem.deadLine = dateString
-            newItem.itemID = newItemID
-            newItem.creatorName = userName
-            newItem.creatorEmail = userEmail
-            newItem.fromGroupID = fromGroupID
-            
-            //Add object to realm
-            do {
-                try realm.write({
-                    let group = realm.objects(Groups.self).filter("groupID CONTAINS %@", fromGroupID!)[0]
-                    group.groupItems.append(newItem)
-                    realm.add(group)
-                })
-            } catch {
-                print(error.localizedDescription)
-            }
-            
-            //Add item to Firebase
-            
-            var realmParticipants: Results<GroupParticipants>?
-            realmParticipants = realm.objects(GroupParticipants.self).filter("partOfGroupID CONTAINS %@", fromGroupID!)
-            
-            var participantsList = [GroupParticipants]()
-            for participant in realmParticipants! {
-                participantsList.append(participant)
-            }
-            
-            //FireDBManager.shared.addItemToFirebase(participantsArray: participantsList, itemObject: newItem)
-            
-            self?.noItemsLabel.isHidden = true
-            self?.tableView.reloadData()
-        }
     }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
+        if segue.identifier == "GroupItemsToSettings" {
+            let destinationVC = segue.destination as! GroupSettingsViewController
+            destinationVC.selectedGroup = selectedGroup
+        }
+        
+        if segue.identifier == "NewGroupItem" {
+            let destinationVC = segue.destination as! AddGroupItemViewController
+            destinationVC.selectedGroup = selectedGroup
+        }
+    }
 
     
 }
@@ -181,38 +159,14 @@ extension GroupsItemsViewController: UITableViewDelegate, UITableViewDataSource 
             
             if let groupItemObject = self?.itemsArray?[indexPath.row] {
                 
-                let realm = try! Realm()
-                
                 //Delete item from firebase
-                var participantsArray = Array<GroupParticipants>()
-                let groupParticipants = realm.objects(GroupParticipants.self).filter("partOfGroupID CONTAINS %@", groupItemObject.fromGroupID!)
-                for participant in groupParticipants {
-                    participantsArray.append(participant)
-                }
-                //FireDBManager.shared.deleteGroupItems(participants: participantsArray, itemObject: groupItemObject)
+                self?.groupItemsLogic.deleteGroupItemFromFirebase(groupItemObject: groupItemObject, participantsArray: (self?.participantsArray)!)
                 
                 //Delete item from realm
-                do {
-                    try realm.write({
-                        realm.delete(groupItemObject)
-                    })
-                } catch {
-                    print(error.localizedDescription)
-                }
-                
-                //Remove row from table view
-                tableView.deleteRows(at: [indexPath], with: .left)
-                
-                
-                //Set no items label to appear if itemsArray is empty
-                if self?.itemsArray?.count == 0 {
-                    self?.noItemsLabel.isHidden = false
-                }
+                self?.groupItemsLogic.deleteGroupItemFromRealm(groupItemObject: groupItemObject)
             }
-            
             completionHandler(true)
         }
-        
         deleteAction.image = UIImage(systemName: "trash")
         deleteAction.backgroundColor = .systemRed
         let configuration = UISwipeActionsConfiguration(actions: [deleteAction])
@@ -239,45 +193,8 @@ extension GroupsItemsViewController: UICollectionViewDelegate, UICollectionViewD
             
             cell.profilePicture.image = image
         }
-        
         return cell
     }
     
     
-}
-
-//MARK: - Realm Manager
-
-extension GroupsItemsViewController {
-    
-    func loadParticipants() {
-        
-        participantsArray = selectedGroup?.groupParticipants.sorted(byKeyPath: "isAdmin", ascending: false)
-        
-        collectionView.reloadData()
-    }
-    
-    func loadGroupItems() {
-        
-        itemsArray = selectedGroup?.groupItems.sorted(byKeyPath: "creationTimeSince1970", ascending: false)
-        
-        tableView.reloadData()
-    }
-}
-
-
-
-//MARK: - DateFormatter
-
-extension Date {
-    func monthName() -> String {
-        let df = DateFormatter()
-        df.setLocalizedDateFormatFromTemplate("MMM")
-        return df.string(from: self).capitalized
-    }
-    func currentDay() -> String {
-        let df = DateFormatter()
-        df.setLocalizedDateFormatFromTemplate("dd")
-        return df.string(from: self)
-    }
 }

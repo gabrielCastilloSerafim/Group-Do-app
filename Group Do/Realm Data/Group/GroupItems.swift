@@ -20,6 +20,7 @@ class GroupItems: Object {
     @objc dynamic var creatorName: String?
     @objc dynamic var creatorEmail: String?
     @objc dynamic var fromGroupID: String?
+    @objc dynamic var completedByUserEmail: String?
     
     let reverseRelationship = LinkingObjects(fromType: Groups.self, property: "groupItems")
 }

@@ -14,6 +14,7 @@
 		5328A71129091E170001B9DD /* ItemsTableViewLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5328A71029091E170001B9DD /* ItemsTableViewLogic.swift */; };
 		5328A713290941690001B9DD /* AddGroupLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5328A712290941690001B9DD /* AddGroupLogic.swift */; };
 		5328A71529094D170001B9DD /* ConfirmGroupLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5328A71429094D170001B9DD /* ConfirmGroupLogic.swift */; };
+		533189EC2912ACA1002BEEE1 /* AddParticipantLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 533189EB2912ACA1002BEEE1 /* AddParticipantLogic.swift */; };
 		5341BE6328F04DF100253761 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5341BE6228F04DF100253761 /* GoogleService-Info.plist */; };
 		5341BE6528F0545D00253761 /* GroupsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5341BE6428F0545D00253761 /* GroupsViewController.swift */; };
 		5341BE6728F0719800253761 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5341BE6628F0719800253761 /* LoginViewController.swift */; };
@@ -52,6 +53,9 @@
 		53C6EE62290828F3001A6667 /* AllGroupsLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53C6EE61290828F3001A6667 /* AllGroupsLogic.swift */; };
 		53C6EE6929082F78001A6667 /* NewCategoryLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53C6EE6829082F78001A6667 /* NewCategoryLogic.swift */; };
 		53C6EE7029083544001A6667 /* NewItemLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53C6EE6F29083544001A6667 /* NewItemLogic.swift */; };
+		53C9199F290ED1EE006FA541 /* NewGroupItemLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53C9199E290ED1EE006FA541 /* NewGroupItemLogic.swift */; };
+		53C919A1290ED20E006FA541 /* GroupItemsLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53C919A0290ED20E006FA541 /* GroupItemsLogic.swift */; };
+		53C919A3290F185A006FA541 /* GroupSettingLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53C919A2290F185A006FA541 /* GroupSettingLogic.swift */; };
 		53CFDF51290089F9005C72C4 /* MainNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53CFDF50290089F9005C72C4 /* MainNavigationController.swift */; };
 		53FD6C0028EEF13200D2C50D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53FD6BFF28EEF13200D2C50D /* AppDelegate.swift */; };
 		53FD6C0228EEF13200D2C50D /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53FD6C0128EEF13200D2C50D /* SceneDelegate.swift */; };
@@ -71,6 +75,7 @@
 		5328A71029091E170001B9DD /* ItemsTableViewLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemsTableViewLogic.swift; sourceTree = "<group>"; };
 		5328A712290941690001B9DD /* AddGroupLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddGroupLogic.swift; sourceTree = "<group>"; };
 		5328A71429094D170001B9DD /* ConfirmGroupLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmGroupLogic.swift; sourceTree = "<group>"; };
+		533189EB2912ACA1002BEEE1 /* AddParticipantLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddParticipantLogic.swift; sourceTree = "<group>"; };
 		5341BE6228F04DF100253761 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		5341BE6428F0545D00253761 /* GroupsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupsViewController.swift; sourceTree = "<group>"; };
 		5341BE6628F0719800253761 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
@@ -109,6 +114,9 @@
 		53C6EE61290828F3001A6667 /* AllGroupsLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllGroupsLogic.swift; sourceTree = "<group>"; };
 		53C6EE6829082F78001A6667 /* NewCategoryLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewCategoryLogic.swift; sourceTree = "<group>"; };
 		53C6EE6F29083544001A6667 /* NewItemLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewItemLogic.swift; sourceTree = "<group>"; };
+		53C9199E290ED1EE006FA541 /* NewGroupItemLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewGroupItemLogic.swift; sourceTree = "<group>"; };
+		53C919A0290ED20E006FA541 /* GroupItemsLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupItemsLogic.swift; sourceTree = "<group>"; };
+		53C919A2290F185A006FA541 /* GroupSettingLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupSettingLogic.swift; sourceTree = "<group>"; };
 		53CFDF50290089F9005C72C4 /* MainNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainNavigationController.swift; sourceTree = "<group>"; };
 		53FD6BFC28EEF13200D2C50D /* Group Do.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Group Do.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		53FD6BFF28EEF13200D2C50D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -356,6 +364,8 @@
 		53C6EE4F2907F0A7001A6667 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				53C919A0290ED20E006FA541 /* GroupItemsLogic.swift */,
+				53C9199E290ED1EE006FA541 /* NewGroupItemLogic.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -391,6 +401,8 @@
 		53C6EE532907F122001A6667 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				53C919A2290F185A006FA541 /* GroupSettingLogic.swift */,
+				533189EB2912ACA1002BEEE1 /* AddParticipantLogic.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -665,6 +677,7 @@
 			files = (
 				53BCCDD028F573DF003B32A4 /* AddGroupViewController.swift in Sources */,
 				535CA5C028F2AA2E007C2011 /* ImageManager.swift in Sources */,
+				533189EC2912ACA1002BEEE1 /* AddParticipantLogic.swift in Sources */,
 				53FD6C0428EEF13200D2C50D /* PersonalCategoriesViewController.swift in Sources */,
 				53C6EE6929082F78001A6667 /* NewCategoryLogic.swift in Sources */,
 				5310C47B290592850092022F /* FireDBExtensions.swift in Sources */,
@@ -687,7 +700,9 @@
 				53FD6C0028EEF13200D2C50D /* AppDelegate.swift in Sources */,
 				53C6EE5E2907F9E2001A6667 /* CategoryLogic.swift in Sources */,
 				5353B8E328F993E90090A62E /* GroupsItemsViewController.swift in Sources */,
+				53C919A3290F185A006FA541 /* GroupSettingLogic.swift in Sources */,
 				53BCCDDD28F5FC42003B32A4 /* GroupPaticipants.swift in Sources */,
+				53C919A1290ED20E006FA541 /* GroupItemsLogic.swift in Sources */,
 				5353B8F328F9B3430090A62E /* AddGroupItemViewController.swift in Sources */,
 				53ACAD3F28F00D70005C3579 /* PersonalItems.swift in Sources */,
 				53C6EE62290828F3001A6667 /* AllGroupsLogic.swift in Sources */,
@@ -700,6 +715,7 @@
 				5302AC3B28FD5CD7004287CF /* GroupSettingsTableViewCell.swift in Sources */,
 				5341BE6728F0719800253761 /* LoginViewController.swift in Sources */,
 				5341BE6528F0545D00253761 /* GroupsViewController.swift in Sources */,
+				53C9199F290ED1EE006FA541 /* NewGroupItemLogic.swift in Sources */,
 				5353B8EE28F9A64E0090A62E /* ItemsTableViewCell.swift in Sources */,
 				53C6EE7029083544001A6667 /* NewItemLogic.swift in Sources */,
 				5341BE6B28F07BBE00253761 /* SettingsViewController.swift in Sources */,

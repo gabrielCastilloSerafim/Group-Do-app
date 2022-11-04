@@ -37,7 +37,7 @@ class GroupsItemsViewController: UIViewController {
         
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.register(UINib(nibName: "ItemsTableViewCell", bundle: nil), forCellReuseIdentifier: "ItemsTableViewCell")
+        tableView.register(UINib(nibName: "GroupItemsTableViewCell", bundle: nil), forCellReuseIdentifier: "GroupItemsCell")
         
         //Setup dates, month and number label
         dateMonthLabel.text = groupItemsLogic.getMonthName()
@@ -147,9 +147,25 @@ extension GroupsItemsViewController: UITableViewDelegate, UITableViewDataSource 
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "ItemsTableViewCell", for: indexPath) as! ItemsTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "GroupItemsCell", for: indexPath) as! GroupItemsTableViewCell
+        
+        if itemsArray?[indexPath.row].completedByUserEmail != "" {
+            
+            let completedByUserEmail = itemsArray![indexPath.row].completedByUserEmail!
+            let completedByUserFormattedEmail = FireDBManager.shared.emailFormatter(email: completedByUserEmail)
+            let completedByUserProfileImageName = "\(completedByUserFormattedEmail)_profile_picture.png"
+            
+            ImageManager.shared.loadPictureFromDisk(fileName: completedByUserProfileImageName) { image in
+                cell.checkImage.image = image
+            }
+        } else {
+            cell.checkImage.image = UIImage(systemName: "circle")
+        }
         
         cell.itemTitleLabel.text = itemsArray?[indexPath.row].itemTitle
+        cell.checkButton.tag = indexPath.row
+        cell.groupObject = selectedGroup!
+        
         return cell
     }
     

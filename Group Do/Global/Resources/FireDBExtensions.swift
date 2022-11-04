@@ -30,7 +30,7 @@ extension FireDBManager {
         return formattedId
     }
     
-    //MARK: - Add New User To Database
+    //MARK: - Login And Register
     
     ///Returns a [String: Any] dictionary containing all the properties of a realm user
     func realmUserObjectToDict(with user: RealmUser) -> [String: Any] {
@@ -40,6 +40,28 @@ extension FireDBManager {
                                             "email":user.email!,
                                             "profilePictureName":user.profilePictureFileName!]
         return userDictionary
+    }
+    
+    ///Takes a user snapshot dictionary and returns a realmUser Object
+    func getRealmUserObject(snapshot: DataSnapshot) -> RealmUser? {
+        
+        guard let userInfoDictionary = snapshot.value as? [String:Any] else {return nil}
+        
+        guard let email = userInfoDictionary["email"],
+              let firstName = userInfoDictionary["first_name"],
+              let fullName = userInfoDictionary["full_name"],
+              let lastName = userInfoDictionary["last_name"],
+              let profilePictureName = userInfoDictionary["profilePictureName"]
+        else {return nil}
+        
+        let realmUser = RealmUser()
+        realmUser.email = email as? String
+        realmUser.fullName = fullName as? String
+        realmUser.firstName = firstName as? String
+        realmUser.lastName = lastName as? String
+        realmUser.profilePictureFileName = profilePictureName as? String
+        
+        return realmUser
     }
     
     //MARK: - Personal Categories
@@ -98,6 +120,7 @@ extension FireDBManager {
             })
         } catch {
             print(error.localizedDescription)
+            return
         }
     }
     
@@ -126,6 +149,7 @@ extension FireDBManager {
             })
         } catch {
             print(error.localizedDescription)
+            return
         }
     }
     
@@ -197,6 +221,7 @@ extension FireDBManager {
             })
         } catch {
             print(error.localizedDescription)
+            return
         }
     }
     
@@ -223,10 +248,11 @@ extension FireDBManager {
             })
         } catch {
             print(error.localizedDescription)
+            return
         }
     }
     
-    ///Updates realm
+    ///Updates realm with the updated personal item
     func updatePersonalItemInRealm(with updatedItem: PersonalItems) {
         
         let realm = try! Realm()
@@ -238,6 +264,7 @@ extension FireDBManager {
             })
         } catch {
             print(error.localizedDescription)
+            return
         }
     }
     
@@ -415,6 +442,7 @@ extension FireDBManager {
             })
         } catch {
             print(error.localizedDescription)
+            return
         }
     }
     
@@ -442,6 +470,7 @@ extension FireDBManager {
             })
         } catch {
             print(error.localizedDescription)
+            return
         }
     }
     
@@ -456,6 +485,7 @@ extension FireDBManager {
             })
         } catch {
             print(error.localizedDescription)
+            return
         }
     }
     
@@ -470,41 +500,9 @@ extension FireDBManager {
             })
         } catch {
             print(error.localizedDescription)
+            return
         }
     }
-    
-    //    ///Updates the group object in realm using the group object and the participants / items array
-    //    func updateRealmWithUpdatedGroup(groupObject: Groups, itemsArray: [GroupItems], participantsArray: [GroupParticipants]) {
-    //
-    //        let realm = try! Realm()
-    //        do {
-    //            try realm.write({
-    //
-    //                let realmGroup = realm.objects(Groups.self).filter("groupID CONTAINS %@", groupObject.groupID!).first
-    //                guard let realmGroup = realmGroup else {return}
-    //
-    //                //Remove old  item values from realm and append new ones if number of old elements is different from new ones
-    //                let itemsToDelete = realm.objects(GroupItems.self).where {
-    //                    $0.fromGroupID == groupObject.groupID!
-    //                }
-    //                if itemsToDelete.count != itemsArray.count {
-    //                    realm.delete(itemsToDelete)
-    //                    realmGroup.groupItems.append(objectsIn: itemsArray)
-    //                }
-    //
-    //                //Remove old participant values from realm and append new ones if number of old elements is different from new ones
-    //                let participantsToDelete = realm.objects(GroupParticipants.self).where {
-    //                    $0.partOfGroupID == groupObject.groupID!
-    //                }
-    //                if participantsToDelete.count != participantsArray.count {
-    //                    realm.delete(participantsToDelete)
-    //                    realmGroup.groupParticipants.append(objectsIn: participantsArray)
-    //                }
-    //            })
-    //        } catch {
-    //            print(error.localizedDescription)
-    //        }
-    //    }
     
     //MARK: - Group Items
     
@@ -585,6 +583,7 @@ extension FireDBManager {
             })
         } catch {
             print(error.localizedDescription)
+            return
         }
     }
     
@@ -599,6 +598,27 @@ extension FireDBManager {
             })
         } catch {
             print(error.localizedDescription)
+            return
+        }
+    }
+    
+    ///Updates realm groupItem with the values got from the updated snapshot groupItems object value
+    func updateGroupItemInRealm(updatedGroupItem: GroupItems) {
+        
+        let realm = try! Realm()
+        
+        do {
+            try realm.write({
+                
+                let itemToUpdate = realm.objects(GroupItems.self).filter("itemID CONTAINS %@", updatedGroupItem.itemID!).first
+                guard let itemToUpdate = itemToUpdate else {return}
+                
+                itemToUpdate.isDone = updatedGroupItem.isDone
+                itemToUpdate.completedByUserEmail = updatedGroupItem.completedByUserEmail
+            })
+        } catch {
+            print(error.localizedDescription)
+            return
         }
     }
     
@@ -719,6 +739,7 @@ extension FireDBManager {
             })
         } catch {
             print(error.localizedDescription)
+            return
         }
     }
     
@@ -737,6 +758,7 @@ extension FireDBManager {
             })
         } catch {
             print(error.localizedDescription)
+            return
         }
     }
     

@@ -22,6 +22,7 @@ struct AddParticipantLogic {
             })
         } catch {
             print(error.localizedDescription)
+            return
         }
     }
     

@@ -41,6 +41,7 @@ struct GroupSettingLogic {
             })
         } catch {
             print(error.localizedDescription)
+            return
         }
     }
     
@@ -97,6 +98,7 @@ struct GroupSettingLogic {
                 })
             } catch {
                 print(error.localizedDescription)
+                return
             }
         }
     }

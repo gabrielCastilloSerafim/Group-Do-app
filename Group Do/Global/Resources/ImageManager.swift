@@ -76,7 +76,7 @@ final class ImageManager {
         
     }
     
-    ///Loads images from local storage, Has completion with UIImage ready to use, the image naming convention used was --->  "\(formattedEmail)_profile_picture.png"
+    ///Loads images from local storage, Has completion with UIImage ready to use
     public func loadPictureFromDisk(fileName: String?, completion:(UIImage?) -> Void) {
         
         let documentDirectory = FileManager.SearchPathDirectory.documentDirectory
@@ -104,6 +104,7 @@ final class ImageManager {
             }
         } catch  {
             print(error.localizedDescription)
+            return
         }
         
     }

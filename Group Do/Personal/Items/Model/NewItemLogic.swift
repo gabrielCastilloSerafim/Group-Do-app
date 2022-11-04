@@ -64,6 +64,7 @@ struct NewItemLogic {
             })
         } catch {
             print(error.localizedDescription)
+            return
         }
     }
     

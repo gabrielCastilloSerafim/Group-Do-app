@@ -12,49 +12,26 @@ import RealmSwift
 class SettingsViewController: UIViewController {
     
     @IBOutlet weak var profilePicture: UIImageView!
+    
+    var settingsLogic = SettingsLogic()
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         print(Realm.Configuration.defaultConfiguration.fileURL!)
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
         
-        loadAndSetProfilePicture()
-    }
-    
-    private func loadAndSetProfilePicture() {
-        
-        let realm = try! Realm()
-        let userObject = realm.objects(RealmUser.self)
-        let profilePictureFileName = userObject[0].profilePictureFileName
-    
-        ImageManager.shared.loadPictureFromDisk(fileName: profilePictureFileName) { image in
-            
-            profilePicture.image = image!
+        settingsLogic.getProfilePicture { image in
+            profilePicture.image = image
         }
     }
-
     
     @IBAction func logOutButtonPressed(_ sender: UIButton) {
         //Log out from firebase
-        do {
-            try Auth.auth().signOut()
-        } catch {
-            print(error.localizedDescription)
-            return
-        }
-        let realm = try! Realm()
+        settingsLogic.logUserOut()
+        
         //Delete user from realm database
-        do {
-            try realm.write {
-                realm.deleteAll()
-            }
-        } catch {
-            print(error.localizedDescription)
-            return
-        }
+        settingsLogic.deleteAllRealmData()
+        
         //Delete images from system files
         ImageManager.shared.deleAllImagesFromUsersDir()
         

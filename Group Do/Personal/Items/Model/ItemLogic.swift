@@ -26,6 +26,7 @@ struct ItemLogic {
             })
         } catch {
             print(error.localizedDescription)
+            return
         }
     }
     

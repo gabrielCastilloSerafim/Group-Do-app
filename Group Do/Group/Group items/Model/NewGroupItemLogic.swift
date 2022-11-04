@@ -69,6 +69,7 @@ struct NewGroupItemLogic {
             })
         } catch {
             print(error.localizedDescription)
+            return
         }
     }
     

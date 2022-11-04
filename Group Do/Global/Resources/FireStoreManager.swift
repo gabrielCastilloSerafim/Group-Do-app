@@ -84,6 +84,7 @@ final class FireStoreManager {
                     completion(url)
                 case .failure(let error):
                     print(error.localizedDescription)
+                    return
                 }
             }
         }
@@ -109,6 +110,7 @@ final class FireStoreManager {
                     completion(url)
                 case .failure(let error):
                     print(error.localizedDescription)
+                    return
                 }
             }
         }
@@ -139,6 +141,7 @@ final class FireStoreManager {
                     completion(url)
                 case .failure(let error):
                     print(error.localizedDescription)
+                    return
                 }
             }
         }
@@ -173,6 +176,7 @@ final class FireStoreManager {
         imagePath.delete { error in
             if let error = error {
                 print(error.localizedDescription)
+                return
             }
         }
         

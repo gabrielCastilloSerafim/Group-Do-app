@@ -48,6 +48,7 @@ struct GroupItemsLogic {
             })
         } catch {
             print(error.localizedDescription)
+            return
         }
     }
     

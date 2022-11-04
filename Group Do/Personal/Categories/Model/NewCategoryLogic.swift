@@ -40,6 +40,7 @@ struct NewCategoryLogic {
             }
         } catch {
             print(error.localizedDescription)
+            return
         }
     }
     

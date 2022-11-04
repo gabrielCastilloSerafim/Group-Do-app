@@ -30,6 +30,7 @@ struct ItemsTableViewLogic {
             })
         } catch {
             print(error.localizedDescription)
+            return
         }
     }
     

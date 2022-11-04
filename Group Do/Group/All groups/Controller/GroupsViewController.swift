@@ -43,6 +43,8 @@ class GroupsViewController: UIViewController {
         FireDBManager.shared.listenForGroupItemAddition(userEmail: userEmail)
         //Start listening for groupItems deletion
         FireDBManager.shared.listenForGroupItemsDeletions(userEmail: userEmail)
+        //Start listening for groupItems Update
+        FireDBManager.shared.listenForGroupItemsUpdates(userEmail: userEmail)
         //Start listening for groupParticipants deletion
         FireDBManager.shared.listenForParticipantDeletions(userEmail: userEmail)
         //Start listening for groupParticipants addition

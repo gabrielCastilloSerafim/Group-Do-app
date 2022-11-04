@@ -72,6 +72,7 @@ struct ConfirmGroupLogic {
             })
         } catch {
             print(error.localizedDescription)
+            return
         }
     }
     

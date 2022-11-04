@@ -42,6 +42,7 @@ struct CategoryLogic {
             })
         } catch {
             print(error.localizedDescription)
+            return
         }
     }
     

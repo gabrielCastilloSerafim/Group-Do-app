@@ -7,7 +7,7 @@
 
 import UIKit
 
-class GroupsTableViewCell: UITableViewCell {
+final class GroupsTableViewCell: UITableViewCell {
 
     
     @IBOutlet weak var groupNameLabel: UILabel!

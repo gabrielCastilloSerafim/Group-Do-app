@@ -59,20 +59,20 @@ class RegisterViewController: UIViewController {
             self?.registerLogic.saveUserToRealm(userObject: userObject)
             
             //Add user to firebase database
-            FireDBManager.shared.addUserToFirebaseDB(userObject: userObject)
+            LoginRegisterFireDBManager.shared.addUserToFirebaseDB(userObject: userObject)
             
             //Save user profile picture to firebaseStore
-            FireStoreManager.shared.uploadImage(image: (self?.profilePicture.image!)!, email: email)
+            FireStoreManager.shared.uploadImageToFireStore(image: (self?.profilePicture.image!)!, imageName: userObject.profilePictureFileName!) {_ in }
             
             //Save profile picture to local users documents folder
-            ImageManager.shared.saveProfileImage(userEmail: email, image: (self?.profilePicture.image)!)
-            
-            //Set Main nav controller login property to true to show logged in screen when dismissed
-            MainNavigationController.isLoggedIn = true
-            
-            DispatchQueue.main.async {
-                self?.spinner.dismiss(animated: true)
-                self?.dismiss(animated: true)
+            ImageManager.shared.saveImageToDeviceMemory(imageName: userObject.profilePictureFileName!, image: (self?.profilePicture.image)!) {
+                //Set Main nav controller login property to true to show logged in screen when dismissed
+                MainNavigationController.isLoggedIn = true
+                
+                DispatchQueue.main.async {
+                    self?.spinner.dismiss(animated: true)
+                    self?.dismiss(animated: true)
+                }
             }
         }
     }

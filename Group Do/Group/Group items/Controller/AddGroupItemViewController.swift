@@ -19,15 +19,20 @@ class AddGroupItemViewController: UIViewController {
             participantArray = selectedGroup?.groupParticipants
         }
     }
+    var groupID: String?
     var participantArray: List<GroupParticipants>?
     var newGroupItemsLogic = NewGroupItemLogic()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        //Listen for delete notifications from parent VC
+        NotificationCenter.default.addObserver(self, selector: #selector(self.methodOfReceivedNotification(notification:)), name: Notification.Name("DismissModalNewGroupItem"), object: nil)
     }
-
+    //When observer gets notified it means that the group has been deleted and needs to dismiss current modal presentation
+    @objc func methodOfReceivedNotification(notification: Notification) {
+        dismiss(animated: true)
+    }
+    
     @IBAction func addTaskButtonPressed(_ sender: Any) {
         
         let itemTitle = itemTitleTextField.text!

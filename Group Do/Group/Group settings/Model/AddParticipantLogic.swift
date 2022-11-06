@@ -54,7 +54,7 @@ struct AddParticipantLogic {
     ///Returns completion with a filtered array of realmUser objects that can be added to group participants to display as search results in tableview
     func getFilteredParticipantsArray(participantsArray: [GroupParticipants], completion: @escaping ([RealmUser]) -> Void) {
         
-        FireDBManager.shared.getAllUsers { resultParticipantsArray in
+        NewGroupFireDBManager.shared.getAllUsers { resultParticipantsArray in
             
             var filteredParticipantArray = [RealmUser]()
             

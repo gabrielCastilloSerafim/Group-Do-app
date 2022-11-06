@@ -30,6 +30,18 @@ struct ItemLogic {
         }
     }
     
+    ///Starts listening for changes in the firebase realtime database
+    func startListeningForItemChangesInFirebase() {
+        
+        let realm = try! Realm()
+        let userEmail = realm.objects(RealmUser.self)[0].email!
+        //Start listening for item addition changes and also pulls new unregistered changes to realm when first loaded/
+        PersonalItemsFireDBManager.shared.listenForItemsAddition(userEmail: userEmail)
+        //Start listening for items deletion changes
+        PersonalItemsFireDBManager.shared.listenForItemsDeletion(userEmail: userEmail)
+        //Start listening for item update changes
+        PersonalItemsFireDBManager.shared.listenForItemsUpdate(userEmail: userEmail)
+    }
     
 
     

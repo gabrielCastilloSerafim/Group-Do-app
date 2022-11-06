@@ -7,10 +7,8 @@
 
 import UIKit
 
-
+//MARK: - Current date string formatter
 extension UIViewController {
-    
-    //MARK: - Current date string formatter
     
     ///Returns the current date formatted in --> "dd/MM/YY" as a String.
     public func currentDateString() -> String {
@@ -22,9 +20,22 @@ extension UIViewController {
         
         return dateString
     }
-    
-    
-    
 }
 
+//MARK: - Email & ID Formatters
 
+extension String {
+    
+    var formattedID: String {
+        
+        let formattedId = self.replacingOccurrences(of: ".", with: "_")
+        return formattedId
+    }
+    
+    var formattedEmail: String {
+        
+        var formattedEmail = self.replacingOccurrences(of: "@", with: "_")
+        formattedEmail = formattedEmail.replacingOccurrences(of: ".", with: "_")
+        return formattedEmail
+    }
+}

@@ -8,7 +8,7 @@
 import UIKit
 import RealmSwift
 
-class GroupsViewController: UIViewController {
+final class GroupsViewController: UIViewController {
 
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var noGroupsLabel: UILabel!
@@ -33,22 +33,7 @@ class GroupsViewController: UIViewController {
         }
         
         //Start listening to group additions on firebase
-        let realm = try! Realm()
-        let userEmail = realm.objects(RealmUser.self)[0].email!
-        //Start listening for group additions in firebase
-        FireDBManager.shared.listenForGroupAdditions(userEmail: userEmail)
-        //Start listening to group deletions on firebase
-        FireDBManager.shared.listenForGroupDeletions(userEmail: userEmail)
-        //Start listening for groupItems addition
-        FireDBManager.shared.listenForGroupItemAddition(userEmail: userEmail)
-        //Start listening for groupItems deletion
-        FireDBManager.shared.listenForGroupItemsDeletions(userEmail: userEmail)
-        //Start listening for groupItems Update
-        FireDBManager.shared.listenForGroupItemsUpdates(userEmail: userEmail)
-        //Start listening for groupParticipants deletion
-        FireDBManager.shared.listenForParticipantDeletions(userEmail: userEmail)
-        //Start listening for groupParticipants addition
-        FireDBManager.shared.listenForParticipantAdditions(userEmail: userEmail)
+        allGroupsLogic.activateAllFirebaseDatabaseListeners()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -95,14 +80,6 @@ class GroupsViewController: UIViewController {
         } else {
             noGroupsLabel.isHidden = true
         }
-    }
-    
-    @IBAction func addButtonPressed(_ sender: Any) {
-
-//        ConfirmGroupViewController.createdGroupCompletion = { [weak self] groupObject in
-//
-//            self?.loadGroups()
-//        }
     }
     
     

@@ -63,11 +63,8 @@ class PersonalCategoriesViewController: UIViewController {
               }
           }
         
-        //Start listening for category addition changes and also pulls new unregistered changes to realm when first loaded
-        let email = realm.objects(RealmUser.self)[0].email!
-        FireDBManager.shared.listenForCategoryAddition(email: email)
-        //Start listening for category deletion changes and also pulls new unregistered changes to realm when first loaded
-        FireDBManager.shared.listenForCategoryDeletion(email: email)
+        //Start listening for category addition and deletion changes and also pulls new unregistered changes to realm when first loaded
+        categoryLogic.startListeningForChangesInFirebaseDatabase()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -133,7 +130,7 @@ extension PersonalCategoriesViewController: UITableViewDelegate, UITableViewData
                 self?.categoryLogic.deleteCategoryFromRealm(category)
                 
                 //Delete category and all related items from firebase
-                FireDBManager.shared.deletePersonalCategory(email: email, categoryID: categoryID, relatedItemsArray: firebasePersonalItemObjectArray)
+                CategoriesFireDBManager.shared.deletePersonalCategory(email: email, categoryID: categoryID, relatedItemsArray: firebasePersonalItemObjectArray)
             }
             completionHandler(true)
         }

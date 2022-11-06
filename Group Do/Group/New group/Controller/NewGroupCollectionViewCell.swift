@@ -10,11 +10,12 @@ import UIKit
 class NewGroupCollectionViewCell: UICollectionViewCell {
 
     @IBOutlet weak var imageView: UIImageView!
-    @IBOutlet weak var xButton: UIImageView!
+    @IBOutlet weak var xButtonImage: UIImageView!
     
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
     }
-
+    
+    
 }

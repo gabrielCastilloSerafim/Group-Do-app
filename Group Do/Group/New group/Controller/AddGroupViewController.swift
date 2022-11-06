@@ -88,7 +88,6 @@ extension AddGroupViewController: UITableViewDelegate, UITableViewDataSource {
                     self?.spinner.dismiss(animated: true)
                 }
             }
-            
         }
         
         return cell
@@ -109,14 +108,14 @@ extension AddGroupViewController: UITableViewDelegate, UITableViewDataSource {
             selectedUserArray.append(participant)
             //Download and save selected user profile picture
             let imageName = participant.profilePictureFileName!
-            let userEmail = participant.email!
             
             FireStoreManager.shared.getImageURL(imageName: imageName) { urlResult in
                 if let url = urlResult {
-                    FireStoreManager.shared.downloadProfileImageWithURL(imageURL: url) { [weak self] profileImage in
-                        ImageManager.shared.saveProfileImage(userEmail: userEmail, image: profileImage)
-                        DispatchQueue.main.async {
-                            self?.collectionView.reloadData()
+                    FireStoreManager.shared.downloadImageWithURL(imageURL: url) { [weak self] profileImage in
+                        ImageManager.shared.saveImageToDeviceMemory(imageName: imageName, image: profileImage) {
+                            DispatchQueue.main.async {
+                                self?.collectionView.reloadData()
+                            }
                         }
                     }
                 } else {
@@ -139,7 +138,6 @@ extension AddGroupViewController: UICollectionViewDelegate, UICollectionViewData
         } else {
             return selectedUserArray.count
         }
-        
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -148,16 +146,17 @@ extension AddGroupViewController: UICollectionViewDelegate, UICollectionViewData
         if selectedUserArray.count != 0 {
             let user = selectedUserArray[indexPath.row]
             let imageName = user.profilePictureFileName!
+            
             //Set image to collection cell
             ImageManager.shared.loadPictureFromDisk(fileName: imageName) { profileImage in
                 cell.imageView.image = profileImage
-                cell.xButton.isHidden = false
+                cell.xButtonImage.isHidden = false
                 spinner.dismiss(animated: true)
             }
         } else {
             DispatchQueue.main.async {
                 cell.imageView.image = UIImage(systemName: "person.crop.circle.badge.plus")
-                cell.xButton.isHidden = true
+                cell.xButtonImage.isHidden = true
             }
         }
         return cell
@@ -170,7 +169,11 @@ extension AddGroupViewController: UICollectionViewDelegate, UICollectionViewData
         }
         if selectedUserArray.count != 0 {
             
+            //Check if added profile picture is being used in device else remove it from device memory
+            addGroupLogic.deletePhotoFromDeviceMemory(selectedUser: selectedUserArray[indexPath.row])
+            
             selectedUserArray.remove(at: indexPath.row)
+            
             collectionView.reloadData()
         }
     }

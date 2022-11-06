@@ -51,7 +51,7 @@ struct ConfirmGroupLogic {
     ///Creates and returns a group object
     func createGroupObject(using groupParticipantsObjectsArray: Array<GroupParticipants>, groupName: String, creationTimeSince1970: Double, groupID: String) -> Groups {
         
-        let groupPictureName = "\(groupID)_group_picture.png"
+        let groupPictureName = "\(groupID.formattedID)_group_picture.png"
         
         let newGroup = Groups()
         newGroup.groupName = groupName

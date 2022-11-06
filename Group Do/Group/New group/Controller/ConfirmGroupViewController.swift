@@ -51,9 +51,10 @@ class ConfirmGroupViewController: UIViewController {
         let groupParticipantsObjectsArray = confirmGroupLogic.createGroupParticipantArray(basedOn: groupParticipants, groupName: groupName, groupID: groupID)
         //Create group object
         let newGroupObject = confirmGroupLogic.createGroupObject(using: groupParticipantsObjectsArray, groupName: groupName, creationTimeSince1970: creationTimeSince1970, groupID: groupID)
+        let groupImageName = newGroupObject.groupPictureName!
         
         //save group image to device memory
-        ImageManager.shared.saveGroupImage(groupID: groupID, image: groupPicture.image!) {
+        ImageManager.shared.saveImageToDeviceMemory(imageName: groupImageName, image: groupPicture.image!) {
             
             self.confirmGroupLogic.saveNewGroupObjectToRealm(willSave: newGroupObject)
             
@@ -61,19 +62,19 @@ class ConfirmGroupViewController: UIViewController {
         }
         
         //Save group image to firebase
-        FireStoreManager.shared.uploadGroupImage(image: groupPicture.image!, groupID: groupID) { boolResult in
+        FireStoreManager.shared.uploadImageToFireStore(image: groupPicture.image!, imageName: groupImageName) { boolResult in
             if boolResult == true {
                 //Only when image finishes uploading save group to firebase database
-                FireDBManager.shared.addGroupToFirebase(groupObject: newGroupObject, participantsObjectArray: groupParticipantsObjectsArray)
+                NewGroupFireDBManager.shared.addGroupToFirebase(groupObject: newGroupObject, participantsObjectArray: groupParticipantsObjectsArray)
             }
         }
-        
     }
     
     @IBAction func addGroupPicturePressed(_ sender: UIButton) {
         
         presentPhotoActionSheet()
     }
+    
     
 }
 
@@ -91,7 +92,7 @@ extension ConfirmGroupViewController: UICollectionViewDelegate, UICollectionView
         
         ImageManager.shared.loadPictureFromDisk(fileName: userImageName) { picture in
             DispatchQueue.main.async {
-                cell.xButton.isHidden = true
+                cell.xButtonImage.isHidden = true
                 cell.imageView.image = picture
             }
         }

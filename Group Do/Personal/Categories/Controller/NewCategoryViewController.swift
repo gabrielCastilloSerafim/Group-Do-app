@@ -34,7 +34,7 @@ class NewCategoryViewController: UIViewController {
         //Save new category to firebase database
         let realm = try! Realm()
         let email = realm.objects(RealmUser.self)[0].email!
-        FireDBManager.shared.addPersonalCategory(email: email, categoryObject: newCategoryObj)
+        CategoriesFireDBManager.shared.addPersonalCategory(email: email, categoryObject: newCategoryObj)
         
         //Dismiss view
         self.dismiss(animated: true)

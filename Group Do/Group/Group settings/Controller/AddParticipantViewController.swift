@@ -42,8 +42,15 @@ class AddParticipantViewController: UIViewController {
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.register(UINib(nibName: "NewGroupCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "customCollectionCell")
+        
+        //Listen for delete notifications from parent VC
+        NotificationCenter.default.addObserver(self, selector: #selector(self.methodOfReceivedNotification(notification:)), name: Notification.Name("DismissModalAddParticipants"), object: nil)
     }
     
+    //When observer gets notified it means that the group has been deleted and needs to dismiss current modal presentation
+    @objc func methodOfReceivedNotification(notification: Notification) {
+        dismiss(animated: true)
+    }
     
     @IBAction func cancelButtonPressed(_ sender: UIButton) {
         dismiss(animated: true)
@@ -56,10 +63,10 @@ class AddParticipantViewController: UIViewController {
         let oldParticipantsArray = participantsArray.filter { !newSelectedParticipantsArray.contains($0)}
         
         //Add new participants to old participant's all participants nodes in firebase
-        FireDBManager.shared.addNewParticipantsToGroup(oldParticipants: oldParticipantsArray, newParticipants: newSelectedParticipantsArray)
+        GroupSettingsFireDBManager.shared.addNewParticipantsToGroup(oldParticipants: oldParticipantsArray, newParticipants: newSelectedParticipantsArray)
         
         //Add complete group object to users that are being added to the group on firebase
-        FireDBManager.shared.addGroupToNewParticipants(selectedGroup: selectedGroup!, newParticipantsArray: newSelectedParticipantsArray, oldParticipantsArray: oldParticipantsArray)
+        GroupSettingsFireDBManager.shared.addGroupToNewParticipants(selectedGroup: selectedGroup!, newParticipantsArray: newSelectedParticipantsArray, oldParticipantsArray: oldParticipantsArray)
         
         dismiss(animated: true)
     }
@@ -111,15 +118,31 @@ extension AddParticipantViewController: UITableViewDelegate, UITableViewDataSour
         if participantsArray.contains(where: {$0.email! == selectedUserEmail}) == false {
             
             let participantObject = addParticipantLogic.getGroupParticipant(using: selectedUser, and: selectedGroup!)
+            let participantProfileImageName = participantObject.profilePictureFileName!
             
             newSelectedParticipantsArray.append(participantObject)
             participantsArray.append(participantObject)
             
-            DispatchQueue.main.async {
-                self.spinner.dismiss(animated: true)
-                self.collectionView.reloadData()
+            //Download and save user photo to device storage if it does not exist yet
+            FireStoreManager.shared.getImageURL(imageName: participantProfileImageName) { url in
+                if let url = url {
+                    FireStoreManager.shared.downloadImageWithURL(imageURL: url) { image in
+                        ImageManager.shared.saveImageToDeviceMemory(imageName: participantProfileImageName, image: image) {
+                            DispatchQueue.main.async {
+                                self.spinner.dismiss(animated: true)
+                                self.collectionView.reloadData()
+                            }
+                        }
+                    }
+                }
+                //Image already exists in device memory just update collection view
+                else {
+                    DispatchQueue.main.async {
+                        self.spinner.dismiss(animated: true)
+                        self.collectionView.reloadData()
+                    }
+                }
             }
-            
         } else {
             //Present alert action saying that the user already is part of the group
             let alert = addParticipantLogic.getAlert()
@@ -152,9 +175,11 @@ extension AddParticipantViewController: UICollectionViewDelegate, UICollectionVi
             cell.imageView.image = profileImage
             
             if self!.newSelectedParticipantsArray.contains(participant) {
-                cell.xButton.isHidden = false
+                cell.xButtonImage.isHidden = false
+                cell.isUserInteractionEnabled = true
             } else {
-                cell.xButton.isHidden = true
+                cell.xButtonImage.isHidden = true
+                cell.isUserInteractionEnabled = false
             }
             spinner.dismiss(animated: true)
         }

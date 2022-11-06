@@ -53,7 +53,7 @@ struct GroupSettingLogic {
         let realmUserEmail = realm.objects(RealmUser.self)[0].email!
         let selfParticipant = realm.objects(GroupParticipants.self).filter("partOfGroupID CONTAINS %@", selectedGroup.groupID!).filter("email CONTAINS %@", realmUserEmail)[0]
         
-        FireDBManager.shared.deleteExitUser(participantToRemove: selfParticipant, allParticipantsArray: allGroupParticipants)
+        GroupSettingsFireDBManager.shared.deleteExitUser(participantToRemove: selfParticipant, allParticipantsArray: allGroupParticipants)
     }
     
     ///Deletes complete group from fire base
@@ -66,7 +66,7 @@ struct GroupSettingLogic {
             participantsArray.append(participant)
         }
         
-        FireDBManager.shared.deleteGroupFromFirebase(group: selectedGroup, participantsArray: participantsArray)
+        GroupSettingsFireDBManager.shared.deleteGroupFromFirebase(group: selectedGroup, participantsArray: participantsArray)
     }
     
     ///Creates and returns a alert action for a participant deletion
@@ -79,16 +79,16 @@ struct GroupSettingLogic {
         
         return UIAlertAction(title: "Confirm", style: .destructive) { _ in
 
-            //Delete group participant other participants accounts on firebase
-            FireDBManager.shared.deleteUserRemovedByAdmin(participantToRemove: participantToDelete, selectedGroup: selectedGroup)
+            //Delete group participant from other participants accounts on firebase
+            GroupSettingsFireDBManager.shared.deleteUserRemovedByAdmin(participantToRemove: participantToDelete, selectedGroup: selectedGroup)
             
             //Delete entire group from person who was deleted from group on firebase
-            FireDBManager.shared.deleteGroupFromRemovedPersonAccount(participantToRemove: participantToDelete, selectedGroup: selectedGroup)
+            GroupSettingsFireDBManager.shared.deleteGroupFromRemovedPersonAccount(participantToRemove: participantToDelete, selectedGroup: selectedGroup)
             
             //Delete removed person's profile picture from local device storage if it is not being used in any other group
             let realm = try! Realm()
             if realm.objects(GroupParticipants.self).filter("email CONTAINS %@", participantToDelete.email!).count == 0 {
-                ImageManager.shared.deleteLocalProfilePicture(userEmail: participantToDelete.email!)
+                ImageManager.shared.deleteImageFromLocalStorage(imageName: participantToDelete.profilePictureFileName!)
             }
 
             //Delete participant from realm
@@ -103,6 +103,22 @@ struct GroupSettingLogic {
         }
     }
     
+    ///Deletes group participants images from device memory  if it is not being used nowhere else
+    func deleteProfilePictures(deletedGroupParticipants: Results<GroupParticipants>) {
+        
+        for participant in deletedGroupParticipants {
+            
+            let realm = try! Realm()
+            let selfUserEmail = realm.objects(RealmUser.self)[0].email!
+            
+            if participant.email != selfUserEmail {
+                
+                if realm.objects(GroupParticipants.self).filter("email CONTAINS %@", participant.email!).filter("partOfGroupID != %@", participant.partOfGroupID!).count == 0 {
+                    ImageManager.shared.deleteImageFromLocalStorage(imageName: participant.profilePictureFileName!)
+                }
+            }
+        }
+    }
     
     
     

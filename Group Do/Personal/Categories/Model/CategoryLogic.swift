@@ -46,7 +46,16 @@ struct CategoryLogic {
         }
     }
     
-    
+    ///Start firebase database listeners for categories addition and deletion
+    func startListeningForChangesInFirebaseDatabase() {
+        
+        let realm = try! Realm()
+        let email = realm.objects(RealmUser.self)[0].email!
+        //Start listening for category addition changes
+        CategoriesFireDBManager.shared.listenForCategoryAddition(email: email)
+        //Start listening for category deletion changes
+        CategoriesFireDBManager.shared.listenForCategoryDeletion(email: email)
+    }
 
     
 }

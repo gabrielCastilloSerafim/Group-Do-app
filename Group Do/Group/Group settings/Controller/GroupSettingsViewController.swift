@@ -21,8 +21,10 @@ class GroupSettingsViewController: UIViewController {
     var selectedGroup: Groups? {
         didSet {
             participantsArray = selectedGroup?.groupParticipants.sorted(byKeyPath: "isAdmin", ascending: false)
+            groupID = selectedGroup?.groupID!
         }
     }
+    var groupID: String?
     var participantsArray: Results<GroupParticipants>?
     var notificationToken: NotificationToken?
     
@@ -69,13 +71,18 @@ class GroupSettingsViewController: UIViewController {
                 tableView.reloadData()
             case .update(_, let deletions, let insertions, let modifications):
                 // Query results have changed, so apply them to the UITableView
-                tableView.performBatchUpdates({
-                    tableView.deleteRows(at: deletions.map({ IndexPath(row: $0, section: 0)}), with: .fade)
-                    tableView.insertRows(at: insertions.map({ IndexPath(row: $0, section: 0)}), with: .top)
-                    tableView.reloadRows(at: modifications.map({ IndexPath(row: $0, section: 0)}), with: .none)
-                    tableView.reloadData()
-                    self?.refreshParticipantCounter()
-                })
+                if realm.objects(Groups.self).filter("groupID CONTAINS %@", self!.groupID!).count == 0 {
+                    NotificationCenter.default.post(name: Notification.Name("DismissModalAddParticipants"), object: nil)
+                    self?.navigationController?.popToRootViewController(animated: true)
+                } else {
+                    tableView.performBatchUpdates({
+                        tableView.deleteRows(at: deletions.map({ IndexPath(row: $0, section: 0)}), with: .fade)
+                        tableView.insertRows(at: insertions.map({ IndexPath(row: $0, section: 0)}), with: .top)
+                        tableView.reloadRows(at: modifications.map({ IndexPath(row: $0, section: 0)}), with: .none)
+                        tableView.reloadData()
+                        self?.refreshParticipantCounter()
+                    })
+                }
             case .error(let error):
                 // An error occurred while opening the Realm file on the background worker thread
                 fatalError("\(error)")
@@ -118,10 +125,15 @@ class GroupSettingsViewController: UIViewController {
         let realm = try! Realm()
         let participantThatExited = realm.objects(RealmUser.self).first
         guard let participantThatExited = participantThatExited else {return}
-        FireDBManager.shared.deleteEntireGroupForExitedUser(exitedParticipant: participantThatExited, exitedGroup: selectedGroup!, participantsArray: participantsArray!)
+        
+        //Delete group from firebase
+        GroupSettingsFireDBManager.shared.deleteEntireGroupForExitedUser(exitedParticipant: participantThatExited, exitedGroup: selectedGroup!, participantsArray: participantsArray!)
         
         //Delete group photo from device local memory
-        ImageManager.shared.deleteLocalGroupPhoto(groupID: selectedGroup!.groupID!)
+        ImageManager.shared.deleteImageFromLocalStorage(imageName: selectedGroup!.groupPictureName!)
+        
+        //Deletes group participants images from device memory if it is not being used nowhere else
+        groupSettingLogic.deleteProfilePictures(deletedGroupParticipants: participantsArray!)
         
         //Delete group, group items and group participants from realm
         groupSettingLogic.deleteGroupFromRealm(selectedGroup: selectedGroup!)
@@ -137,10 +149,13 @@ class GroupSettingsViewController: UIViewController {
         groupSettingLogic.deleteEntireGroupFromFirebase(selectedGroup: selectedGroup!, participantsArray: participantsArray!)
         
         //Delete group image from fireStore
-        FireStoreManager.shared.deleteGroupImage(group: selectedGroup!)
+        FireStoreManager.shared.deleteImageFromFireStore(imageName: selectedGroup!.groupPictureName!)
         
         //Delete group image from local device memory
-        ImageManager.shared.deleteLocalGroupPhoto(groupID: selectedGroup!.groupID!)
+        ImageManager.shared.deleteImageFromLocalStorage(imageName: selectedGroup!.groupPictureName!)
+        
+        //Deletes group participants images from device memory if it is not being used nowhere else
+        groupSettingLogic.deleteProfilePictures(deletedGroupParticipants: participantsArray!)
         
         //Delete group, group items and group participants from realm
         groupSettingLogic.deleteGroupFromRealm(selectedGroup: selectedGroup!)

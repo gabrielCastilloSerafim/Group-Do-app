@@ -41,7 +41,7 @@ class GroupItemsTableViewCell: UITableViewCell {
             groupItemsTableViewLogic.updateRealmForCompletedTask(selectedItem: selectedItem, selfUserEmail: selfUserEmail)
             
             //Update completed task in firebase
-            FireDBManager.shared.updateCompletedGroupItemInFirebase(completedItem: selectedItem, selectedGroup: groupObject!, selfUserEmail: selfUserEmail)
+            GroupItemsFireDBManager.shared.updateCompletedGroupItemInFirebase(completedItem: selectedItem, selectedGroup: groupObject!, selfUserEmail: selfUserEmail)
             
         } else {
             
@@ -50,7 +50,7 @@ class GroupItemsTableViewCell: UITableViewCell {
                 groupItemsTableViewLogic.updateRealmForUndoneCompletedTask(selectedItem: selectedItem)
                 
                 //Update firebase for done item unchecked
-                FireDBManager.shared.updateUncheckedDoneGroupItemInFirebase(completedItem: selectedItem, selectedGroup: groupObject!)
+                GroupItemsFireDBManager.shared.updateUncheckedDoneGroupItemInFirebase(completedItem: selectedItem, selectedGroup: groupObject!)
             }
         }
     }

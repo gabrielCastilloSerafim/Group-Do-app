@@ -44,7 +44,7 @@ final class PersonalItemsViewController: UIViewController {
         super.viewWillAppear(animated)
         
         let realm = try! Realm()
-        let results = realm.objects(PersonalItems.self).sorted(byKeyPath: "creationTimeSince1970", ascending: false)
+        let results = realm.objects(PersonalItems.self).filter("parentCategoryID CONTAINS %@", categoryID!).sorted(byKeyPath: "creationTimeSince1970", ascending: false)
         //Set realm to listen for changes in the database and update the tableview according with the made changes
         notificationToken = results.observe { [weak self] (changes: RealmCollectionChange) in
               guard let tableView = self?.tableView else { return }
@@ -53,8 +53,9 @@ final class PersonalItemsViewController: UIViewController {
                   // Results are now populated and can be accessed without blocking the UI
                   tableView.reloadData()
               case .update(_, let deletions, let insertions, let modifications):
-                  //Check if parent category still exist if it doesn't pop to root vc else preform updates
+                  //Check if parent category still exist if it doesn't pop to root VC else preform updates
                   if realm.objects(PersonalCategories.self).filter("categoryID CONTAINS %@", self!.categoryID!).count == 0 {
+                      NotificationCenter.default.post(name: Notification.Name("DismissModalNewItem"), object: nil)
                       self?.navigationController?.popToRootViewController(animated: true)
                   } else {
                       // Query results have changed, so apply them to the UITableView
@@ -71,14 +72,8 @@ final class PersonalItemsViewController: UIViewController {
                   fatalError("\(error)")
               }
           }
-        
-        //Start listening for item addition changes and also pulls new unregistered changes to realm when first loaded
-        let userEmail = realm.objects(RealmUser.self)[0].email!
-        FireDBManager.shared.listenForItemsAddition(userEmail: userEmail)
-        //Start listening for items deletion changes and also pulls new unregistered changes to realm when first loaded
-        FireDBManager.shared.listenForItemsDeletion(userEmail: userEmail)
-        //Start listening for item update changes and also pulls new unregistered changes to realm when first loaded
-        FireDBManager.shared.listenForItemsUpdate(userEmail: userEmail)
+        //Start listening for item changes in firebase database and also pulls new unregistered changes to realm when first loaded
+        itemLogic.startListeningForItemChangesInFirebase()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -96,7 +91,11 @@ final class PersonalItemsViewController: UIViewController {
     
     @IBAction func addTaskPressed(_ sender: UIButton) {
         
-        performSegue(withIdentifier: "PersonalItemToNewItem", sender: self)
+        if selectedCategory!.isInvalidated {
+            self.navigationController?.popToRootViewController(animated: true)
+        } else {
+            performSegue(withIdentifier: "PersonalItemToNewItem", sender: self)
+        }
     }
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -106,6 +105,8 @@ final class PersonalItemsViewController: UIViewController {
             destinationVC.currentCategory = self.selectedCategory
         }
     }
+    
+    
     
 }
 
@@ -145,7 +146,7 @@ extension PersonalItemsViewController: UITableViewDelegate, UITableViewDataSourc
                 //Delete item from firebase
                 let realm = try! Realm()
                 let email = realm.objects(RealmUser.self)[0].email!
-                FireDBManager.shared.deletePersonalItem(email: email, categoryID: (self?.selectedCategory?.categoryID)!, itemObject: itemObject)
+                PersonalItemsFireDBManager.shared.deletePersonalItem(email: email, categoryID: (self?.selectedCategory?.categoryID)!, itemObject: itemObject)
                 
                 //Delete item from realm
                 self?.itemLogic.deleteItemFromRealm(itemObject)
@@ -169,10 +170,14 @@ extension PersonalItemsViewController: UISearchBarDelegate {
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         
-        itemsArray = itemsArray?.filter("itemTitle CONTAINS[cd] %@", searchBar.text!).sorted(byKeyPath: "creationTimeSince1970", ascending: true)
+        if selectedCategory!.isInvalidated {
+            self.navigationController?.popToRootViewController(animated: true)
+        } else {
+            itemsArray = itemsArray?.filter("itemTitle CONTAINS[cd] %@", searchBar.text!).sorted(byKeyPath: "creationTimeSince1970", ascending: true)
 
-        DispatchQueue.main.async {
-            self.tableView.reloadData()
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
         }
     }
     

@@ -13,7 +13,7 @@ struct AddGroupLogic {
     ///Perform search for users in firebase and include matches in an array of realm users that is passed back in the completion block
     func performUserSearch(with searchText: String, completion: @escaping (Array<RealmUser>) -> Void) {
         
-        FireDBManager.shared.getAllUsers { firebaseUsersArray in
+        NewGroupFireDBManager.shared.getAllUsers { firebaseUsersArray in
             
             let realm = try! Realm()
             let selfUserEmail = realm.objects(RealmUser.self)[0].email!
@@ -49,5 +49,17 @@ struct AddGroupLogic {
         return alert
     }
     
+    ///Checks if profile picture that is going to be deleted is being used some were else on the app if its not than deletes it
+    func deletePhotoFromDeviceMemory(selectedUser: RealmUser) {
+        
+        let userProfilePictureName = selectedUser.profilePictureFileName!
+        let userEmail = selectedUser.email!
+        
+        let realm = try! Realm()
+        if realm.objects(GroupParticipants.self).filter("email CONTAINS %@", userEmail).count == 0 {
+            
+            ImageManager.shared.deleteImageFromLocalStorage(imageName: userProfilePictureName)
+        }
+    }
     
 }

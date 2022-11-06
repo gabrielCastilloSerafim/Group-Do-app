@@ -13,7 +13,7 @@ struct RegisterLogic {
     ///Returns a userObject
     func getUserObject(email: String, firstName: String, lastName: String) -> RealmUser {
         
-        let formattedEmail = FireDBManager.shared.emailFormatter(email: email)
+        let formattedEmail = email.formattedEmail
         let userFullName = "\(firstName) \(lastName)"
         let profilePictureFileName = "\(formattedEmail)_profile_picture.png"
         

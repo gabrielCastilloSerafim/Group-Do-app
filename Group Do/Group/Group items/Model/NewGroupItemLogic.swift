@@ -80,7 +80,7 @@ struct NewGroupItemLogic {
         for participant in participantsArray {
             groupParticipantsArray.append(participant)
         }
-        FireDBManager.shared.addGroupItemToFirebase(participantsArray: groupParticipantsArray, groupItemObject: newItemObject)
+        GroupItemsFireDBManager.shared.addGroupItemToFirebase(participantsArray: groupParticipantsArray, groupItemObject: newItemObject)
     }
     
     ///Returns the current data string in the format "dd/MM/YY"

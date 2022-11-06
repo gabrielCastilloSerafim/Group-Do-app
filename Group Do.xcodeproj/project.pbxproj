@@ -10,7 +10,6 @@
 		5302AC3B28FD5CD7004287CF /* GroupSettingsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5302AC3928FD5CD7004287CF /* GroupSettingsTableViewCell.swift */; };
 		5302AC3C28FD5CD7004287CF /* GroupSettingsTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5302AC3A28FD5CD7004287CF /* GroupSettingsTableViewCell.xib */; };
 		5302AC3E28FDD1E4004287CF /* AddParticipantViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5302AC3D28FDD1E3004287CF /* AddParticipantViewController.swift */; };
-		5310C47B290592850092022F /* FireDBExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5310C47A290592850092022F /* FireDBExtensions.swift */; };
 		5328A71129091E170001B9DD /* ItemsTableViewLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5328A71029091E170001B9DD /* ItemsTableViewLogic.swift */; };
 		5328A713290941690001B9DD /* AddGroupLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5328A712290941690001B9DD /* AddGroupLogic.swift */; };
 		5328A71529094D170001B9DD /* ConfirmGroupLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5328A71429094D170001B9DD /* ConfirmGroupLogic.swift */; };
@@ -20,7 +19,6 @@
 		5341BE6728F0719800253761 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5341BE6628F0719800253761 /* LoginViewController.swift */; };
 		5341BE6928F0721400253761 /* RegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5341BE6828F0721400253761 /* RegisterViewController.swift */; };
 		5341BE6B28F07BBE00253761 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5341BE6A28F07BBE00253761 /* SettingsViewController.swift */; };
-		5341BE7028F08BEA00253761 /* FireDBManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5341BE6F28F08BEA00253761 /* FireDBManager.swift */; };
 		5341BE7428F09B9000253761 /* FireStoreManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5341BE7328F09B9000253761 /* FireStoreManager.swift */; };
 		5341BE7628F09EF100253761 /* RealmUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5341BE7528F09EF100253761 /* RealmUser.swift */; };
 		5345884128F7F3F800C26C27 /* ConfirmGroupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5345884028F7F3F800C26C27 /* ConfirmGroupViewController.swift */; };
@@ -36,7 +34,7 @@
 		5353B8EF28F9A64E0090A62E /* ItemsTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5353B8ED28F9A64E0090A62E /* ItemsTableViewCell.xib */; };
 		5353B8F328F9B3430090A62E /* AddGroupItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5353B8F228F9B3430090A62E /* AddGroupItemViewController.swift */; };
 		535CA5C028F2AA2E007C2011 /* ImageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535CA5BF28F2AA2D007C2011 /* ImageManager.swift */; };
-		535CA5C628F2C610007C2011 /* ViewControllerExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535CA5C528F2C610007C2011 /* ViewControllerExtensions.swift */; };
+		535CA5C628F2C610007C2011 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535CA5C528F2C610007C2011 /* Extensions.swift */; };
 		53ACAD3D28F00ABA005C3579 /* NewItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53ACAD3C28F00ABA005C3579 /* NewItemViewController.swift */; };
 		53ACAD3F28F00D70005C3579 /* PersonalItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53ACAD3E28F00D70005C3579 /* PersonalItems.swift */; };
 		53BBEDF228FD5B59004EC47D /* GroupSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53BBEDF128FD5B59004EC47D /* GroupSettingsViewController.swift */; };
@@ -51,6 +49,20 @@
 		53C095F4291501D600D0E2AC /* RegisterLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53C095F3291501D500D0E2AC /* RegisterLogic.swift */; };
 		53C095F62915126B00D0E2AC /* LoginLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53C095F52915126B00D0E2AC /* LoginLogic.swift */; };
 		53C095F82915190200D0E2AC /* SettingsLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53C095F72915190200D0E2AC /* SettingsLogic.swift */; };
+		53C095FB29154E9C00D0E2AC /* AllGroupsFireDBManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53C095FA29154E9C00D0E2AC /* AllGroupsFireDBManager.swift */; };
+		53C095FD2915505900D0E2AC /* AllGroupsFireDBLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53C095FC2915505900D0E2AC /* AllGroupsFireDBLogic.swift */; };
+		53C096002915822500D0E2AC /* NewGroupFireDBLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53C095FF2915822500D0E2AC /* NewGroupFireDBLogic.swift */; };
+		53C096022915830300D0E2AC /* NewGroupFireDBManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53C096012915830300D0E2AC /* NewGroupFireDBManager.swift */; };
+		53C09605291588DF00D0E2AC /* GroupItemsFireDBManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53C09604291588DF00D0E2AC /* GroupItemsFireDBManager.swift */; };
+		53C096072915898E00D0E2AC /* GroupItemsFireDBLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53C096062915898E00D0E2AC /* GroupItemsFireDBLogic.swift */; };
+		53C0960A2915905B00D0E2AC /* GroupSettingsFireDBLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53C096092915905B00D0E2AC /* GroupSettingsFireDBLogic.swift */; };
+		53C0960C291590DD00D0E2AC /* GroupSettingsFireDBManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53C0960B291590DD00D0E2AC /* GroupSettingsFireDBManager.swift */; };
+		53C0960F29159F6400D0E2AC /* LoginRegisterFireDBLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53C0960E29159F6400D0E2AC /* LoginRegisterFireDBLogic.swift */; };
+		53C0961129159F8300D0E2AC /* LoginRegisterFireDBManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53C0961029159F8300D0E2AC /* LoginRegisterFireDBManager.swift */; };
+		53C096142915A66100D0E2AC /* CategoriesFireDBManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53C096132915A66100D0E2AC /* CategoriesFireDBManager.swift */; };
+		53C096172915A6EA00D0E2AC /* CategoriesFireDBLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53C096162915A6EA00D0E2AC /* CategoriesFireDBLogic.swift */; };
+		53C0961A2915AF0D00D0E2AC /* PersonalItemsFireDBManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53C096192915AF0D00D0E2AC /* PersonalItemsFireDBManager.swift */; };
+		53C0961C2915AFA700D0E2AC /* PersonalItemFireDBLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53C0961B2915AFA700D0E2AC /* PersonalItemFireDBLogic.swift */; };
 		53C6EE5E2907F9E2001A6667 /* CategoryLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53C6EE5D2907F9E2001A6667 /* CategoryLogic.swift */; };
 		53C6EE6029080A31001A6667 /* ItemLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53C6EE5F29080A31001A6667 /* ItemLogic.swift */; };
 		53C6EE62290828F3001A6667 /* AllGroupsLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53C6EE61290828F3001A6667 /* AllGroupsLogic.swift */; };
@@ -77,7 +89,6 @@
 		5302AC3928FD5CD7004287CF /* GroupSettingsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupSettingsTableViewCell.swift; sourceTree = "<group>"; };
 		5302AC3A28FD5CD7004287CF /* GroupSettingsTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = GroupSettingsTableViewCell.xib; sourceTree = "<group>"; };
 		5302AC3D28FDD1E3004287CF /* AddParticipantViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddParticipantViewController.swift; sourceTree = "<group>"; };
-		5310C47A290592850092022F /* FireDBExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FireDBExtensions.swift; sourceTree = "<group>"; };
 		5328A71029091E170001B9DD /* ItemsTableViewLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemsTableViewLogic.swift; sourceTree = "<group>"; };
 		5328A712290941690001B9DD /* AddGroupLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddGroupLogic.swift; sourceTree = "<group>"; };
 		5328A71429094D170001B9DD /* ConfirmGroupLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmGroupLogic.swift; sourceTree = "<group>"; };
@@ -87,7 +98,6 @@
 		5341BE6628F0719800253761 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		5341BE6828F0721400253761 /* RegisterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterViewController.swift; sourceTree = "<group>"; };
 		5341BE6A28F07BBE00253761 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
-		5341BE6F28F08BEA00253761 /* FireDBManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FireDBManager.swift; sourceTree = "<group>"; };
 		5341BE7328F09B9000253761 /* FireStoreManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FireStoreManager.swift; sourceTree = "<group>"; };
 		5341BE7528F09EF100253761 /* RealmUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmUser.swift; sourceTree = "<group>"; };
 		5345884028F7F3F800C26C27 /* ConfirmGroupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmGroupViewController.swift; sourceTree = "<group>"; };
@@ -103,7 +113,7 @@
 		5353B8ED28F9A64E0090A62E /* ItemsTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ItemsTableViewCell.xib; sourceTree = "<group>"; };
 		5353B8F228F9B3430090A62E /* AddGroupItemViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddGroupItemViewController.swift; sourceTree = "<group>"; };
 		535CA5BF28F2AA2D007C2011 /* ImageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageManager.swift; sourceTree = "<group>"; };
-		535CA5C528F2C610007C2011 /* ViewControllerExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewControllerExtensions.swift; sourceTree = "<group>"; };
+		535CA5C528F2C610007C2011 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		53ACAD3C28F00ABA005C3579 /* NewItemViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewItemViewController.swift; sourceTree = "<group>"; };
 		53ACAD3E28F00D70005C3579 /* PersonalItems.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonalItems.swift; sourceTree = "<group>"; };
 		53BBEDF128FD5B59004EC47D /* GroupSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupSettingsViewController.swift; sourceTree = "<group>"; };
@@ -118,6 +128,20 @@
 		53C095F3291501D500D0E2AC /* RegisterLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterLogic.swift; sourceTree = "<group>"; };
 		53C095F52915126B00D0E2AC /* LoginLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginLogic.swift; sourceTree = "<group>"; };
 		53C095F72915190200D0E2AC /* SettingsLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsLogic.swift; sourceTree = "<group>"; };
+		53C095FA29154E9C00D0E2AC /* AllGroupsFireDBManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllGroupsFireDBManager.swift; sourceTree = "<group>"; };
+		53C095FC2915505900D0E2AC /* AllGroupsFireDBLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllGroupsFireDBLogic.swift; sourceTree = "<group>"; };
+		53C095FF2915822500D0E2AC /* NewGroupFireDBLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewGroupFireDBLogic.swift; sourceTree = "<group>"; };
+		53C096012915830300D0E2AC /* NewGroupFireDBManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewGroupFireDBManager.swift; sourceTree = "<group>"; };
+		53C09604291588DF00D0E2AC /* GroupItemsFireDBManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupItemsFireDBManager.swift; sourceTree = "<group>"; };
+		53C096062915898E00D0E2AC /* GroupItemsFireDBLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupItemsFireDBLogic.swift; sourceTree = "<group>"; };
+		53C096092915905B00D0E2AC /* GroupSettingsFireDBLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupSettingsFireDBLogic.swift; sourceTree = "<group>"; };
+		53C0960B291590DD00D0E2AC /* GroupSettingsFireDBManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupSettingsFireDBManager.swift; sourceTree = "<group>"; };
+		53C0960E29159F6400D0E2AC /* LoginRegisterFireDBLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginRegisterFireDBLogic.swift; sourceTree = "<group>"; };
+		53C0961029159F8300D0E2AC /* LoginRegisterFireDBManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginRegisterFireDBManager.swift; sourceTree = "<group>"; };
+		53C096132915A66100D0E2AC /* CategoriesFireDBManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoriesFireDBManager.swift; sourceTree = "<group>"; };
+		53C096162915A6EA00D0E2AC /* CategoriesFireDBLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoriesFireDBLogic.swift; sourceTree = "<group>"; };
+		53C096192915AF0D00D0E2AC /* PersonalItemsFireDBManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonalItemsFireDBManager.swift; sourceTree = "<group>"; };
+		53C0961B2915AFA700D0E2AC /* PersonalItemFireDBLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonalItemFireDBLogic.swift; sourceTree = "<group>"; };
 		53C6EE5D2907F9E2001A6667 /* CategoryLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryLogic.swift; sourceTree = "<group>"; };
 		53C6EE5F29080A31001A6667 /* ItemLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemLogic.swift; sourceTree = "<group>"; };
 		53C6EE61290828F3001A6667 /* AllGroupsLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllGroupsLogic.swift; sourceTree = "<group>"; };
@@ -130,7 +154,7 @@
 		53F371F829142C5000CC9BFA /* GroupItemsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupItemsTableViewCell.swift; sourceTree = "<group>"; };
 		53F371F929142C5000CC9BFA /* GroupItemsTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = GroupItemsTableViewCell.xib; sourceTree = "<group>"; };
 		53F371FC2914426200CC9BFA /* GroupItemsTableViewLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupItemsTableViewLogic.swift; sourceTree = "<group>"; };
-		53FD6BFC28EEF13200D2C50D /* Group Do.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Group Do.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		53FD6BFC28EEF13200D2C50D /* Group Task.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Group Task.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		53FD6BFF28EEF13200D2C50D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		53FD6C0128EEF13200D2C50D /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		53FD6C0328EEF13200D2C50D /* PersonalCategoriesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonalCategoriesViewController.swift; sourceTree = "<group>"; };
@@ -160,6 +184,7 @@
 				53C6EE3E2907EDDC001A6667 /* Model */,
 				53C6EE3F2907EDEC001A6667 /* View */,
 				53C6EE3D2907EDC1001A6667 /* Controller */,
+				53C096122915A60E00D0E2AC /* Services */,
 			);
 			path = Categories;
 			sourceTree = "<group>";
@@ -170,6 +195,7 @@
 				53C6EE422907EE97001A6667 /* Model */,
 				53C6EE412907EE76001A6667 /* View */,
 				53C6EE402907EE28001A6667 /* Controller */,
+				53C096182915AD6300D0E2AC /* Services */,
 			);
 			path = Items;
 			sourceTree = "<group>";
@@ -182,6 +208,71 @@
 				53BCCDDE28F5FDE1003B32A4 /* GroupItems.swift */,
 			);
 			path = Group;
+			sourceTree = "<group>";
+		};
+		53C095F929154E4900D0E2AC /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				53C095FA29154E9C00D0E2AC /* AllGroupsFireDBManager.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		53C095FE291581FC00D0E2AC /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				53C096012915830300D0E2AC /* NewGroupFireDBManager.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		53C09603291588BD00D0E2AC /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				53C09604291588DF00D0E2AC /* GroupItemsFireDBManager.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		53C0960829158FE400D0E2AC /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				53C0960B291590DD00D0E2AC /* GroupSettingsFireDBManager.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		53C0960D29159F2600D0E2AC /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				53C0961029159F8300D0E2AC /* LoginRegisterFireDBManager.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		53C096122915A60E00D0E2AC /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				53C096132915A66100D0E2AC /* CategoriesFireDBManager.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		53C096152915A68B00D0E2AC /* Personal */ = {
+			isa = PBXGroup;
+			children = (
+				534B6B2A28EF3C6B006EF12A /* PersonalCategories.swift */,
+				53ACAD3E28F00D70005C3579 /* PersonalItems.swift */,
+			);
+			path = Personal;
+			sourceTree = "<group>";
+		};
+		53C096182915AD6300D0E2AC /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				53C096192915AF0D00D0E2AC /* PersonalItemsFireDBManager.swift */,
+			);
+			path = Services;
 			sourceTree = "<group>";
 		};
 		53C6EE3B2907ECB4001A6667 /* Global */ = {
@@ -217,9 +308,9 @@
 		53C6EE3E2907EDDC001A6667 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				534B6B2A28EF3C6B006EF12A /* PersonalCategories.swift */,
-				53C6EE6829082F78001A6667 /* NewCategoryLogic.swift */,
 				53C6EE5D2907F9E2001A6667 /* CategoryLogic.swift */,
+				53C6EE6829082F78001A6667 /* NewCategoryLogic.swift */,
+				53C096162915A6EA00D0E2AC /* CategoriesFireDBLogic.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -235,8 +326,8 @@
 			isa = PBXGroup;
 			children = (
 				534B6B2C28EF4F10006EF12A /* PersonalItemsViewController.swift */,
-				5353B8EC28F9A64E0090A62E /* ItemsTableViewCell.swift */,
 				53ACAD3C28F00ABA005C3579 /* NewItemViewController.swift */,
+				5353B8EC28F9A64E0090A62E /* ItemsTableViewCell.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -252,10 +343,10 @@
 		53C6EE422907EE97001A6667 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				53ACAD3E28F00D70005C3579 /* PersonalItems.swift */,
 				53C6EE5F29080A31001A6667 /* ItemLogic.swift */,
 				5328A71029091E170001B9DD /* ItemsTableViewLogic.swift */,
 				53C6EE6F29083544001A6667 /* NewItemLogic.swift */,
+				53C0961B2915AFA700D0E2AC /* PersonalItemFireDBLogic.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -277,6 +368,7 @@
 				53C6EE472907EF5E001A6667 /* Model */,
 				53C6EE462907EF53001A6667 /* View */,
 				53C6EE452907EF44001A6667 /* Controller */,
+				53C095F929154E4900D0E2AC /* Services */,
 			);
 			path = "All groups";
 			sourceTree = "<group>";
@@ -302,6 +394,7 @@
 			isa = PBXGroup;
 			children = (
 				53C6EE61290828F3001A6667 /* AllGroupsLogic.swift */,
+				53C095FC2915505900D0E2AC /* AllGroupsFireDBLogic.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -312,6 +405,7 @@
 				53C6EE4B2907EFE3001A6667 /* Model */,
 				53C6EE4A2907EFD5001A6667 /* View */,
 				53C6EE492907EFC2001A6667 /* Controller */,
+				53C095FE291581FC00D0E2AC /* Services */,
 			);
 			path = "New group";
 			sourceTree = "<group>";
@@ -341,6 +435,7 @@
 			children = (
 				5328A712290941690001B9DD /* AddGroupLogic.swift */,
 				5328A71429094D170001B9DD /* ConfirmGroupLogic.swift */,
+				53C095FF2915822500D0E2AC /* NewGroupFireDBLogic.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -351,6 +446,7 @@
 				53C6EE4F2907F0A7001A6667 /* Model */,
 				53C6EE4E2907F08A001A6667 /* View */,
 				53C6EE4D2907F07B001A6667 /* Controller */,
+				53C09603291588BD00D0E2AC /* Services */,
 			);
 			path = "Group items";
 			sourceTree = "<group>";
@@ -381,6 +477,7 @@
 				53C919A0290ED20E006FA541 /* GroupItemsLogic.swift */,
 				53C9199E290ED1EE006FA541 /* NewGroupItemLogic.swift */,
 				53F371FC2914426200CC9BFA /* GroupItemsTableViewLogic.swift */,
+				53C096062915898E00D0E2AC /* GroupItemsFireDBLogic.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -391,6 +488,7 @@
 				53C6EE532907F122001A6667 /* Model */,
 				53C6EE522907F11A001A6667 /* View */,
 				53C6EE512907F10E001A6667 /* Controller */,
+				53C0960829158FE400D0E2AC /* Services */,
 			);
 			path = "Group settings";
 			sourceTree = "<group>";
@@ -418,6 +516,7 @@
 			children = (
 				53C919A2290F185A006FA541 /* GroupSettingLogic.swift */,
 				533189EB2912ACA1002BEEE1 /* AddParticipantLogic.swift */,
+				53C096092915905B00D0E2AC /* GroupSettingsFireDBLogic.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -428,6 +527,7 @@
 				53C6EE572907F1DD001A6667 /* Model */,
 				53C6EE562907F1D3001A6667 /* View */,
 				53C6EE552907F1C2001A6667 /* Controller */,
+				53C0960D29159F2600D0E2AC /* Services */,
 			);
 			path = "Login & Register";
 			sourceTree = "<group>";
@@ -453,6 +553,7 @@
 			children = (
 				53C095F52915126B00D0E2AC /* LoginLogic.swift */,
 				53C095F3291501D500D0E2AC /* RegisterLogic.swift */,
+				53C0960E29159F6400D0E2AC /* LoginRegisterFireDBLogic.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -513,7 +614,7 @@
 		53FD6BFD28EEF13200D2C50D /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				53FD6BFC28EEF13200D2C50D /* Group Do.app */,
+				53FD6BFC28EEF13200D2C50D /* Group Task.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -536,11 +637,9 @@
 		53FD6C1728EEF1D400D2C50D /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				5341BE6F28F08BEA00253761 /* FireDBManager.swift */,
-				5310C47A290592850092022F /* FireDBExtensions.swift */,
 				5341BE7328F09B9000253761 /* FireStoreManager.swift */,
 				535CA5BF28F2AA2D007C2011 /* ImageManager.swift */,
-				535CA5C528F2C610007C2011 /* ViewControllerExtensions.swift */,
+				535CA5C528F2C610007C2011 /* Extensions.swift */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -549,6 +648,7 @@
 			isa = PBXGroup;
 			children = (
 				5341BE7528F09EF100253761 /* RealmUser.swift */,
+				53C096152915A68B00D0E2AC /* Personal */,
 				53BCCDDB28F5FB54003B32A4 /* Group */,
 			);
 			path = "Realm Data";
@@ -574,9 +674,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		53FD6BFB28EEF13200D2C50D /* Group Do */ = {
+		53FD6BFB28EEF13200D2C50D /* Group Task */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 53FD6C1028EEF13300D2C50D /* Build configuration list for PBXNativeTarget "Group Do" */;
+			buildConfigurationList = 53FD6C1028EEF13300D2C50D /* Build configuration list for PBXNativeTarget "Group Task" */;
 			buildPhases = (
 				67389E241A16DEA46CC162CA /* [CP] Check Pods Manifest.lock */,
 				53FD6BF828EEF13200D2C50D /* Sources */,
@@ -588,9 +688,9 @@
 			);
 			dependencies = (
 			);
-			name = "Group Do";
+			name = "Group Task";
 			productName = "Group Do";
-			productReference = 53FD6BFC28EEF13200D2C50D /* Group Do.app */;
+			productReference = 53FD6BFC28EEF13200D2C50D /* Group Task.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -621,7 +721,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				53FD6BFB28EEF13200D2C50D /* Group Do */,
+				53FD6BFB28EEF13200D2C50D /* Group Task */,
 			);
 		};
 /* End PBXProject section */
@@ -699,38 +799,49 @@
 				533189EC2912ACA1002BEEE1 /* AddParticipantLogic.swift in Sources */,
 				53FD6C0428EEF13200D2C50D /* PersonalCategoriesViewController.swift in Sources */,
 				53C6EE6929082F78001A6667 /* NewCategoryLogic.swift in Sources */,
-				5310C47B290592850092022F /* FireDBExtensions.swift in Sources */,
+				53C0960F29159F6400D0E2AC /* LoginRegisterFireDBLogic.swift in Sources */,
+				53C0960A2915905B00D0E2AC /* GroupSettingsFireDBLogic.swift in Sources */,
+				53C09605291588DF00D0E2AC /* GroupItemsFireDBManager.swift in Sources */,
+				53C0961129159F8300D0E2AC /* LoginRegisterFireDBManager.swift in Sources */,
 				5345884828F8469A00C26C27 /* GroupsTableViewCell.swift in Sources */,
+				53C095FD2915505900D0E2AC /* AllGroupsFireDBLogic.swift in Sources */,
 				5328A713290941690001B9DD /* AddGroupLogic.swift in Sources */,
-				5341BE7028F08BEA00253761 /* FireDBManager.swift in Sources */,
 				53F371FA29142C5000CC9BFA /* GroupItemsTableViewCell.swift in Sources */,
 				5345884128F7F3F800C26C27 /* ConfirmGroupViewController.swift in Sources */,
+				53C0961A2915AF0D00D0E2AC /* PersonalItemsFireDBManager.swift in Sources */,
 				53C6EE6029080A31001A6667 /* ItemLogic.swift in Sources */,
 				53BCCDDF28F5FDE1003B32A4 /* GroupItems.swift in Sources */,
 				5302AC3E28FDD1E4004287CF /* AddParticipantViewController.swift in Sources */,
 				5341BE6928F0721400253761 /* RegisterViewController.swift in Sources */,
 				5341BE7428F09B9000253761 /* FireStoreManager.swift in Sources */,
+				53C0960C291590DD00D0E2AC /* GroupSettingsFireDBManager.swift in Sources */,
+				53C096002915822500D0E2AC /* NewGroupFireDBLogic.swift in Sources */,
+				53C096142915A66100D0E2AC /* CategoriesFireDBManager.swift in Sources */,
 				534B6B2B28EF3C6B006EF12A /* PersonalCategories.swift in Sources */,
 				534B6B2928EF07CD006EF12A /* NewCategoryViewController.swift in Sources */,
 				53BBEDF228FD5B59004EC47D /* GroupSettingsViewController.swift in Sources */,
 				53BCCDD728F5EE5F003B32A4 /* UsersResultsTableViewCell.swift in Sources */,
-				535CA5C628F2C610007C2011 /* ViewControllerExtensions.swift in Sources */,
+				535CA5C628F2C610007C2011 /* Extensions.swift in Sources */,
 				53C095F82915190200D0E2AC /* SettingsLogic.swift in Sources */,
 				5328A71129091E170001B9DD /* ItemsTableViewLogic.swift in Sources */,
 				534B6B2D28EF4F10006EF12A /* PersonalItemsViewController.swift in Sources */,
 				53FD6C0028EEF13200D2C50D /* AppDelegate.swift in Sources */,
 				53C6EE5E2907F9E2001A6667 /* CategoryLogic.swift in Sources */,
+				53C095FB29154E9C00D0E2AC /* AllGroupsFireDBManager.swift in Sources */,
 				53F371FD2914426200CC9BFA /* GroupItemsTableViewLogic.swift in Sources */,
+				53C096022915830300D0E2AC /* NewGroupFireDBManager.swift in Sources */,
 				5353B8E328F993E90090A62E /* GroupsItemsViewController.swift in Sources */,
 				53C919A3290F185A006FA541 /* GroupSettingLogic.swift in Sources */,
 				53BCCDDD28F5FC42003B32A4 /* GroupPaticipants.swift in Sources */,
 				53C919A1290ED20E006FA541 /* GroupItemsLogic.swift in Sources */,
+				53C0961C2915AFA700D0E2AC /* PersonalItemFireDBLogic.swift in Sources */,
 				53C095F4291501D600D0E2AC /* RegisterLogic.swift in Sources */,
 				5353B8F328F9B3430090A62E /* AddGroupItemViewController.swift in Sources */,
 				53ACAD3F28F00D70005C3579 /* PersonalItems.swift in Sources */,
 				53C6EE62290828F3001A6667 /* AllGroupsLogic.swift in Sources */,
 				5328A71529094D170001B9DD /* ConfirmGroupLogic.swift in Sources */,
 				53BCCDD328F5DCD9003B32A4 /* NewGroupCollectionViewCell.swift in Sources */,
+				53C096072915898E00D0E2AC /* GroupItemsFireDBLogic.swift in Sources */,
 				5341BE7628F09EF100253761 /* RealmUser.swift in Sources */,
 				53FD6C0228EEF13200D2C50D /* SceneDelegate.swift in Sources */,
 				53CFDF51290089F9005C72C4 /* MainNavigationController.swift in Sources */,
@@ -739,6 +850,7 @@
 				5341BE6728F0719800253761 /* LoginViewController.swift in Sources */,
 				5341BE6528F0545D00253761 /* GroupsViewController.swift in Sources */,
 				53C9199F290ED1EE006FA541 /* NewGroupItemLogic.swift in Sources */,
+				53C096172915A6EA00D0E2AC /* CategoriesFireDBLogic.swift in Sources */,
 				53C095F62915126B00D0E2AC /* LoginLogic.swift in Sources */,
 				5353B8EE28F9A64E0090A62E /* ItemsTableViewCell.swift in Sources */,
 				53C6EE7029083544001A6667 /* NewItemLogic.swift in Sources */,
@@ -820,7 +932,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -874,7 +986,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -962,7 +1074,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		53FD6C1028EEF13300D2C50D /* Build configuration list for PBXNativeTarget "Group Do" */ = {
+		53FD6C1028EEF13300D2C50D /* Build configuration list for PBXNativeTarget "Group Task" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				53FD6C1128EEF13300D2C50D /* Debug */,

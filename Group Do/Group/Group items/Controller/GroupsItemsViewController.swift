@@ -21,8 +21,10 @@ class GroupsItemsViewController: UIViewController {
         didSet {
             participantsArray = selectedGroup?.groupParticipants.sorted(byKeyPath: "isAdmin", ascending: false)
             itemsArray = selectedGroup?.groupItems.sorted(byKeyPath: "creationTimeSince1970", ascending: false)
+            groupID = selectedGroup?.groupID!
         }
     }
+    var groupID: String?
     var participantsArray: Results<GroupParticipants>?
     var itemsArray: Results<GroupItems>?
     private var itemsNotificationToken: NotificationToken?
@@ -52,22 +54,29 @@ class GroupsItemsViewController: UIViewController {
         //Start listening for changes in the realm database and handle those changes by updating tableView or the collectionView accordingly
         let realm = try! Realm()
         //listen for item updates
-        let itemResults = realm.objects(GroupItems.self).filter("fromGroupID CONTAINS %@", selectedGroup!.groupID!).sorted(byKeyPath: "creationTimeSince1970", ascending: false)
+        let itemResults = realm.objects(GroupItems.self).filter("fromGroupID CONTAINS %@", groupID!).sorted(byKeyPath: "creationTimeSince1970", ascending: false)
+        
         itemsNotificationToken = itemResults.observe { [weak self] (changes: RealmCollectionChange) in
             guard let tableView = self?.tableView else { return }
+            
             switch changes {
             case .initial:
                 // Results are now populated and can be accessed without blocking the UI
                 tableView.reloadData()
             case .update(_, let deletions, let insertions, let modifications):
-                // Query results have changed, so apply them to the UITableView
-                tableView.performBatchUpdates({
-                    tableView.deleteRows(at: deletions.map({IndexPath(row: $0, section: 0)}), with: .fade)
-                    tableView.insertRows(at: insertions.map({IndexPath(row: $0, section: 0)}), with: .top)
-                    tableView.reloadRows(at: modifications.map({IndexPath(row: $0, section: 0)}), with: .none)
-                    tableView.reloadData()
-                    self?.checkNoItemsLabel()
-                })
+                //Check if parent category still exist if it doesn't pop to root VC else preform updates
+                if realm.objects(Groups.self).filter("groupID CONTAINS %@", self!.groupID!).count == 0 {
+                    NotificationCenter.default.post(name: Notification.Name("DismissModalNewGroupItem"), object: nil)
+                    self?.navigationController?.popToRootViewController(animated: true)
+                } else {
+                    tableView.performBatchUpdates({
+                        tableView.deleteRows(at: deletions.map({IndexPath(row: $0, section: 0)}), with: .fade)
+                        tableView.insertRows(at: insertions.map({IndexPath(row: $0, section: 0)}), with: .top)
+                        tableView.reloadRows(at: modifications.map({IndexPath(row: $0, section: 0)}), with: .none)
+                        tableView.reloadData()
+                        self?.checkNoItemsLabel()
+                    })
+                }
             case .error(let error):
                 // An error occurred while opening the Realm file on the background worker thread
                 fatalError("\(error)")
@@ -84,12 +93,17 @@ class GroupsItemsViewController: UIViewController {
                   collectionView.reloadData()
               case .update(_, let deletions, let insertions, let modifications):
                   // Query results have changed, so apply them to the UITableView
-                  collectionView.performBatchUpdates({
-                      collectionView.deleteItems(at: deletions.map({IndexPath(item: $0, section: 0)}))
-                      collectionView.insertItems(at: insertions.map({IndexPath(item: $0, section: 0)}))
-                      collectionView.reloadItems(at: modifications.map({IndexPath(item: $0, section: 0)}))
-                          //self?.checkNoGroupsLabel()
+                  //Check if parent category still exist if it doesn't pop to root VC else preform updates
+                  if realm.objects(Groups.self).filter("groupID CONTAINS %@", self!.groupID!).count == 0 {
+                      NotificationCenter.default.post(name: Notification.Name("DismissModalNewGroupItem"), object: nil)
+                      self?.navigationController?.popToRootViewController(animated: true)
+                  } else {
+                      collectionView.performBatchUpdates({
+                          collectionView.deleteItems(at: deletions.map({IndexPath(item: $0, section: 0)}))
+                          collectionView.insertItems(at: insertions.map({IndexPath(item: $0, section: 0)}))
+                          collectionView.reloadItems(at: modifications.map({IndexPath(item: $0, section: 0)}))
                       })
+                  }
               case .error(let error):
                   // An error occurred while opening the Realm file on the background worker thread
                   fatalError("\(error)")
@@ -152,7 +166,7 @@ extension GroupsItemsViewController: UITableViewDelegate, UITableViewDataSource 
         if itemsArray?[indexPath.row].completedByUserEmail != "" {
             
             let completedByUserEmail = itemsArray![indexPath.row].completedByUserEmail!
-            let completedByUserFormattedEmail = FireDBManager.shared.emailFormatter(email: completedByUserEmail)
+            let completedByUserFormattedEmail = completedByUserEmail.formattedEmail
             let completedByUserProfileImageName = "\(completedByUserFormattedEmail)_profile_picture.png"
             
             ImageManager.shared.loadPictureFromDisk(fileName: completedByUserProfileImageName) { image in

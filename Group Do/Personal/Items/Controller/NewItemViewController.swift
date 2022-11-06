@@ -19,9 +19,15 @@ final class NewItemViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        
+        //Listen for delete notifications from parent VC
+        NotificationCenter.default.addObserver(self, selector: #selector(self.methodOfReceivedNotification(notification:)), name: Notification.Name("DismissModalNewItem"), object: nil)
     }
+    
+//When observer gets notified it means that the parent category has been deleted and needs to dismiss current modal presentation
+@objc func methodOfReceivedNotification(notification: Notification) {
+    dismiss(animated: true)
+}
     
     @IBAction func addTaskPressed(_ sender: UIButton) {
         
@@ -45,7 +51,7 @@ final class NewItemViewController: UIViewController {
         //Save created object to firebase
         let realm = try! Realm()
         let email = realm.objects(RealmUser.self)[0].email!
-        FireDBManager.shared.addPersonalItem(email: email, itemObject: newItemObject)
+        PersonalItemsFireDBManager.shared.addPersonalItem(email: email, itemObject: newItemObject)
         
         dismiss(animated: true)
     }

@@ -13,7 +13,7 @@
         <!--Add participants-->
         <scene sceneID="bXw-hS-gIH">
             <objects>
-                <viewController id="Jhh-Ih-nj5" customClass="AddGroupViewController" customModule="Group_Do" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="Jhh-Ih-nj5" customClass="AddGroupViewController" customModule="Group_Task" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="SSq-Sn-5Ra">
                         <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -81,7 +81,7 @@
         <!--Group-->
         <scene sceneID="4DT-t5-J9H">
             <objects>
-                <viewController id="G8J-Fc-rmL" customClass="ConfirmGroupViewController" customModule="Group_Do" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="G8J-Fc-rmL" customClass="ConfirmGroupViewController" customModule="Group_Task" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="j1l-GE-tDX">
                         <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -207,7 +207,7 @@
         <!--Groups Items View Controller-->
         <scene sceneID="UqN-yY-oAV">
             <objects>
-                <viewController id="bxe-6p-jtZ" customClass="GroupsItemsViewController" customModule="Group_Do" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="bxe-6p-jtZ" customClass="GroupsItemsViewController" customModule="Group_Task" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="S4y-8N-21f">
                         <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -350,7 +350,7 @@
         <!--Settings-->
         <scene sceneID="avo-VQ-jOv">
             <objects>
-                <viewController id="FC9-ag-AAs" customClass="GroupSettingsViewController" customModule="Group_Do" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="FC9-ag-AAs" customClass="GroupSettingsViewController" customModule="Group_Task" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="3eG-bI-peC">
                         <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -468,7 +468,7 @@
         <!--Add Participant View Controller-->
         <scene sceneID="CcR-SL-q8g">
             <objects>
-                <viewController id="VOG-6W-TC3" customClass="AddParticipantViewController" customModule="Group_Do" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="VOG-6W-TC3" customClass="AddParticipantViewController" customModule="Group_Task" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="pBI-M2-zNI">
                         <rect key="frame" x="0.0" y="0.0" width="390" height="787"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -567,7 +567,7 @@
         <!--Add Group Item View Controller-->
         <scene sceneID="dfZ-V2-Umq">
             <objects>
-                <viewController id="Svx-Dt-LLL" customClass="AddGroupItemViewController" customModule="Group_Do" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="Svx-Dt-LLL" customClass="AddGroupItemViewController" customModule="Group_Task" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="L1i-vP-Feo">
                         <rect key="frame" x="0.0" y="0.0" width="390" height="787"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -639,7 +639,7 @@
         <!--Groups-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="GroupsViewController" customModule="Group_Do" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="BYZ-38-t0r" customClass="GroupsViewController" customModule="Group_Task" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -677,7 +677,6 @@
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" title=" "/>
                                         <connections>
-                                            <action selector="addButtonPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="qW2-oB-RrA"/>
                                             <segue destination="Jhh-Ih-nj5" kind="show" id="5dP-7y-ps4"/>
                                         </connections>
                                     </button>
@@ -729,7 +728,7 @@
         <!--Main Navigation Controller-->
         <scene sceneID="dfm-Mi-Lpa">
             <objects>
-                <viewController storyboardIdentifier="MainNavigationController" id="0BA-Jx-Jzn" customClass="MainNavigationController" customModule="Group_Do" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="MainNavigationController" id="0BA-Jx-Jzn" customClass="MainNavigationController" customModule="Group_Task" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="aml-ru-Hka">
                         <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -773,7 +772,7 @@
         <!--Categories-->
         <scene sceneID="DFm-MP-nUP">
             <objects>
-                <viewController id="61R-bV-6Ne" customClass="PersonalCategoriesViewController" customModule="Group_Do" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="61R-bV-6Ne" customClass="PersonalCategoriesViewController" customModule="Group_Task" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="UTT-gb-Ktx">
                         <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -862,7 +861,7 @@
         <!--Personal Items View Controller-->
         <scene sceneID="kvg-dR-5pB">
             <objects>
-                <viewController id="NNM-dv-AVb" customClass="PersonalItemsViewController" customModule="Group_Do" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="NNM-dv-AVb" customClass="PersonalItemsViewController" customModule="Group_Task" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="bJW-EJ-Oa7">
                         <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -941,7 +940,7 @@
         <!--New Item View Controller-->
         <scene sceneID="BhQ-Lt-Q0L">
             <objects>
-                <viewController id="HFt-80-QNu" customClass="NewItemViewController" customModule="Group_Do" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="HFt-80-QNu" customClass="NewItemViewController" customModule="Group_Task" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Pcz-uN-2hI">
                         <rect key="frame" x="0.0" y="0.0" width="390" height="787"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1014,7 +1013,7 @@
         <!--New Category View Controller-->
         <scene sceneID="kdf-K8-sZi">
             <objects>
-                <viewController id="xHS-ci-n1x" customClass="NewCategoryViewController" customModule="Group_Do" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="xHS-ci-n1x" customClass="NewCategoryViewController" customModule="Group_Task" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="99u-iJ-lXP">
                         <rect key="frame" x="0.0" y="0.0" width="390" height="787"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1058,7 +1057,7 @@
         <!--Profile-->
         <scene sceneID="8Do-QX-XEF">
             <objects>
-                <viewController title="Profile" id="OTX-8l-gcC" customClass="SettingsViewController" customModule="Group_Do" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="Profile" id="OTX-8l-gcC" customClass="SettingsViewController" customModule="Group_Task" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="wbj-eL-ZCN">
                         <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1142,7 +1141,7 @@
         <!--Login View Controller-->
         <scene sceneID="tIC-0D-rjk">
             <objects>
-                <viewController id="knF-nH-DSz" customClass="LoginViewController" customModule="Group_Do" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="knF-nH-DSz" customClass="LoginViewController" customModule="Group_Task" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="kka-N9-Wxq">
                         <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1229,7 +1228,7 @@
         <!--Register View Controller-->
         <scene sceneID="7Eb-76-n7Z">
             <objects>
-                <viewController id="lYB-yb-59J" customClass="RegisterViewController" customModule="Group_Do" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="lYB-yb-59J" customClass="RegisterViewController" customModule="Group_Task" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="hdD-ER-8gz">
                         <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

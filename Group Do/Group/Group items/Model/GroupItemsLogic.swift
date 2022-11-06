@@ -35,7 +35,7 @@ struct GroupItemsLogic {
             formattedParticipantsArray.append(participant)
         }
         
-        FireDBManager.shared.deleteGroupItems(participants: formattedParticipantsArray, groupItemObject: groupItemObject)
+        GroupItemsFireDBManager.shared.deleteGroupItems(participants: formattedParticipantsArray, groupItemObject: groupItemObject)
     }
     
     ///Deletes group item from realm

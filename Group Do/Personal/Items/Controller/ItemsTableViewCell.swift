@@ -39,7 +39,7 @@ final class ItemsTableViewCell: UITableViewCell {
         
         //Perform isDone property update in firebase (Can call the addPersonal item because if it's child already exists it wont create another one it will only update the exiting child with it`s new value)
         let email = realm.objects(RealmUser.self)[0].email!
-        FireDBManager.shared.addPersonalItem(email: email, itemObject: selectedItemObject)
+        PersonalItemsFireDBManager.shared.addPersonalItem(email: email, itemObject: selectedItemObject)
         
     }
 }

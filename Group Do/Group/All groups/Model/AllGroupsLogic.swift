@@ -24,5 +24,25 @@ struct AllGroupsLogic {
         completion(realm.objects(Groups.self).filter("groupName CONTAINS[cd] %@", text).sorted(byKeyPath: "creationTimeSince1970",ascending: true))
     }
     
+    ///Activates all listeners for firebase real time database
+    func activateAllFirebaseDatabaseListeners() {
+        
+        let realm = try! Realm()
+        let userEmail = realm.objects(RealmUser.self)[0].email!
+        //Start listening for group additions in firebase
+        AllGroupsFireDBManager.shared.listenForGroupAdditions(userEmail: userEmail)
+        //Start listening to group deletions on firebase
+        AllGroupsFireDBManager.shared.listenForGroupDeletions(userEmail: userEmail)
+        //Start listening for groupItems addition
+        AllGroupsFireDBManager.shared.listenForGroupItemAddition(userEmail: userEmail)
+        //Start listening for groupItems deletion
+        AllGroupsFireDBManager.shared.listenForGroupItemsDeletions(userEmail: userEmail)
+        //Start listening for groupItems Update
+        AllGroupsFireDBManager.shared.listenForGroupItemsUpdates(userEmail: userEmail)
+        //Start listening for groupParticipants addition
+        AllGroupsFireDBManager.shared.listenForParticipantAdditions(userEmail: userEmail)
+        //Start listening for groupParticipants deletion
+        AllGroupsFireDBManager.shared.listenForParticipantDeletions(userEmail: userEmail)
+    }
     
 }

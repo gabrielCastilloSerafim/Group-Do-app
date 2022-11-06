@@ -16,7 +16,6 @@ class MainNavigationController: UIViewController {
         super.viewDidLoad()
         
         checkLogIn()
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -34,7 +33,6 @@ class MainNavigationController: UIViewController {
             controller.modalPresentationStyle = .fullScreen
             self.present(controller, animated: true)
         }
-        
     }
     
     private func checkLogIn() {
@@ -44,7 +42,6 @@ class MainNavigationController: UIViewController {
         } else {
             Self.isLoggedIn = false
         }
-        
     }
     
     

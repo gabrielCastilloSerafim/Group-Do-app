@@ -8,7 +8,7 @@
 import UIKit
 import RealmSwift
 
-class MainNavigationController: UIViewController {
+final class MainNavigationController: UIViewController {
     
     static var isLoggedIn: Bool?
     
@@ -31,7 +31,7 @@ class MainNavigationController: UIViewController {
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
             let controller = storyboard.instantiateViewController(withIdentifier: "LoginVC") as! UINavigationController
             controller.modalPresentationStyle = .fullScreen
-            self.present(controller, animated: true)
+            self.present(controller, animated: false)
         }
     }
     

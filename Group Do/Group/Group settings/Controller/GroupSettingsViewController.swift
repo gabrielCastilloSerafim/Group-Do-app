@@ -8,7 +8,7 @@
 import UIKit
 import RealmSwift
 
-class GroupSettingsViewController: UIViewController {
+final class GroupSettingsViewController: UIViewController {
 
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var groupImage: UIImageView!

@@ -14,6 +14,7 @@ class Groups: Object {
     @objc dynamic var creationTimeSince1970: Double = 0
     @objc dynamic var groupID: String?
     @objc dynamic var groupPictureName: String?
+    @objc dynamic var isSeen: Bool = true
     
     let groupParticipants = List<GroupParticipants>()
     let groupItems = List<GroupItems>()

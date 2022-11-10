@@ -9,13 +9,18 @@ import UIKit
 
 final class GroupsTableViewCell: UITableViewCell {
 
-    
+    @IBOutlet weak var greenBackgroundView: UIView!
+    @IBOutlet weak var notificationCircle: UIImageView!
     @IBOutlet weak var groupNameLabel: UILabel!
     @IBOutlet weak var groupImage: UIImageView!
+    @IBOutlet weak var numberOfUncompletedTasks: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
+        
+        groupImage.layer.cornerRadius = groupImage.frame.height/2
+        greenBackgroundView.layer.cornerRadius = greenBackgroundView.frame.height/5
+        
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -23,5 +28,6 @@ final class GroupsTableViewCell: UITableViewCell {
 
         // Configure the view for the selected state
     }
+    
     
 }

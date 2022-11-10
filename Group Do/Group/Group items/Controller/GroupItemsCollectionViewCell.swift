@@ -7,13 +7,16 @@
 
 import UIKit
 
-class GroupItemsCollectionViewCell: UICollectionViewCell {
+final class GroupItemsCollectionViewCell: UICollectionViewCell {
 
+    @IBOutlet weak var whiteBackground: UIImageView!
     @IBOutlet weak var profilePicture: UIImageView!
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
+        profilePicture.layer.cornerRadius = profilePicture.frame.height/2
+        
+        whiteBackground.layer.cornerRadius = whiteBackground.frame.height/2
     }
 
 }

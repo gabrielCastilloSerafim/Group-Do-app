@@ -13,6 +13,8 @@ final class ItemsTableViewCell: UITableViewCell {
     @IBOutlet weak var itemTitleLabel: UILabel!
     @IBOutlet weak var taskCompletionCircle: UIImageView!
     @IBOutlet weak var taskCompletedButton: UIButton!
+    @IBOutlet weak var priorityImage: UIImageView!
+    @IBOutlet weak var deadLineLabel: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()

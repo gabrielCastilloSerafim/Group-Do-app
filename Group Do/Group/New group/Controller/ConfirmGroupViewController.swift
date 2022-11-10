@@ -8,7 +8,7 @@
 import UIKit
 import RealmSwift
 
-class ConfirmGroupViewController: UIViewController {
+final class ConfirmGroupViewController: UIViewController {
     
     @IBOutlet weak var groupPicture: UIImageView!
     @IBOutlet weak var groupName: UITextField!

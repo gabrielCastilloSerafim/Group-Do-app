@@ -29,6 +29,9 @@ final class NewItemViewController: UIViewController {
     dismiss(animated: true)
 }
     
+    @IBAction func cancelButtonPressed(_ sender: UIButton) {
+        dismiss(animated: true)
+    }
     @IBAction func addTaskPressed(_ sender: UIButton) {
         
         //Variables necessary to create a newItem object

@@ -43,6 +43,22 @@ struct ItemLogic {
         PersonalItemsFireDBManager.shared.listenForItemsUpdate(userEmail: userEmail)
     }
     
+    ///Returns the abbreviated current month string name  in the "MMM" format
+    func getMonthName() -> String {
+        let date = Date()
+        let dateFormatter = DateFormatter()
+        dateFormatter.setLocalizedDateFormatFromTemplate("MMM")
+        return dateFormatter.string(from: date).capitalized
+    }
+    
+    ///Returns the current day string in the format "dd"
+    func getCurrentDay() -> String {
+        let date = Date()
+        let dateFormatter = DateFormatter()
+        dateFormatter.setLocalizedDateFormatFromTemplate("dd")
+        return dateFormatter.string(from: date)
+    }
+    
 
     
 }

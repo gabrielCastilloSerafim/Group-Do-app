@@ -43,6 +43,8 @@ struct AllGroupsLogic {
         AllGroupsFireDBManager.shared.listenForParticipantAdditions(userEmail: userEmail)
         //Start listening for groupParticipants deletion
         AllGroupsFireDBManager.shared.listenForParticipantDeletions(userEmail: userEmail)
+        //Start listening for group updated to be able to reorganise tableview cells with most recently updated ones at the top
+        AllGroupsFireDBManager.shared.listenForGroupUpdates(userEmail: userEmail)
     }
     
 }

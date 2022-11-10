@@ -10,8 +10,11 @@ import RealmSwift
 
 final class GroupsViewController: UIViewController {
 
+    
+    @IBOutlet weak var searchField: UISearchBar!
+    @IBOutlet weak var noGroupsImage: UIImageView!
     @IBOutlet weak var tableView: UITableView!
-    @IBOutlet weak var noGroupsLabel: UILabel!
+    @IBOutlet weak var arrowImage: UIImageView!
     
     private var allGroupsLogic = AllGroupsLogic()
     private var groupsArray: Results<Groups>?
@@ -19,6 +22,9 @@ final class GroupsViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        //Change navBar tint color
+        navigationController?.navigationBar.tintColor = UIColor.white
         
         tableView.delegate = self
         tableView.dataSource = self
@@ -38,6 +44,9 @@ final class GroupsViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
+        //Change navBar text color
+        navigationController?.navigationBar.largeTitleTextAttributes = [.foregroundColor: UIColor.black]
         
         checkNoGroupsLabel()
         
@@ -76,9 +85,13 @@ final class GroupsViewController: UIViewController {
     ///Checks if the no groups label needs to be hidden or not and updates the UI
     private func checkNoGroupsLabel() {
         if groupsArray?.count == 0 {
-            noGroupsLabel.isHidden = false
+            noGroupsImage.isHidden = false
+            arrowImage.isHidden = false
+            searchField.isHidden = true
         } else {
-            noGroupsLabel.isHidden = true
+            noGroupsImage.isHidden = true
+            arrowImage.isHidden = true
+            searchField.isHidden = false
         }
     }
     
@@ -97,11 +110,20 @@ extension GroupsViewController: UITableViewDelegate, UITableViewDataSource {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "GroupsCell", for: indexPath) as! GroupsTableViewCell
         
+        let group = groupsArray?[indexPath.row]
         let imageName = groupsArray?[indexPath.row].groupPictureName
+        let uncompletedTasks = group!.groupItems.filter("isDone == %@", false).count
         
         ImageManager.shared.loadPictureFromDisk(fileName: imageName) { [weak self] resultImage in
             cell.groupNameLabel.text = self?.groupsArray?[indexPath.row].groupName
             cell.groupImage.image = resultImage
+            cell.numberOfUncompletedTasks.text = String(uncompletedTasks)
+            
+            if group?.isSeen == true {
+                cell.notificationCircle.isHidden = true
+            } else {
+                cell.notificationCircle.isHidden = false
+            }
         }
         return cell
     }
@@ -109,6 +131,12 @@ extension GroupsViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         performSegue(withIdentifier: "GroupsToGroupsItems", sender: self)
+        
+        let realm = try! Realm()
+        try? realm.write({
+            groupsArray?[indexPath.row].isSeen = true
+        })
+
         tableView.deselectRow(at: indexPath, animated: true)
     }
     

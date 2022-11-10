@@ -20,6 +20,8 @@ final class GroupItemsFireDBManager {
     public func addGroupItemToFirebase(participantsArray: [GroupParticipants], groupItemObject: GroupItems) {
         
         let itemID = groupItemObject.itemID!.formattedID
+        let groupID = groupItemObject.fromGroupID!.formattedID
+        let timeIntervalSince1970 = Date().timeIntervalSince1970
         
         //Transform item object to item dictionary
         let groupItemDict = self.groupItemObjectToDictionary(for: groupItemObject)
@@ -27,6 +29,7 @@ final class GroupItemsFireDBManager {
         for participant in participantsArray {
             let participantEmail = participant.email!.formattedEmail
             database.child("\(participantEmail)/groupItems/\(itemID)").updateChildValues(groupItemDict)
+            database.child("\(participantEmail)/groups/\(groupID)/creationTimeSince1970").setValue(timeIntervalSince1970)
         }
     }
     
@@ -36,10 +39,13 @@ final class GroupItemsFireDBManager {
     public func deleteGroupItems(participants: [GroupParticipants], groupItemObject: GroupItems) {
         
         let itemID = groupItemObject.itemID!.formattedID
+        let groupID = groupItemObject.fromGroupID!.formattedID
+        let timeIntervalSince1970 = Date().timeIntervalSince1970
         
         for participant in participants {
             let participantEmail = participant.email!.formattedEmail
             database.child("\(participantEmail)/groupItems/\(itemID)").removeValue()
+            database.child("\(participantEmail)/groups/\(groupID)/creationTimeSince1970").setValue(timeIntervalSince1970)
         }
     }
     
@@ -50,6 +56,7 @@ final class GroupItemsFireDBManager {
         
         let groupParticipants = selectedGroup.groupParticipants
         let completedItemID = completedItem.itemID!.formattedID
+        let timeIntervalSince1970 = Date().timeIntervalSince1970
         
         for participant in groupParticipants {
             
@@ -57,6 +64,7 @@ final class GroupItemsFireDBManager {
             
             database.child("\(participantEmail)/groupItems/\(completedItemID)/isDone").setValue(true)
             database.child("\(participantEmail)/groupItems/\(completedItemID)/completedByUserEmail").setValue(selfUserEmail)
+            database.child("\(participantEmail)/groups/\(selectedGroup.groupID!.formattedID)/creationTimeSince1970").setValue(timeIntervalSince1970)
         }
     }
     
@@ -65,6 +73,7 @@ final class GroupItemsFireDBManager {
         
         let groupParticipants = selectedGroup.groupParticipants
         let completedItemID = completedItem.itemID!.formattedID
+        let timeIntervalSince1970 = Date().timeIntervalSince1970
         
         for participant in groupParticipants {
             
@@ -72,6 +81,7 @@ final class GroupItemsFireDBManager {
             
             database.child("\(participantEmail)/groupItems/\(completedItemID)/isDone").setValue(false)
             database.child("\(participantEmail)/groupItems/\(completedItemID)/completedByUserEmail").setValue("")
+            database.child("\(participantEmail)/groups/\(selectedGroup.groupID!.formattedID)/creationTimeSince1970").setValue(timeIntervalSince1970)
         }
     }
     

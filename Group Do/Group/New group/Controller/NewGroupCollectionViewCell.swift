@@ -7,7 +7,7 @@
 
 import UIKit
 
-class NewGroupCollectionViewCell: UICollectionViewCell {
+final class NewGroupCollectionViewCell: UICollectionViewCell {
 
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var xButtonImage: UIImageView!

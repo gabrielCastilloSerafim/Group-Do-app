@@ -10,7 +10,7 @@ import RealmSwift
 import SDWebImage
 import JGProgressHUD
 
-class AddParticipantViewController: UIViewController {
+final class AddParticipantViewController: UIViewController {
 
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var tableView: UITableView!

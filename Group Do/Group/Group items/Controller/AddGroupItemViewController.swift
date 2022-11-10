@@ -8,7 +8,7 @@
 import UIKit
 import RealmSwift
 
-class AddGroupItemViewController: UIViewController {
+final class AddGroupItemViewController: UIViewController {
     
     @IBOutlet weak var prioritySelector: UISegmentedControl!
     @IBOutlet weak var datePicker: UIDatePicker!
@@ -33,6 +33,9 @@ class AddGroupItemViewController: UIViewController {
         dismiss(animated: true)
     }
     
+    @IBAction func cancelButtonPressed(_ sender: UIButton) {
+        dismiss(animated: true)
+    }
     @IBAction func addTaskButtonPressed(_ sender: Any) {
         
         let itemTitle = itemTitleTextField.text!

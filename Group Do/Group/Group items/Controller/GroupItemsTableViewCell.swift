@@ -8,15 +8,20 @@
 import UIKit
 import RealmSwift
 
-class GroupItemsTableViewCell: UITableViewCell {
-
+final class GroupItemsTableViewCell: UITableViewCell {
+    
+    @IBOutlet weak var checkCircle: UIImageView!
+    @IBOutlet weak var dueToLabel: UILabel!
+    @IBOutlet weak var createdBy: UILabel!
+    @IBOutlet weak var priorityImage: UIImageView!
     @IBOutlet weak var itemTitleLabel: UILabel!
     @IBOutlet weak var checkImage: UIImageView!
     @IBOutlet weak var checkButton: UIButton!
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
+        
+        checkImage.layer.cornerRadius = checkImage.frame.height/2
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

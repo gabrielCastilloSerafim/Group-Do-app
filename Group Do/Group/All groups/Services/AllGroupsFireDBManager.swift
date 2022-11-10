@@ -120,7 +120,7 @@ final class AllGroupsFireDBManager {
             //Only proceed to item addition if item does not exist in realm yet
             if self?.checkIfGroupItemExistsInRealm(for: groupItemObject) == false {
                 
-                //Add group item to its corresponding group in realm
+                //Add group item to its corresponding group in realm and change group isSeen property to false
                 self?.addGroupItemToRealm(with: groupItemObject)
             }
         }
@@ -159,7 +159,7 @@ final class AllGroupsFireDBManager {
             let updatedGroupItemObject = self?.getGroupItemObject(snapshot: snapshot)
             guard let updatedGroupItemObject = updatedGroupItemObject else {return}
             
-            //Update groupItem in realm with the values from the snapshot's updatedGroupItemObject
+            //Update groupItem in realm with the values from the snapshot's updatedGroupItemObject and change group's isSeen property to false
             self?.updateGroupItemInRealm(updatedGroupItem: updatedGroupItemObject)
         }
     }
@@ -225,7 +225,23 @@ final class AllGroupsFireDBManager {
         }
     }
     
+    //MARK: - Listen Group Updates
     
+    ///Listen for group updates to be able to reorganise the order of most recently updated groups in the allGroups VC tableView
+    public func listenForGroupUpdates(userEmail: String) {
+        
+        let formattedUserEmail = userEmail.formattedEmail
+        
+        database.child("\(formattedUserEmail)/groups").observe(.childChanged) { [weak self] snapshot in
+            
+            //Get and groups object that only contains the creationTimeSince1970 and groupID variables
+            let groupObject = self?.getGroupPartialObject(snapshot: snapshot)
+            guard let groupObject = groupObject else {return}
+            
+            //Update group object in realm with the new creationTimeSince1970 value
+            self?.updateGroupInRealm(groupID: groupObject.groupID!, creationTimeSince1970: groupObject.creationTimeSince1970)
+        }
+    }
     
     
     

@@ -55,7 +55,7 @@ final class ImageManager {
         if let dirPath = paths.first {
             let imageUrl = URL(fileURLWithPath: dirPath).appendingPathComponent(fileName!)
             let image = UIImage(contentsOfFile: imageUrl.path)
-            print("Success retrieving image from local storage")
+            
             completion(image)
         }
     }

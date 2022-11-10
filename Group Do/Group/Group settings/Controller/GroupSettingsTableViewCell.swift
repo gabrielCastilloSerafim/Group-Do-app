@@ -7,7 +7,7 @@
 
 import UIKit
 
-class GroupSettingsTableViewCell: UITableViewCell {
+final class GroupSettingsTableViewCell: UITableViewCell {
     
     
     @IBOutlet weak var profilePicture: UIImageView!

@@ -8,7 +8,7 @@
 import UIKit
 import RealmSwift
 
-class NewCategoryViewController: UIViewController {
+final class NewCategoryViewController: UIViewController {
 
     @IBOutlet weak var newCategoryTextField: UITextField!
     
@@ -18,6 +18,11 @@ class NewCategoryViewController: UIViewController {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+    }
+    
+    
+    @IBAction func cancelButtonPressed(_ sender: UIButton) {
+        dismiss(animated: true)
     }
     
     @IBAction func addCategoryPressed(_ sender: UIButton) {

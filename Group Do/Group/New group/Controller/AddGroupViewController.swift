@@ -10,7 +10,7 @@ import RealmSwift
 import SDWebImage
 import JGProgressHUD
 
-class AddGroupViewController: UIViewController {
+final class AddGroupViewController: UIViewController {
 
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var tableView: UITableView!

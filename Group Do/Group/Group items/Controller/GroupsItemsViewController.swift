@@ -8,13 +8,14 @@
 import UIKit
 import RealmSwift
 
-class GroupsItemsViewController: UIViewController {
+final class GroupsItemsViewController: UIViewController {
 
     @IBOutlet weak var dateNumberLabel: UILabel!
     @IBOutlet weak var dateMonthLabel: UILabel!
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var tableView: UITableView!
-    @IBOutlet weak var noItemsLabel: UILabel!
+    @IBOutlet weak var noItemsImage: UIImageView!
+    
     
     var groupItemsLogic = GroupItemsLogic()
     var selectedGroup: Groups? {
@@ -29,6 +30,7 @@ class GroupsItemsViewController: UIViewController {
     var itemsArray: Results<GroupItems>?
     private var itemsNotificationToken: NotificationToken?
     private var participantNotificationToken: NotificationToken?
+    private let priorityImagesArray = [#imageLiteral(resourceName: "Priority Low"), #imageLiteral(resourceName: "Priority Medium"), #imageLiteral(resourceName: "Priority High")]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -48,7 +50,7 @@ class GroupsItemsViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-     
+        
         checkNoItemsLabel()
         
         //Start listening for changes in the realm database and handle those changes by updating tableView or the collectionView accordingly
@@ -113,16 +115,21 @@ class GroupsItemsViewController: UIViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+        
         itemsNotificationToken?.invalidate()
         participantNotificationToken?.invalidate()
+        let realm = try! Realm()
+        try? realm.write({
+            selectedGroup?.isSeen = true
+        })
     }
     
     ///Checks if the no items label needs to be hidden or not and updates the UI
     private func checkNoItemsLabel() {
         if itemsArray?.count == 0 {
-            noItemsLabel.isHidden = false
+            noItemsImage.isHidden = false
         } else {
-            noItemsLabel.isHidden = true
+            noItemsImage.isHidden = true
         }
     }
     
@@ -163,20 +170,45 @@ extension GroupsItemsViewController: UITableViewDelegate, UITableViewDataSource 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "GroupItemsCell", for: indexPath) as! GroupItemsTableViewCell
         
-        if itemsArray?[indexPath.row].completedByUserEmail != "" {
-            
-            let completedByUserEmail = itemsArray![indexPath.row].completedByUserEmail!
-            let completedByUserFormattedEmail = completedByUserEmail.formattedEmail
-            let completedByUserProfileImageName = "\(completedByUserFormattedEmail)_profile_picture.png"
-            
-            ImageManager.shared.loadPictureFromDisk(fileName: completedByUserProfileImageName) { image in
-                cell.checkImage.image = image
-            }
-        } else {
-            cell.checkImage.image = UIImage(systemName: "circle")
+        let item = itemsArray![indexPath.row]
+        let completedByUserEmail = item.completedByUserEmail!
+        let completedByUserFormattedEmail = completedByUserEmail.formattedEmail
+        let completedByUserProfileImageName = "\(completedByUserFormattedEmail)_profile_picture.png"
+        
+        ImageManager.shared.loadPictureFromDisk(fileName: completedByUserProfileImageName) { image in
+            cell.checkImage.image = image
         }
         
-        cell.itemTitleLabel.text = itemsArray?[indexPath.row].itemTitle
+        if item.isDone == true {
+            cell.checkCircle.tintColor = #colorLiteral(red: 0.009343600007, green: 0.8226275974, blue: 0.722228879, alpha: 1)
+            
+            let strikeString = NSMutableAttributedString(string: item.itemTitle!)
+            strikeString.addAttribute(NSAttributedString.Key.strikethroughStyle, value: 1, range: NSRange(location: 0, length: strikeString.length))
+            
+            cell.itemTitleLabel.attributedText = strikeString
+            
+        } else {
+            cell.checkCircle.tintColor = #colorLiteral(red: 0.5943419933, green: 0.1176240817, blue: 0.9982598424, alpha: 1)
+            
+            let strikeString = NSMutableAttributedString(string: item.itemTitle!)
+            strikeString.addAttribute(NSAttributedString.Key.strikethroughStyle, value: 0, range: NSRange(location: 0, length: strikeString.length))
+            
+            cell.itemTitleLabel.attributedText = strikeString
+        }
+        
+        switch item.priority {
+        case "Low":
+            cell.priorityImage.image = priorityImagesArray[0]
+        case "Medium":
+            cell.priorityImage.image = priorityImagesArray[1]
+        default:
+            cell.priorityImage.image = priorityImagesArray[2]
+        }
+        
+        cell.itemTitleLabel.text = item.itemTitle
+        cell.createdBy.text = item.creatorName
+        cell.dueToLabel.text = item.deadLine
+        
         cell.checkButton.tag = indexPath.row
         cell.groupObject = selectedGroup!
         
@@ -197,8 +229,9 @@ extension GroupsItemsViewController: UITableViewDelegate, UITableViewDataSource 
             }
             completionHandler(true)
         }
-        deleteAction.image = UIImage(systemName: "trash")
-        deleteAction.backgroundColor = .systemRed
+        deleteAction.image = UIImage(systemName: "trash")?.withTintColor(.red, renderingMode: .alwaysOriginal)
+        deleteAction.backgroundColor = #colorLiteral(red: 0.9490196078, green: 0.9490196078, blue: 0.968627451, alpha: 1)
+        deleteAction.title = " "
         let configuration = UISwipeActionsConfiguration(actions: [deleteAction])
         
         return configuration

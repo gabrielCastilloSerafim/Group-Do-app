@@ -8,10 +8,12 @@
 import UIKit
 import RealmSwift
 
-class PersonalCategoriesViewController: UIViewController {
+final class PersonalCategoriesViewController: UIViewController {
 
+    @IBOutlet weak var noCategoriesImage: UIImageView!
     @IBOutlet weak var tableView: UITableView!
-    @IBOutlet weak var noCategoriesLabel: UILabel!
+    @IBOutlet weak var arrowImage: UIImageView!
+    @IBOutlet weak var searchField: UISearchBar!
     
     private var categoryLogic = CategoryLogic()
     private var categoriesArray: Results<PersonalCategories>?
@@ -20,8 +22,12 @@ class PersonalCategoriesViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        //Change navBar tint color
+        navigationController?.navigationBar.tintColor = UIColor.white
+        
         tableView.delegate = self
         tableView.dataSource = self
+        tableView.register(UINib(nibName: "CategoriesTableViewCell", bundle: nil), forCellReuseIdentifier: "CategoriesTableViewCell")
         
         //Load data from realm and assigns it to categories array that is used as the tableview's datasource
         categoryLogic.loadRealmData { resultArray in
@@ -75,9 +81,13 @@ class PersonalCategoriesViewController: UIViewController {
     ///Checks if the no categories label needs to be hidden or not and updates the UI
     private func checkNoCategoriesLabel() {
         if categoriesArray?.count == 0 {
-            noCategoriesLabel.isHidden = false
+            noCategoriesImage.isHidden = false
+            arrowImage.isHidden = false
+            searchField.isHidden = true
         } else {
-            noCategoriesLabel.isHidden = true
+            noCategoriesImage.isHidden = true
+            arrowImage.isHidden = true
+            searchField.isHidden = false
         }
     }
     
@@ -91,9 +101,14 @@ extension PersonalCategoriesViewController: UITableViewDelegate, UITableViewData
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "PrototypeCell1", for: indexPath)
-        let categoryName = categoriesArray?[indexPath.row].categoryName
-        cell.textLabel?.text = "\(categoryName!)"
+        
+        let cell = tableView.dequeueReusableCell(withIdentifier: "CategoriesTableViewCell", for: indexPath) as! CategoriesTableViewCell
+        
+        let category = categoriesArray?[indexPath.row]
+        let numberOfUncompletedTasks = category!.itemsRelationship.filter("isDone == %@", false).count
+        
+        cell.categoryNameLabel?.text = "\(category!.categoryName!)"
+        cell.uncompletedTasksNumber.text = String(numberOfUncompletedTasks)
         
         return cell
     }
@@ -134,8 +149,9 @@ extension PersonalCategoriesViewController: UITableViewDelegate, UITableViewData
             }
             completionHandler(true)
         }
-        deleteAction.image = UIImage(systemName: "trash")
-        deleteAction.backgroundColor = .systemRed
+        deleteAction.image = UIImage(systemName: "trash")?.withTintColor(.red, renderingMode: .alwaysOriginal)
+        deleteAction.backgroundColor = #colorLiteral(red: 0.9999960065, green: 1, blue: 1, alpha: 1)
+        deleteAction.title = " "
         let configuration = UISwipeActionsConfiguration(actions: [deleteAction])
         
         return configuration

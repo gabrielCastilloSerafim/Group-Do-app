@@ -280,6 +280,7 @@ extension AllGroupsFireDBManager {
         do {
             try realm .write({
                 realmGroup.groupItems.append(newItem)
+                realmGroup.isSeen = false
             })
         } catch {
             print(error.localizedDescription)
@@ -315,8 +316,13 @@ extension AllGroupsFireDBManager {
                 let itemToUpdate = realm.objects(GroupItems.self).filter("itemID CONTAINS %@", updatedGroupItem.itemID!).first
                 guard let itemToUpdate = itemToUpdate else {return}
                 
+                let groupObject = realm.objects(Groups.self).filter("groupID CONTAINS %@", updatedGroupItem.fromGroupID!).first
+                guard let groupObject = groupObject else {return}
+                
                 itemToUpdate.isDone = updatedGroupItem.isDone
                 itemToUpdate.completedByUserEmail = updatedGroupItem.completedByUserEmail
+                
+                groupObject.isSeen = false
             })
         } catch {
             print(error.localizedDescription)
@@ -419,5 +425,40 @@ extension AllGroupsFireDBManager {
             ImageManager.shared.deleteImageFromLocalStorage(imageName: userProfilePictureName)
         }
     }
+    
+    ///Takes an snapshot and returns a Groups object only with the creationTimeSince1970 and groupID properties
+    func getGroupPartialObject(snapshot: DataSnapshot) -> Groups? {
+        
+        let snapDict = snapshot.value as? [String:Any]
+        guard let snapDict = snapDict else {return nil}
+        let groupID = snapDict["groupID"] as! String
+        let creationTimeSince1970 = snapDict["creationTimeSince1970"] as! Double
+        
+        let partialGroupObject = Groups()
+        partialGroupObject.creationTimeSince1970 = creationTimeSince1970
+        partialGroupObject.groupID = groupID
+        
+        return partialGroupObject
+    }
+    
+    ///Updates group object in realm with the new creationTimeSince1970 value
+    func updateGroupInRealm(groupID: String, creationTimeSince1970: Double) {
+        
+        let realm = try! Realm()
+        do {
+            try realm.write({
+                let groupToUpdate = realm.objects(Groups.self).filter("groupID CONTAINS %@", groupID).first
+                guard let groupToUpdate = groupToUpdate else {return}
+                
+                groupToUpdate.creationTimeSince1970 = creationTimeSince1970
+            })
+        } catch {
+            print(error.localizedDescription)
+            return
+        }
+    }
+
+    
+    
     
 }

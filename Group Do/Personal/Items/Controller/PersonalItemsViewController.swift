@@ -11,7 +11,10 @@ import RealmSwift
 final class PersonalItemsViewController: UIViewController {
 
     @IBOutlet weak var tableView: UITableView!
-    @IBOutlet weak var noItemsLabel: UILabel!
+    @IBOutlet weak var noItemsImage: UIImageView!
+    @IBOutlet weak var searchField: UISearchBar!
+    @IBOutlet weak var dateNumberLabel: UILabel!
+    @IBOutlet weak var dateMonthLabel: UILabel!
     
     private var itemLogic = ItemLogic()
     private var itemsArray: Results<PersonalItems>?
@@ -22,6 +25,7 @@ final class PersonalItemsViewController: UIViewController {
     }
     private var categoryID: String?
     private var notificationToken: NotificationToken?
+    private let priorityImagesArray = [#imageLiteral(resourceName: "Priority Low"), #imageLiteral(resourceName: "Priority Medium"), #imageLiteral(resourceName: "Priority High")]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,6 +41,10 @@ final class PersonalItemsViewController: UIViewController {
                 self.tableView.reloadData()
             }
         }
+        
+        dateNumberLabel.text = itemLogic.getCurrentDay()
+        dateMonthLabel.text = itemLogic.getMonthName()
+        
         checkNoItemsLabel()
     }
     
@@ -83,9 +91,11 @@ final class PersonalItemsViewController: UIViewController {
     ///Checks if the no items label needs to be hidden or not and updates the UI
     private func checkNoItemsLabel() {
         if itemsArray?.count == 0 {
-            noItemsLabel.isHidden = false
+            noItemsImage.isHidden = false
+            searchField.isHidden = true
         } else {
-            noItemsLabel.isHidden = true
+            noItemsImage.isHidden = true
+            searchField.isHidden = false
         }
     }
     
@@ -118,15 +128,36 @@ extension PersonalItemsViewController: UITableViewDelegate, UITableViewDataSourc
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
         let cell = tableView.dequeueReusableCell(withIdentifier: "ItemsTableViewCell", for: indexPath) as! ItemsTableViewCell
         let item = itemsArray?[indexPath.row]
         
-        cell.itemTitleLabel.text = item?.itemTitle
+        cell.deadLineLabel.text = item?.deadLine
+        
+        switch item?.priority {
+        case "Low":
+            cell.priorityImage.image = priorityImagesArray[0]
+        case "Medium":
+            cell.priorityImage.image = priorityImagesArray[1]
+        default:
+            cell.priorityImage.image = priorityImagesArray[2]
+        }
         
         if item?.isDone == true {
             cell.taskCompletionCircle.isHidden = false
+            
+            let strikeString = NSMutableAttributedString(string: item!.itemTitle!)
+            strikeString.addAttribute(NSAttributedString.Key.strikethroughStyle, value: 1, range: NSRange(location: 0, length: strikeString.length))
+            
+            cell.itemTitleLabel.attributedText = strikeString
+            
         } else {
             cell.taskCompletionCircle.isHidden = true
+            
+            let strikeString = NSMutableAttributedString(string: item!.itemTitle!)
+            strikeString.addAttribute(NSAttributedString.Key.strikethroughStyle, value: 0, range: NSRange(location: 0, length: strikeString.length))
+            
+            cell.itemTitleLabel.attributedText = strikeString
         }
         //Set the parentCategoryID property on the nib tableViewCell class to be the same as the one in this class
         cell.parentCategoryID = categoryID
@@ -154,8 +185,9 @@ extension PersonalItemsViewController: UITableViewDelegate, UITableViewDataSourc
             completionHandler(true)
         }
         
-        deleteAction.image = UIImage(systemName: "trash")
-        deleteAction.backgroundColor = .systemRed
+        deleteAction.image = UIImage(systemName: "trash")?.withTintColor(.red, renderingMode: .alwaysOriginal)
+        deleteAction.backgroundColor = #colorLiteral(red: 0.9490196078, green: 0.9490196078, blue: 0.968627451, alpha: 1)
+        deleteAction.title = " "
         let configuration = UISwipeActionsConfiguration(actions: [deleteAction])
         
         return configuration

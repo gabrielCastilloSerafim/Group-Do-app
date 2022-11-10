@@ -9,9 +9,11 @@ import UIKit
 import FirebaseAuth
 import RealmSwift
 
-class SettingsViewController: UIViewController {
+final class SettingsViewController: UIViewController {
     
+    @IBOutlet weak var pictureBackground: UIView!
     @IBOutlet weak var profilePicture: UIImageView!
+    @IBOutlet weak var userName: UILabel!
     
     var settingsLogic = SettingsLogic()
 
@@ -20,6 +22,16 @@ class SettingsViewController: UIViewController {
         
         print(Realm.Configuration.defaultConfiguration.fileURL!)
         
+        //Setup user name
+        let realm = try! Realm()
+        let name = realm.objects(RealmUser.self)[0].fullName
+        userName.text = name
+        
+        //Setup Profile Picture
+        pictureBackground.layer.cornerRadius = pictureBackground.frame.height/2
+        profilePicture.layer.cornerRadius = profilePicture.frame.height/2
+        
+        //Set profile picture
         settingsLogic.getProfilePicture { image in
             profilePicture.image = image
         }

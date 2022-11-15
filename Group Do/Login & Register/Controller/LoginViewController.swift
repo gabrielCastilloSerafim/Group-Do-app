@@ -9,9 +9,9 @@ import UIKit
 import FirebaseAuth
 import RealmSwift
 import JGProgressHUD
+import TextFieldEffects
 
 final class LoginViewController: UIViewController {
-    
     
     @IBOutlet weak var emailTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
@@ -22,6 +22,19 @@ final class LoginViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        //Dismiss keyboard when tapped around
+        self.hideKeyboardWhenTappedAround()
+        
+        //TextFields delegates
+        emailTextField.delegate = self
+        passwordTextField.delegate = self
+        
+        //Change navBar tint color
+        navigationController?.navigationBar.tintColor = UIColor.white
+        
+        //Manage keyboard hiding textField
+        self.setupKeyboardHiding()
     }
     
     @IBAction func loginButtonPressed(_ sender: Any) {
@@ -36,7 +49,8 @@ final class LoginViewController: UIViewController {
         //Log in to firebase auth
         Auth.auth().signIn(withEmail: email, password: password) { [weak self] _, error in
             guard error == nil else {
-                print(error!.localizedDescription)
+                //Handle Firebase Auth Errors
+                self?.handleFireAuthError(error: error!)
                 self?.spinner.dismiss(animated: true)
                 return
             }
@@ -72,6 +86,25 @@ final class LoginViewController: UIViewController {
         }
     }
     
+}
+
+//MARK: - UITextFieldDelegate
+
+extension LoginViewController: UITextFieldDelegate {
     
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        //Use switch function below to send user to next textField when return button is tapped.
+        self.switchBasedNextTextField(textField)
+        
+        return true
+    }
     
+    private func switchBasedNextTextField(_ textField: UITextField) {
+        switch textField {
+        case self.emailTextField:
+            self.passwordTextField.becomeFirstResponder()
+        default:
+            self.passwordTextField.resignFirstResponder()
+        }
+    }
 }

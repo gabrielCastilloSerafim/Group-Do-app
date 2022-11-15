@@ -38,7 +38,7 @@ extension AllGroupsFireDBManager {
         
         let realm = try! Realm()
         
-        if realm.objects(Groups.self).filter("groupID CONTAINS %@", groupID).count != 0 {
+        if realm.objects(Groups.self).filter("groupID == %@", groupID).count != 0 {
             return true
         } else {
             return false
@@ -160,7 +160,7 @@ extension AllGroupsFireDBManager {
     func checkIfGroupStillExists(for groupID: String) -> Bool {
         
         let realm = try! Realm()
-        if realm.objects(Groups.self).filter("groupID CONTAINS %@", groupID).count != 0 {
+        if realm.objects(Groups.self).filter("groupID == %@", groupID).count != 0 {
             return true
         } else {
             return false
@@ -180,7 +180,7 @@ extension AllGroupsFireDBManager {
     func deleteGroupFromRealm(_ groupObject: Groups) {
         
         let realm = try! Realm()
-        let realmGroupObject = realm.objects(Groups.self).filter("groupID CONTAINS %@", groupObject.groupID!).first
+        let realmGroupObject = realm.objects(Groups.self).filter("groupID == %@", groupObject.groupID!).first
         guard let realmGroupObject = realmGroupObject else {return}
         do {
             try realm.write({
@@ -196,7 +196,7 @@ extension AllGroupsFireDBManager {
     func deleteGroupParticipantsFromRealm(for groupObject: Groups) {
         
         let realm = try! Realm()
-        let groupParticipants = realm.objects(GroupParticipants.self).filter("partOfGroupID CONTAINS %@", groupObject.groupID!)
+        let groupParticipants = realm.objects(GroupParticipants.self).filter("partOfGroupID == %@", groupObject.groupID!)
         do {
             try realm.write({
                 realm.delete(groupParticipants)
@@ -211,7 +211,7 @@ extension AllGroupsFireDBManager {
     func deleteGroupItemsFromRealm(for groupObject: Groups) {
         
         let realm = try! Realm()
-        let groupItems = realm.objects(GroupItems.self).filter("fromGroupID CONTAINS %@", groupObject.groupID!)
+        let groupItems = realm.objects(GroupItems.self).filter("fromGroupID == %@", groupObject.groupID!)
         do {
             try realm.write({
                 realm.delete(groupItems)
@@ -263,7 +263,7 @@ extension AllGroupsFireDBManager {
     func checkIfGroupItemExistsInRealm(for itemObject: GroupItems) -> Bool{
         
         let realm = try! Realm()
-        if realm.objects(GroupItems.self).filter("itemID CONTAINS %@", itemObject.itemID!).count != 0 {
+        if realm.objects(GroupItems.self).filter("itemID == %@", itemObject.itemID!).count != 0 {
             return true
         } else {
             return false
@@ -274,7 +274,7 @@ extension AllGroupsFireDBManager {
     func addGroupItemToRealm(with newItem: GroupItems) {
         
         let realm = try! Realm()
-        let realmGroup = realm.objects(Groups.self).filter("groupID CONTAINS %@", newItem.fromGroupID!).first
+        let realmGroup = realm.objects(Groups.self).filter("groupID == %@", newItem.fromGroupID!).first
         guard let realmGroup = realmGroup else {return}
         
         do {
@@ -296,7 +296,7 @@ extension AllGroupsFireDBManager {
         let realm = try! Realm()
         do {
             try realm.write({
-                let itemObjectToDelete = realm.objects(GroupItems.self).filter("itemID CONTAINS %@", itemGroupObject.itemID!)
+                let itemObjectToDelete = realm.objects(GroupItems.self).filter("itemID == %@", itemGroupObject.itemID!)
                 realm.delete(itemObjectToDelete)
             })
         } catch {
@@ -313,10 +313,10 @@ extension AllGroupsFireDBManager {
         do {
             try realm.write({
                 
-                let itemToUpdate = realm.objects(GroupItems.self).filter("itemID CONTAINS %@", updatedGroupItem.itemID!).first
+                let itemToUpdate = realm.objects(GroupItems.self).filter("itemID == %@", updatedGroupItem.itemID!).first
                 guard let itemToUpdate = itemToUpdate else {return}
                 
-                let groupObject = realm.objects(Groups.self).filter("groupID CONTAINS %@", updatedGroupItem.fromGroupID!).first
+                let groupObject = realm.objects(Groups.self).filter("groupID == %@", updatedGroupItem.fromGroupID!).first
                 guard let groupObject = groupObject else {return}
                 
                 itemToUpdate.isDone = updatedGroupItem.isDone
@@ -363,7 +363,7 @@ extension AllGroupsFireDBManager {
         
         let realm = try! Realm()
         
-        if realm.objects(GroupParticipants.self).filter("partOfGroupID CONTAINS %@", participant.partOfGroupID!).filter("email CONTAINS %@", participant.email!).count != 0 {
+        if realm.objects(GroupParticipants.self).filter("partOfGroupID == %@", participant.partOfGroupID!).filter("email == %@", participant.email!).count != 0 {
             return true
         } else {
             return false
@@ -376,7 +376,7 @@ extension AllGroupsFireDBManager {
         let realm = try! Realm()
         do {
             try realm.write({
-                let groupToAddParticipant = realm.objects(Groups.self).filter("groupID CONTAINS %@", participant.partOfGroupID!).first
+                let groupToAddParticipant = realm.objects(Groups.self).filter("groupID == %@", participant.partOfGroupID!).first
                 guard let groupToAddParticipant = groupToAddParticipant else {return}
                 
                 groupToAddParticipant.groupParticipants.append(participant)
@@ -397,13 +397,13 @@ extension AllGroupsFireDBManager {
         let realm = try! Realm()
         
         //Check if user participates in other groups if it does not then delete its profile picture from device's local storage
-        if realm.objects(GroupParticipants.self).filter("email CONTAINS %@", participant.email!).count == 0 {
+        if realm.objects(GroupParticipants.self).filter("email == %@", participant.email!).count == 0 {
             ImageManager.shared.deleteImageFromLocalStorage(imageName: participant.profilePictureFileName!)
         }
         //Delete participant from realm
         do {
             try realm.write({
-                let participantToDelete = realm.objects(GroupParticipants.self).filter("partOfGroupID CONTAINS %@", participant.partOfGroupID!).filter("email CONTAINS %@", participant.email!)
+                let participantToDelete = realm.objects(GroupParticipants.self).filter("partOfGroupID == %@", participant.partOfGroupID!).filter("email == %@", participant.email!)
                 
                 realm.delete(participantToDelete)
             })
@@ -420,7 +420,7 @@ extension AllGroupsFireDBManager {
         let userEmail = selectedUser.email!
         
         let realm = try! Realm()
-        if realm.objects(GroupParticipants.self).filter("email CONTAINS %@", userEmail).count == 0 {
+        if realm.objects(GroupParticipants.self).filter("email == %@", userEmail).count == 0 {
             
             ImageManager.shared.deleteImageFromLocalStorage(imageName: userProfilePictureName)
         }
@@ -447,7 +447,7 @@ extension AllGroupsFireDBManager {
         let realm = try! Realm()
         do {
             try realm.write({
-                let groupToUpdate = realm.objects(Groups.self).filter("groupID CONTAINS %@", groupID).first
+                let groupToUpdate = realm.objects(Groups.self).filter("groupID == %@", groupID).first
                 guard let groupToUpdate = groupToUpdate else {return}
                 
                 groupToUpdate.creationTimeSince1970 = creationTimeSince1970

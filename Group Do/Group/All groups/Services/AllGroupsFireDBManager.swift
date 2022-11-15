@@ -243,6 +243,37 @@ final class AllGroupsFireDBManager {
         }
     }
     
+    //MARK: - Listen For Need To Update Images
     
+    ///Listens for the creation of a need to update images node in selfUser's node, perform images updates and then deletes the created need to update images node
+    public func listenForNeedToUpdateImages(userEmail: String) {
+        
+        let formattedUserEmail = userEmail.formattedEmail
+        
+        database.child("\(formattedUserEmail)/picturesToUpdate").observe(.childAdded) { [weak self] snapshot in
+            
+            //Get the image name to update in a string format
+            let imageToUpdateName = snapshot.value as! String
+            
+            //Get update image URL
+            FireStoreManager.shared.getUpdateImageURL(imageName: imageToUpdateName) { url in
+                //Download new image from fireStore
+                FireStoreManager.shared.downloadImageWithURL(imageURL: url) { image in
+                    //Delete old image
+                    ImageManager.shared.deleteImageFromLocalStorage(imageName: imageToUpdateName)
+                    //Save downloaded image
+                    ImageManager.shared.saveImageToDeviceMemory(imageName: imageToUpdateName, image: image) {}
+                }
+            }
+            
+            //Get the snapshot node name
+            let snapshotNodeName = snapshot.key
+            
+            //Remove updated image node from firebase picturesToUpdate node
+            self?.database.child("\(formattedUserEmail)/picturesToUpdate/\(snapshotNodeName)").removeValue()
+        }
+    }
+    
+
     
 }

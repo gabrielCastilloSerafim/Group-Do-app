@@ -278,7 +278,36 @@ final class GroupSettingsFireDBManager {
         }
     }
     
+    //MARK: - User Changed Group Image
     
+    ///Sets a need to update picture node with the name of the picture that needs to be updated for every group participant user
+    public func notifyGroupUsersThatImageUpdated(selectedGroup: Groups) {
+        
+        let realm = try! Realm()
+        let groupParticipantsArray = selectedGroup.groupParticipants
+        let groupPictureName = selectedGroup.groupPictureName!
+        let selfParticipantEmail = realm.objects(RealmUser.self)[0].email!
+        
+        var allEmailsArray = [String]()
+        
+        for participant in groupParticipantsArray {
+            if participant.email != selfParticipantEmail {
+                allEmailsArray.append(participant.email!)
+            }
+        }
+        
+        //Convert array to set and then back to array in order to remove duplicated emails
+        let groupParticipantsEmails = Array(Set(allEmailsArray))
+        
+        //Set a need to update node in each of the related users personal nodes
+        for participantEmail in groupParticipantsEmails {
+            
+            let formattedRelatedUserEmail = participantEmail.formattedEmail
+            let selfUserFormattedEmail = selectedGroup.groupID!.formattedID
+            
+            database.child("\(formattedRelatedUserEmail)/picturesToUpdate/\(selfUserFormattedEmail)").setValue(groupPictureName)
+        }
+    }
     
     
     

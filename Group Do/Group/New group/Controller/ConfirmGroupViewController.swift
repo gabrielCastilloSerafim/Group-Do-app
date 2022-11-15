@@ -13,6 +13,8 @@ final class ConfirmGroupViewController: UIViewController {
     @IBOutlet weak var groupPicture: UIImageView!
     @IBOutlet weak var groupName: UITextField!
     @IBOutlet weak var collectionView: UICollectionView!
+    @IBOutlet weak var groupImageBackground: UIView!
+    @IBOutlet weak var personImage: UIImageView!
     
     var groupParticipants = Array<RealmUser>()
     private var confirmGroupLogic = ConfirmGroupLogic()
@@ -20,21 +22,21 @@ final class ConfirmGroupViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        //Setup group image and group image background to be rounded
+        groupPicture.layer.cornerRadius = groupPicture.frame.height/2
+        groupImageBackground.layer.cornerRadius = groupImageBackground.frame.height/2
+        groupImageBackground.isHidden = true
+        
+        //Dismiss keyboard when tapped around
+        self.hideKeyboardWhenTappedAround()
+        
         collectionView.delegate = self
         collectionView.dataSource = self
-        collectionView.register(UINib(nibName: "NewGroupCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "customCollectionCell")
+        collectionView.register(UINib(nibName: "ConfirmGroupCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "ConfirmGroupCollectionViewCell")
         
         groupParticipants.insert(confirmGroupLogic.selfUser(), at: 0)
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        self.tabBarController?.tabBar.isHidden = true
-    }
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        self.tabBarController?.tabBar.isHidden = false
-    }
     
     @IBAction func cancelButtonPressed(_ sender: UIButton) {
         navigationController?.popToRootViewController(animated: true)
@@ -47,11 +49,24 @@ final class ConfirmGroupViewController: UIViewController {
         let creationTimeSince1970 = Date().timeIntervalSince1970
         let groupID = "\(groupName)\(creationTimeSince1970)"
         
+        //Check if user typed a group name
+        if groupName == "" {
+            let alert = UIAlertController(title: "Error", message: "Please give the group a Name.", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Dismiss", style: .default))
+            self.present(alert, animated: true)
+            return
+        }
+        
         //Create group participantArray from realmUsersArray
         let groupParticipantsObjectsArray = confirmGroupLogic.createGroupParticipantArray(basedOn: groupParticipants, groupName: groupName, groupID: groupID)
         //Create group object
         let newGroupObject = confirmGroupLogic.createGroupObject(using: groupParticipantsObjectsArray, groupName: groupName, creationTimeSince1970: creationTimeSince1970, groupID: groupID)
         let groupImageName = newGroupObject.groupPictureName!
+        
+        //Check if user selected a photo for group and if user did not then set the group picture to its default image
+        if groupPicture.image == nil {
+            groupPicture.image = #imageLiteral(resourceName: "defaultGroupAvatar")
+        }
         
         //save group image to device memory
         ImageManager.shared.saveImageToDeviceMemory(imageName: groupImageName, image: groupPicture.image!) {
@@ -86,17 +101,15 @@ extension ConfirmGroupViewController: UICollectionViewDelegate, UICollectionView
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "customCollectionCell", for: indexPath) as! NewGroupCollectionViewCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ConfirmGroupCollectionViewCell", for: indexPath) as! ConfirmGroupCollectionViewCell
         
         let userImageName = groupParticipants[indexPath.row].profilePictureFileName
         
-        ImageManager.shared.loadPictureFromDisk(fileName: userImageName) { picture in
+        ImageManager.shared.loadPictureFromDisk(fileName: userImageName) { image in
             DispatchQueue.main.async {
-                cell.xButtonImage.isHidden = true
-                cell.imageView.image = picture
+                cell.profilePicture.image = image
             }
         }
-        
         return cell
     }
     
@@ -149,6 +162,8 @@ extension ConfirmGroupViewController: UIImagePickerControllerDelegate, UINavigat
         picker.dismiss(animated: true)
         let selectedImage = info[UIImagePickerController.InfoKey.editedImage]
         self.groupPicture.image = (selectedImage as! UIImage)
+        self.groupImageBackground.isHidden = false
+        self.personImage.isHidden = true
     }
     
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {

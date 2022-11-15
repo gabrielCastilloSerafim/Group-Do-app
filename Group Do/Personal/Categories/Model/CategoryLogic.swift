@@ -23,7 +23,7 @@ struct CategoryLogic {
         var firebasePersonalItemObjectArray = Array<PersonalItems>()
         
         //Find items that have the same parentCategoryName as the current category's name so we can delete them from firebase
-        let personalItemObjectArray = realm.objects(PersonalItems.self).filter("parentCategoryID CONTAINS %@", category.categoryID!)
+        let personalItemObjectArray = realm.objects(PersonalItems.self).filter("parentCategoryID == %@", category.categoryID!)
         //Append objects in an array that has the an Array<PersonalItems> format to pass it to firebase
         for item in personalItemObjectArray {
             firebasePersonalItemObjectArray.append(item)

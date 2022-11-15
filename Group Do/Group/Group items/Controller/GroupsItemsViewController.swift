@@ -35,6 +35,9 @@ final class GroupsItemsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        //Dismiss keyboard when tapped around
+        self.hideKeyboardWhenTappedAround() 
+        
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.register(UINib(nibName: "GroupItemsCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "ItemsCollectionViewCell")
@@ -56,7 +59,7 @@ final class GroupsItemsViewController: UIViewController {
         //Start listening for changes in the realm database and handle those changes by updating tableView or the collectionView accordingly
         let realm = try! Realm()
         //listen for item updates
-        let itemResults = realm.objects(GroupItems.self).filter("fromGroupID CONTAINS %@", groupID!).sorted(byKeyPath: "creationTimeSince1970", ascending: false)
+        let itemResults = realm.objects(GroupItems.self).filter("fromGroupID == %@", groupID!).sorted(byKeyPath: "creationTimeSince1970", ascending: false)
         
         itemsNotificationToken = itemResults.observe { [weak self] (changes: RealmCollectionChange) in
             guard let tableView = self?.tableView else { return }
@@ -67,7 +70,7 @@ final class GroupsItemsViewController: UIViewController {
                 tableView.reloadData()
             case .update(_, let deletions, let insertions, let modifications):
                 //Check if parent category still exist if it doesn't pop to root VC else preform updates
-                if realm.objects(Groups.self).filter("groupID CONTAINS %@", self!.groupID!).count == 0 {
+                if realm.objects(Groups.self).filter("groupID == %@", self!.groupID!).count == 0 {
                     NotificationCenter.default.post(name: Notification.Name("DismissModalNewGroupItem"), object: nil)
                     self?.navigationController?.popToRootViewController(animated: true)
                 } else {
@@ -86,7 +89,7 @@ final class GroupsItemsViewController: UIViewController {
         }
         
         //Listen for participant updates
-        let participantResults = realm.objects(GroupParticipants.self).filter("partOfGroupID CONTAINS %@", selectedGroup!.groupID!).sorted(byKeyPath: "isAdmin", ascending: false)
+        let participantResults = realm.objects(GroupParticipants.self).filter("partOfGroupID == %@", selectedGroup!.groupID!).sorted(byKeyPath: "isAdmin", ascending: false)
         participantNotificationToken = participantResults.observe { [weak self] (changes: RealmCollectionChange) in
               guard let collectionView = self?.collectionView else { return }
               switch changes {
@@ -96,7 +99,7 @@ final class GroupsItemsViewController: UIViewController {
               case .update(_, let deletions, let insertions, let modifications):
                   // Query results have changed, so apply them to the UITableView
                   //Check if parent category still exist if it doesn't pop to root VC else preform updates
-                  if realm.objects(Groups.self).filter("groupID CONTAINS %@", self!.groupID!).count == 0 {
+                  if realm.objects(Groups.self).filter("groupID == %@", self!.groupID!).count == 0 {
                       NotificationCenter.default.post(name: Notification.Name("DismissModalNewGroupItem"), object: nil)
                       self?.navigationController?.popToRootViewController(animated: true)
                   } else {

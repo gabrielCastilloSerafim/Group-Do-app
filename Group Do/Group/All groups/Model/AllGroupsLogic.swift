@@ -45,6 +45,8 @@ struct AllGroupsLogic {
         AllGroupsFireDBManager.shared.listenForParticipantDeletions(userEmail: userEmail)
         //Start listening for group updated to be able to reorganise tableview cells with most recently updated ones at the top
         AllGroupsFireDBManager.shared.listenForGroupUpdates(userEmail: userEmail)
+        //Start listening for profile pictures and group images updates
+        AllGroupsFireDBManager.shared.listenForNeedToUpdateImages(userEmail: userEmail)
     }
     
 }

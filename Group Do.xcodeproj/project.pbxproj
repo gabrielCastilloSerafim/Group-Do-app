@@ -37,8 +37,14 @@
 		5353B8F328F9B3430090A62E /* AddGroupItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5353B8F228F9B3430090A62E /* AddGroupItemViewController.swift */; };
 		535CA5C028F2AA2E007C2011 /* ImageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535CA5BF28F2AA2D007C2011 /* ImageManager.swift */; };
 		535CA5C628F2C610007C2011 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535CA5C528F2C610007C2011 /* Extensions.swift */; };
+		5366C51D2922C80F00E145AD /* GroupSettingsCellLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5366C51C2922C80F00E145AD /* GroupSettingsCellLogic.swift */; };
+		5366C5202922DBC400E145AD /* AddParticipantCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5366C51E2922DBC400E145AD /* AddParticipantCollectionViewCell.swift */; };
+		5366C5212922DBC400E145AD /* AddParticipantCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5366C51F2922DBC400E145AD /* AddParticipantCollectionViewCell.xib */; };
+		5366C5242922E20900E145AD /* AddParticipantTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5366C5222922E20900E145AD /* AddParticipantTableViewCell.swift */; };
+		5366C5252922E20900E145AD /* AddParticipantTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5366C5232922E20900E145AD /* AddParticipantTableViewCell.xib */; };
 		53ACAD3D28F00ABA005C3579 /* NewItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53ACAD3C28F00ABA005C3579 /* NewItemViewController.swift */; };
 		53ACAD3F28F00D70005C3579 /* PersonalItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53ACAD3E28F00D70005C3579 /* PersonalItems.swift */; };
+		53BA9A37292267A100FD2C5E /* EditProfileLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53BA9A36292267A100FD2C5E /* EditProfileLogic.swift */; };
 		53BBEDF228FD5B59004EC47D /* GroupSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53BBEDF128FD5B59004EC47D /* GroupSettingsViewController.swift */; };
 		53BCCDCE28F571BA003B32A4 /* Groups.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53BCCDCD28F571BA003B32A4 /* Groups.swift */; };
 		53BCCDD028F573DF003B32A4 /* AddGroupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53BCCDCF28F573DF003B32A4 /* AddGroupViewController.swift */; };
@@ -48,6 +54,8 @@
 		53BCCDD828F5EE5F003B32A4 /* UsersResultsTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53BCCDD628F5EE5F003B32A4 /* UsersResultsTableViewCell.xib */; };
 		53BCCDDD28F5FC42003B32A4 /* GroupPaticipants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53BCCDDC28F5FC42003B32A4 /* GroupPaticipants.swift */; };
 		53BCCDDF28F5FDE1003B32A4 /* GroupItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53BCCDDE28F5FDE1003B32A4 /* GroupItems.swift */; };
+		53BFB9C32923AFBA00FF4437 /* ConfirmGroupCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53BFB9C12923AFBA00FF4437 /* ConfirmGroupCollectionViewCell.swift */; };
+		53BFB9C42923AFBA00FF4437 /* ConfirmGroupCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53BFB9C22923AFBA00FF4437 /* ConfirmGroupCollectionViewCell.xib */; };
 		53C095F4291501D600D0E2AC /* RegisterLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53C095F3291501D500D0E2AC /* RegisterLogic.swift */; };
 		53C095F62915126B00D0E2AC /* LoginLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53C095F52915126B00D0E2AC /* LoginLogic.swift */; };
 		53C095F82915190200D0E2AC /* SettingsLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53C095F72915190200D0E2AC /* SettingsLogic.swift */; };
@@ -74,6 +82,8 @@
 		53C9199F290ED1EE006FA541 /* NewGroupItemLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53C9199E290ED1EE006FA541 /* NewGroupItemLogic.swift */; };
 		53C919A1290ED20E006FA541 /* GroupItemsLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53C919A0290ED20E006FA541 /* GroupItemsLogic.swift */; };
 		53C919A3290F185A006FA541 /* GroupSettingLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53C919A2290F185A006FA541 /* GroupSettingLogic.swift */; };
+		53C954EC2922450600648B2A /* EditProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53C954EB2922450600648B2A /* EditProfileViewController.swift */; };
+		53C954EE29225F6700648B2A /* EditProfileDBManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53C954ED29225F6700648B2A /* EditProfileDBManager.swift */; };
 		53CFDF51290089F9005C72C4 /* MainNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53CFDF50290089F9005C72C4 /* MainNavigationController.swift */; };
 		53ED5E15291D32B300EB998C /* HighPriorityTasksTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53ED5E13291D32B300EB998C /* HighPriorityTasksTableViewCell.swift */; };
 		53ED5E16291D32B300EB998C /* HighPriorityTasksTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53ED5E14291D32B300EB998C /* HighPriorityTasksTableViewCell.xib */; };
@@ -134,8 +144,14 @@
 		5353B8F228F9B3430090A62E /* AddGroupItemViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddGroupItemViewController.swift; sourceTree = "<group>"; };
 		535CA5BF28F2AA2D007C2011 /* ImageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageManager.swift; sourceTree = "<group>"; };
 		535CA5C528F2C610007C2011 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		5366C51C2922C80F00E145AD /* GroupSettingsCellLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupSettingsCellLogic.swift; sourceTree = "<group>"; };
+		5366C51E2922DBC400E145AD /* AddParticipantCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddParticipantCollectionViewCell.swift; sourceTree = "<group>"; };
+		5366C51F2922DBC400E145AD /* AddParticipantCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AddParticipantCollectionViewCell.xib; sourceTree = "<group>"; };
+		5366C5222922E20900E145AD /* AddParticipantTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddParticipantTableViewCell.swift; sourceTree = "<group>"; };
+		5366C5232922E20900E145AD /* AddParticipantTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AddParticipantTableViewCell.xib; sourceTree = "<group>"; };
 		53ACAD3C28F00ABA005C3579 /* NewItemViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewItemViewController.swift; sourceTree = "<group>"; };
 		53ACAD3E28F00D70005C3579 /* PersonalItems.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonalItems.swift; sourceTree = "<group>"; };
+		53BA9A36292267A100FD2C5E /* EditProfileLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileLogic.swift; sourceTree = "<group>"; };
 		53BBEDF128FD5B59004EC47D /* GroupSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupSettingsViewController.swift; sourceTree = "<group>"; };
 		53BCCDCD28F571BA003B32A4 /* Groups.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Groups.swift; sourceTree = "<group>"; };
 		53BCCDCF28F573DF003B32A4 /* AddGroupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddGroupViewController.swift; sourceTree = "<group>"; };
@@ -145,6 +161,8 @@
 		53BCCDD628F5EE5F003B32A4 /* UsersResultsTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = UsersResultsTableViewCell.xib; sourceTree = "<group>"; };
 		53BCCDDC28F5FC42003B32A4 /* GroupPaticipants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupPaticipants.swift; sourceTree = "<group>"; };
 		53BCCDDE28F5FDE1003B32A4 /* GroupItems.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupItems.swift; sourceTree = "<group>"; };
+		53BFB9C12923AFBA00FF4437 /* ConfirmGroupCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmGroupCollectionViewCell.swift; sourceTree = "<group>"; };
+		53BFB9C22923AFBA00FF4437 /* ConfirmGroupCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ConfirmGroupCollectionViewCell.xib; sourceTree = "<group>"; };
 		53C095F3291501D500D0E2AC /* RegisterLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterLogic.swift; sourceTree = "<group>"; };
 		53C095F52915126B00D0E2AC /* LoginLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginLogic.swift; sourceTree = "<group>"; };
 		53C095F72915190200D0E2AC /* SettingsLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsLogic.swift; sourceTree = "<group>"; };
@@ -171,6 +189,8 @@
 		53C9199E290ED1EE006FA541 /* NewGroupItemLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewGroupItemLogic.swift; sourceTree = "<group>"; };
 		53C919A0290ED20E006FA541 /* GroupItemsLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupItemsLogic.swift; sourceTree = "<group>"; };
 		53C919A2290F185A006FA541 /* GroupSettingLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupSettingLogic.swift; sourceTree = "<group>"; };
+		53C954EB2922450600648B2A /* EditProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileViewController.swift; sourceTree = "<group>"; };
+		53C954ED29225F6700648B2A /* EditProfileDBManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileDBManager.swift; sourceTree = "<group>"; };
 		53CFDF50290089F9005C72C4 /* MainNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainNavigationController.swift; sourceTree = "<group>"; };
 		53ED5E13291D32B300EB998C /* HighPriorityTasksTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HighPriorityTasksTableViewCell.swift; sourceTree = "<group>"; };
 		53ED5E14291D32B300EB998C /* HighPriorityTasksTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = HighPriorityTasksTableViewCell.xib; sourceTree = "<group>"; };
@@ -234,6 +254,30 @@
 				53C096182915AD6300D0E2AC /* Services */,
 			);
 			path = Items;
+			sourceTree = "<group>";
+		};
+		53BA9A322922674D00FD2C5E /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				53BA9A36292267A100FD2C5E /* EditProfileLogic.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		53BA9A332922675800FD2C5E /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				53C954ED29225F6700648B2A /* EditProfileDBManager.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		53BA9A352922676800FD2C5E /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				53C954EB2922450600648B2A /* EditProfileViewController.swift */,
+			);
+			path = Controller;
 			sourceTree = "<group>";
 		};
 		53BCCDDB28F5FB54003B32A4 /* Group */ = {
@@ -455,6 +499,7 @@
 				5345884028F7F3F800C26C27 /* ConfirmGroupViewController.swift */,
 				53BCCDD128F5DCD9003B32A4 /* NewGroupCollectionViewCell.swift */,
 				53BCCDD528F5EE5F003B32A4 /* UsersResultsTableViewCell.swift */,
+				53BFB9C12923AFBA00FF4437 /* ConfirmGroupCollectionViewCell.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -464,6 +509,7 @@
 			children = (
 				53BCCDD228F5DCD9003B32A4 /* NewGroupCollectionViewCell.xib */,
 				53BCCDD628F5EE5F003B32A4 /* UsersResultsTableViewCell.xib */,
+				53BFB9C22923AFBA00FF4437 /* ConfirmGroupCollectionViewCell.xib */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -537,6 +583,8 @@
 				53BBEDF128FD5B59004EC47D /* GroupSettingsViewController.swift */,
 				5302AC3D28FDD1E3004287CF /* AddParticipantViewController.swift */,
 				5302AC3928FD5CD7004287CF /* GroupSettingsTableViewCell.swift */,
+				5366C51E2922DBC400E145AD /* AddParticipantCollectionViewCell.swift */,
+				5366C5222922E20900E145AD /* AddParticipantTableViewCell.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -545,6 +593,8 @@
 			isa = PBXGroup;
 			children = (
 				5302AC3A28FD5CD7004287CF /* GroupSettingsTableViewCell.xib */,
+				5366C51F2922DBC400E145AD /* AddParticipantCollectionViewCell.xib */,
+				5366C5232922E20900E145AD /* AddParticipantTableViewCell.xib */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -555,6 +605,7 @@
 				53C919A2290F185A006FA541 /* GroupSettingLogic.swift */,
 				533189EB2912ACA1002BEEE1 /* AddParticipantLogic.swift */,
 				53C096092915905B00D0E2AC /* GroupSettingsFireDBLogic.swift */,
+				5366C51C2922C80F00E145AD /* GroupSettingsCellLogic.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -600,6 +651,7 @@
 			isa = PBXGroup;
 			children = (
 				53C7A9B8291D1672001E3E32 /* Main Screen */,
+				53C954EA292244D000648B2A /* Edit Profile */,
 				53C7A9B9291D169E001E3E32 /* High Priority Tasks */,
 				53ED5E1E291D5AF900EB998C /* Created By Me */,
 				53ED5E2C291DAC3800EB998C /* Completed Tasks */,
@@ -658,6 +710,16 @@
 				53ED5E19291D55F600EB998C /* Controller */,
 			);
 			path = "High Priority Tasks";
+			sourceTree = "<group>";
+		};
+		53C954EA292244D000648B2A /* Edit Profile */ = {
+			isa = PBXGroup;
+			children = (
+				53BA9A322922674D00FD2C5E /* Model */,
+				53BA9A352922676800FD2C5E /* Controller */,
+				53BA9A332922675800FD2C5E /* Services */,
+			);
+			path = "Edit Profile";
 			sourceTree = "<group>";
 		};
 		53ED5E17291D55DA00EB998C /* Model */ = {
@@ -891,9 +953,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				5345884928F8469A00C26C27 /* GroupsTableViewCell.xib in Resources */,
+				5366C5252922E20900E145AD /* AddParticipantTableViewCell.xib in Resources */,
 				53FD6C0C28EEF13300D2C50D /* LaunchScreen.storyboard in Resources */,
 				5341BE6328F04DF100253761 /* GoogleService-Info.plist in Resources */,
 				53FD6C0928EEF13300D2C50D /* Assets.xcassets in Resources */,
+				5366C5212922DBC400E145AD /* AddParticipantCollectionViewCell.xib in Resources */,
 				5302AC3C28FD5CD7004287CF /* GroupSettingsTableViewCell.xib in Resources */,
 				53FD6C0728EEF13200D2C50D /* Main.storyboard in Resources */,
 				53BCCDD428F5DCD9003B32A4 /* NewGroupCollectionViewCell.xib in Resources */,
@@ -905,6 +969,7 @@
 				53ED5E16291D32B300EB998C /* HighPriorityTasksTableViewCell.xib in Resources */,
 				5353B8EF28F9A64E0090A62E /* ItemsTableViewCell.xib in Resources */,
 				53F371FB29142C5000CC9BFA /* GroupItemsTableViewCell.xib in Resources */,
+				53BFB9C42923AFBA00FF4437 /* ConfirmGroupCollectionViewCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -965,6 +1030,7 @@
 				53C6EE6929082F78001A6667 /* NewCategoryLogic.swift in Sources */,
 				53C0960F29159F6400D0E2AC /* LoginRegisterFireDBLogic.swift in Sources */,
 				53C0960A2915905B00D0E2AC /* GroupSettingsFireDBLogic.swift in Sources */,
+				53BFB9C32923AFBA00FF4437 /* ConfirmGroupCollectionViewCell.swift in Sources */,
 				53C09605291588DF00D0E2AC /* GroupItemsFireDBManager.swift in Sources */,
 				53C0961129159F8300D0E2AC /* LoginRegisterFireDBManager.swift in Sources */,
 				5345884828F8469A00C26C27 /* GroupsTableViewCell.swift in Sources */,
@@ -976,6 +1042,7 @@
 				53C6EE6029080A31001A6667 /* ItemLogic.swift in Sources */,
 				53ED5E2E291DAC7600EB998C /* CompletedTasksViewController.swift in Sources */,
 				53BCCDDF28F5FDE1003B32A4 /* GroupItems.swift in Sources */,
+				5366C51D2922C80F00E145AD /* GroupSettingsCellLogic.swift in Sources */,
 				5302AC3E28FDD1E4004287CF /* AddParticipantViewController.swift in Sources */,
 				5341BE6928F0721400253761 /* RegisterViewController.swift in Sources */,
 				5341BE7428F09B9000253761 /* FireStoreManager.swift in Sources */,
@@ -987,6 +1054,7 @@
 				534B6B2928EF07CD006EF12A /* NewCategoryViewController.swift in Sources */,
 				53BBEDF228FD5B59004EC47D /* GroupSettingsViewController.swift in Sources */,
 				53C7A9BB291D171A001E3E32 /* HighPriorityTasksViewController.swift in Sources */,
+				53BA9A37292267A100FD2C5E /* EditProfileLogic.swift in Sources */,
 				53BCCDD728F5EE5F003B32A4 /* UsersResultsTableViewCell.swift in Sources */,
 				535CA5C628F2C610007C2011 /* Extensions.swift in Sources */,
 				53ED5E20291D5B3C00EB998C /* CreatedByMeViewController.swift in Sources */,
@@ -1012,6 +1080,9 @@
 				5328A71529094D170001B9DD /* ConfirmGroupLogic.swift in Sources */,
 				53BCCDD328F5DCD9003B32A4 /* NewGroupCollectionViewCell.swift in Sources */,
 				53C096072915898E00D0E2AC /* GroupItemsFireDBLogic.swift in Sources */,
+				53C954EE29225F6700648B2A /* EditProfileDBManager.swift in Sources */,
+				53C954EC2922450600648B2A /* EditProfileViewController.swift in Sources */,
+				5366C5242922E20900E145AD /* AddParticipantTableViewCell.swift in Sources */,
 				5341BE7628F09EF100253761 /* RealmUser.swift in Sources */,
 				53ED5E37291DAD6200EB998C /* CompletedTasksObject.swift in Sources */,
 				53ED5E2B291DABF000EB998C /* CreatedByMeObject.swift in Sources */,
@@ -1033,6 +1104,7 @@
 				5341BE6B28F07BBE00253761 /* SettingsViewController.swift in Sources */,
 				53BCCDCE28F571BA003B32A4 /* Groups.swift in Sources */,
 				5353B8EA28F9A60B0090A62E /* GroupItemsCollectionViewCell.swift in Sources */,
+				5366C5202922DBC400E145AD /* AddParticipantCollectionViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

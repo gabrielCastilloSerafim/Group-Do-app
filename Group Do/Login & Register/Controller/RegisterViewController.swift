@@ -17,6 +17,7 @@ final class RegisterViewController: UIViewController {
     @IBOutlet weak var emailTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
     @IBOutlet weak var profilePicture: UIImageView!
+    @IBOutlet weak var profilePictureBackground: UIImageView!
     
     //Instance of spinner imported from the JGProgressHUD pod
     private let spinner = JGProgressHUD(style: .dark)
@@ -24,6 +25,25 @@ final class RegisterViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        //Dismiss keyboard when tapped around
+        self.hideKeyboardWhenTappedAround()
+        
+        //TextFields Delegates
+        firstNameTextField.delegate = self
+        lastNameTextField.delegate = self
+        emailTextField.delegate = self
+        passwordTextField.delegate = self
+        
+        //Change navBar tint color
+        navigationController?.navigationBar.tintColor = #colorLiteral(red: 0.5943419933, green: 0.1176240817, blue: 0.9982598424, alpha: 1)
+        
+        //Round profile picture and it's background corners
+        profilePicture.layer.cornerRadius = profilePicture.frame.height/2
+        profilePictureBackground.layer.cornerRadius = profilePictureBackground.frame.height/2
+        
+        //Manage keyboard hiding textField
+        self.setupKeyboardHiding()
     }
     
     @IBAction func profileButtonPressed(_ sender: UIButton) {
@@ -39,13 +59,22 @@ final class RegisterViewController: UIViewController {
               let password = passwordTextField.text
         else {return}
         
+        //Check if firstName or lastName are not empty and if one of them are show alert and return
+        if firstName == "" || lastName == "" {
+            let alert = UIAlertController(title: "Error", message: "Please make sure to fill all fields.", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Dismiss", style: .default))
+            self.present(alert, animated: true)
+            return
+        }
+        
         //Show spinner
         spinner.show(in: view)
         
         //Create user in Firebase Auth
         Auth.auth().createUser(withEmail: email, password: password) { [weak self] _, error in
             guard error == nil else {
-                print(error!.localizedDescription)
+                //Handle Firebase Auth Errors
+                self?.handleFireAuthError(error: error!)
                 //Dismiss spinner
                 self?.spinner.dismiss(animated: true)
                 return
@@ -60,6 +89,11 @@ final class RegisterViewController: UIViewController {
             
             //Add user to firebase database
             LoginRegisterFireDBManager.shared.addUserToFirebaseDB(userObject: userObject)
+            
+            //Check if user selected a profile picture, if user did not select photo save default one
+            if self?.profilePicture.image == nil {
+                self?.profilePicture.image = #imageLiteral(resourceName: "defaultUserAvatar.jpg")
+            }
             
             //Save user profile picture to firebaseStore
             FireStoreManager.shared.uploadImageToFireStore(image: (self?.profilePicture.image!)!, imageName: userObject.profilePictureFileName!) {_ in }
@@ -131,4 +165,29 @@ extension RegisterViewController: UIImagePickerControllerDelegate, UINavigationC
         picker.dismiss(animated: true, completion: nil)
     }
     
+}
+
+//MARK: - UITextFieldDelegate
+
+extension RegisterViewController: UITextFieldDelegate {
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        //Use switch function below to send user to next textField when return button is tapped.
+        self.switchBasedNextTextField(textField)
+        
+        return true
+    }
+    
+    private func switchBasedNextTextField(_ textField: UITextField) {
+        switch textField {
+        case self.firstNameTextField:
+            self.lastNameTextField.becomeFirstResponder()
+        case self.lastNameTextField:
+            self.emailTextField.becomeFirstResponder()
+        case self.emailTextField:
+            self.passwordTextField.becomeFirstResponder()
+        default:
+            self.passwordTextField.resignFirstResponder()
+        }
+    }
 }

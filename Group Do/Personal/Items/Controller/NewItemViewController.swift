@@ -20,6 +20,9 @@ final class NewItemViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        //Dismiss keyboard when tapped around
+        self.hideKeyboardWhenTappedAround() 
+        
         //Listen for delete notifications from parent VC
         NotificationCenter.default.addObserver(self, selector: #selector(self.methodOfReceivedNotification(notification:)), name: Notification.Name("DismissModalNewItem"), object: nil)
     }
@@ -32,6 +35,7 @@ final class NewItemViewController: UIViewController {
     @IBAction func cancelButtonPressed(_ sender: UIButton) {
         dismiss(animated: true)
     }
+    
     @IBAction func addTaskPressed(_ sender: UIButton) {
         
         //Variables necessary to create a newItem object
@@ -41,6 +45,14 @@ final class NewItemViewController: UIViewController {
         let newItemTitle = newItemTextField.text!
         let newItemDeadline = newItemLogic.selectedDateToString(with: datePicker.date)
         let newItemPriority = newItemLogic.determinePriorityLevel(for: prioritySelector.selectedSegmentIndex)
+        
+        //Check if user typed a item title
+        if newItemTitle == "" {
+            let alert = UIAlertController(title: "Error", message: "Please give the item a title.", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Dismiss", style: .default))
+            self.present(alert, animated: true)
+            return
+        }
         
         //Create a new item object
         let newItemObject = newItemLogic.createPersonalItemObject(title: newItemTitle,

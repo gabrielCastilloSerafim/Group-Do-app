@@ -37,7 +37,7 @@ final class GroupItemsTableViewCell: UITableViewCell {
         
         let realm = try! Realm()
         let selfUserEmail = realm.objects(RealmUser.self)[0].email!
-        let realmGroup = realm.objects(GroupItems.self).filter("fromGroupID CONTAINS %@", groupObject!.groupID!).sorted(byKeyPath: "creationTimeSince1970", ascending: false)
+        let realmGroup = realm.objects(GroupItems.self).filter("fromGroupID == %@", groupObject!.groupID!).sorted(byKeyPath: "creationTimeSince1970", ascending: false)
         let selectedItem = realmGroup[checkButton.tag]
         
         if selectedItem.completedByUserEmail == "" {

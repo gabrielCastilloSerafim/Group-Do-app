@@ -45,13 +45,13 @@
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Uncompleted Tasks" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DFZ-4b-zOG">
                                         <rect key="frame" x="12.999999999999993" y="0.0" width="107.33333333333331" height="13.333333333333334"/>
                                         <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="11"/>
-                                        <color key="textColor" red="0.3411051631" green="0.74642032380000001" blue="0.6627385616" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                        <color key="textColor" red="0.3411764705882353" green="0.74509803921568629" blue="0.66274509803921566" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                 </subviews>
                             </stackView>
                         </subviews>
-                        <color key="backgroundColor" red="0.8784313725490196" green="0.98847931619999996" blue="0.97254878280000001" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                        <color key="backgroundColor" red="0.8784313725490196" green="0.9882352941176471" blue="0.97254901960784312" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                         <constraints>
                             <constraint firstAttribute="bottom" secondItem="1E8-l5-nBA" secondAttribute="bottom" constant="3" id="DD7-VK-VoG"/>
                             <constraint firstItem="1E8-l5-nBA" firstAttribute="top" secondItem="gKj-NI-rFX" secondAttribute="top" constant="3" id="RwM-AM-BRX"/>

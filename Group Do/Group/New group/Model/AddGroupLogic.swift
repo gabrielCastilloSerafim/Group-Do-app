@@ -56,7 +56,7 @@ struct AddGroupLogic {
         let userEmail = selectedUser.email!
         
         let realm = try! Realm()
-        if realm.objects(GroupParticipants.self).filter("email CONTAINS %@", userEmail).count == 0 {
+        if realm.objects(GroupParticipants.self).filter("email == %@", userEmail).count == 0 {
             
             ImageManager.shared.deleteImageFromLocalStorage(imageName: userProfilePictureName)
         }

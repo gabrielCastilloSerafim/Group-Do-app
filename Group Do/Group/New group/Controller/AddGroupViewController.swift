@@ -16,6 +16,7 @@ final class AddGroupViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var collectionView: UICollectionView!
     
+    
     private let spinner = JGProgressHUD(style: .dark)
     private var usersArray = Array<RealmUser>()
     private var selectedUserArray = Array<RealmUser>()
@@ -24,22 +25,15 @@ final class AddGroupViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        searchBar.becomeFirstResponder()
+        
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(UINib(nibName: "UsersResultsTableViewCell", bundle: nil), forCellReuseIdentifier: "UsersTableCell")
+        
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.register(UINib(nibName: "NewGroupCollectionViewCell" , bundle: nil), forCellWithReuseIdentifier: "customCollectionCell")
-
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        self.tabBarController?.tabBar.isHidden = true
-    }
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        self.tabBarController?.tabBar.isHidden = false
     }
     
     
@@ -150,13 +144,20 @@ extension AddGroupViewController: UICollectionViewDelegate, UICollectionViewData
             //Set image to collection cell
             ImageManager.shared.loadPictureFromDisk(fileName: imageName) { profileImage in
                 cell.imageView.image = profileImage
+                cell.imageView.isHidden = false
+                cell.personImage.isHidden = true
                 cell.xButtonImage.isHidden = false
+                cell.whiteBackground.isHidden = false
+                cell.xButtonBackground.isHidden = false
                 spinner.dismiss(animated: true)
             }
         } else {
             DispatchQueue.main.async {
-                cell.imageView.image = UIImage(systemName: "person.crop.circle.badge.plus")
+                cell.imageView.isHidden = true
+                cell.personImage.isHidden = false
                 cell.xButtonImage.isHidden = true
+                cell.whiteBackground.isHidden = true
+                cell.xButtonBackground.isHidden = true
             }
         }
         return cell
@@ -164,9 +165,6 @@ extension AddGroupViewController: UICollectionViewDelegate, UICollectionViewData
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
-        if usersArray.count == 0 {
-            searchBar.becomeFirstResponder()
-        }
         if selectedUserArray.count != 0 {
             
             //Check if added profile picture is being used in device else remove it from device memory

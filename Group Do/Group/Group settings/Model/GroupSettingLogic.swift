@@ -16,7 +16,7 @@ struct GroupSettingLogic {
         let realm = try! Realm()
         
         let realmUserEmail = realm.objects(RealmUser.self)[0].email
-        let realmGroupAdminEmail = realm.objects(GroupParticipants.self).filter("partOfGroupID CONTAINS %@", selectedGroup.groupID!).filter("isAdmin == true")[0].email
+        let realmGroupAdminEmail = realm.objects(GroupParticipants.self).filter("partOfGroupID == %@", selectedGroup.groupID!).filter("isAdmin == true")[0].email
         
         if realmUserEmail == realmGroupAdminEmail {
             return true
@@ -30,10 +30,10 @@ struct GroupSettingLogic {
         let realm = try! Realm()
         do {
             try realm.write({
-                let realmGroup = realm.objects(Groups.self).filter("groupID CONTAINS %@", selectedGroup.groupID!).first
+                let realmGroup = realm.objects(Groups.self).filter("groupID == %@", selectedGroup.groupID!).first
                 guard let realmGroup = realmGroup else {return}
-                let realmGroupParticipants = realm.objects(GroupParticipants.self).filter("partOfGroupID CONTAINS %@", selectedGroup.groupID!)
-                let realmGroupItems = realm.objects(GroupItems.self).filter("fromGroupID CONTAINS %@", selectedGroup.groupID!)
+                let realmGroupParticipants = realm.objects(GroupParticipants.self).filter("partOfGroupID == %@", selectedGroup.groupID!)
+                let realmGroupItems = realm.objects(GroupItems.self).filter("fromGroupID == %@", selectedGroup.groupID!)
                 
                 realm.delete(realmGroup)
                 realm.delete(realmGroupParticipants)
@@ -51,7 +51,7 @@ struct GroupSettingLogic {
         let realm = try! Realm()
         
         let realmUserEmail = realm.objects(RealmUser.self)[0].email!
-        let selfParticipant = realm.objects(GroupParticipants.self).filter("partOfGroupID CONTAINS %@", selectedGroup.groupID!).filter("email CONTAINS %@", realmUserEmail)[0]
+        let selfParticipant = realm.objects(GroupParticipants.self).filter("partOfGroupID == %@", selectedGroup.groupID!).filter("email == %@", realmUserEmail)[0]
         
         GroupSettingsFireDBManager.shared.deleteExitUser(participantToRemove: selfParticipant, allParticipantsArray: allGroupParticipants)
     }
@@ -61,46 +61,12 @@ struct GroupSettingLogic {
         
         var participantsArray = Array<GroupParticipants>()
         let realm = try! Realm()
-        let participants = realm.objects(GroupParticipants.self).filter("partOfGroupID CONTAINS %@", selectedGroup.groupID!)
+        let participants = realm.objects(GroupParticipants.self).filter("partOfGroupID == %@", selectedGroup.groupID!)
         for participant in participants {
             participantsArray.append(participant)
         }
         
         GroupSettingsFireDBManager.shared.deleteGroupFromFirebase(group: selectedGroup, participantsArray: participantsArray)
-    }
-    
-    ///Creates and returns a alert action for a participant deletion
-    func createAlertAction() -> UIAlertController {
-        return UIAlertController(title: "Delete participant", message: "By clicking Confirm the selected participant will be excluded from group", preferredStyle: .alert)
-    }
-    
-    ///Creates and returns a completion block to the delete participant  alert action
-    func createAlertCompletion(participantToDelete: GroupParticipants, selectedGroup: Groups) -> UIAlertAction {
-        
-        return UIAlertAction(title: "Confirm", style: .destructive) { _ in
-
-            //Delete group participant from other participants accounts on firebase
-            GroupSettingsFireDBManager.shared.deleteUserRemovedByAdmin(participantToRemove: participantToDelete, selectedGroup: selectedGroup)
-            
-            //Delete entire group from person who was deleted from group on firebase
-            GroupSettingsFireDBManager.shared.deleteGroupFromRemovedPersonAccount(participantToRemove: participantToDelete, selectedGroup: selectedGroup)
-            
-            //Delete removed person's profile picture from local device storage if it is not being used in any other group
-            let realm = try! Realm()
-            if realm.objects(GroupParticipants.self).filter("email CONTAINS %@", participantToDelete.email!).count == 0 {
-                ImageManager.shared.deleteImageFromLocalStorage(imageName: participantToDelete.profilePictureFileName!)
-            }
-
-            //Delete participant from realm
-            do {
-                try realm.write({
-                    realm.delete(participantToDelete)
-                })
-            } catch {
-                print(error.localizedDescription)
-                return
-            }
-        }
     }
     
     ///Deletes group participants images from device memory  if it is not being used nowhere else
@@ -113,13 +79,27 @@ struct GroupSettingLogic {
             
             if participant.email != selfUserEmail {
                 
-                if realm.objects(GroupParticipants.self).filter("email CONTAINS %@", participant.email!).filter("partOfGroupID != %@", participant.partOfGroupID!).count == 0 {
+                if realm.objects(GroupParticipants.self).filter("email == %@", participant.email!).filter("partOfGroupID != %@", participant.partOfGroupID!).count == 0 {
                     ImageManager.shared.deleteImageFromLocalStorage(imageName: participant.profilePictureFileName!)
                 }
             }
         }
     }
     
+    ///Updates the modified profile picture in local device memory
+    func updateProfilePictureInDeviceMemory(newImage: UIImage, selectedGroup: Groups) {
+        
+        let realm = try! Realm()
+        let group = realm.objects(Groups.self).filter("groupID == %@", selectedGroup.groupID!).first
+        guard let group = group else {return}
+        let groupImageName = group.groupPictureName!
+        
+        //Delete old image from device memory
+        ImageManager.shared.deleteImageFromLocalStorage(imageName: groupImageName)
+        
+        //Save new image to device memory
+        ImageManager.shared.saveImageToDeviceMemory(imageName: groupImageName, image: newImage) {}
+    }
     
     
 }

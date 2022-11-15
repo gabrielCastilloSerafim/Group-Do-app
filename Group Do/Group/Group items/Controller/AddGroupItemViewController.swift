@@ -25,6 +25,13 @@ final class AddGroupItemViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        //Dismiss keyboard when tapped around
+        self.hideKeyboardWhenTappedAround()
+        
+        //Manage keyboard hiding textField
+        self.setupKeyboardHiding()
+        
         //Listen for delete notifications from parent VC
         NotificationCenter.default.addObserver(self, selector: #selector(self.methodOfReceivedNotification(notification:)), name: Notification.Name("DismissModalNewGroupItem"), object: nil)
     }
@@ -36,11 +43,20 @@ final class AddGroupItemViewController: UIViewController {
     @IBAction func cancelButtonPressed(_ sender: UIButton) {
         dismiss(animated: true)
     }
+    
     @IBAction func addTaskButtonPressed(_ sender: Any) {
         
         let itemTitle = itemTitleTextField.text!
         let deadLine = newGroupItemsLogic.getDeadLineString(for: datePicker.date)
         let priorityString = newGroupItemsLogic.getPriorityString(for: prioritySelector.selectedSegmentIndex)
+        
+        //Check if user typed a item title
+        if itemTitle == "" {
+            let alert = UIAlertController(title: "Error", message: "Please give the item a title.", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Dismiss", style: .default))
+            self.present(alert, animated: true)
+            return
+        }
         
         //Create new group item object
         let newItemObject = newGroupItemsLogic.createGroupItemObject(itemTitle: itemTitle, selectedGroup: selectedGroup!, priorityString: priorityString, deadLine: deadLine)

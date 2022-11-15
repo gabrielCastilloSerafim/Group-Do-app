@@ -16,6 +16,7 @@ final class GroupSettingsViewController: UIViewController {
     @IBOutlet weak var numberOfParticipantsLabel: UILabel!
     @IBOutlet weak var exitGroupButton: UIButton!
     @IBOutlet weak var deleteGroupButton: UIButton!
+    @IBOutlet weak var whiteImageBackground: UIImageView!
     
     var groupSettingLogic = GroupSettingLogic()
     var selectedGroup: Groups? {
@@ -43,6 +44,9 @@ final class GroupSettingsViewController: UIViewController {
         ImageManager.shared.loadPictureFromDisk(fileName: groupPictureName) { image in
             groupImage.image = image
         }
+        groupImage.layer.cornerRadius = groupImage.frame.height/2
+        whiteImageBackground.layer.cornerRadius = whiteImageBackground.frame.height/2
+        
         //Set the group name
         groupNameLAbel.text = selectedGroup?.groupName
         
@@ -57,11 +61,10 @@ final class GroupSettingsViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        self.tabBarController?.tabBar.isHidden = true
         refreshParticipantCounter()
         
         let realm = try! Realm()
-        let results = realm.objects(GroupParticipants.self).filter("partOfGroupID CONTAINS %@", selectedGroup!.groupID!).sorted(byKeyPath: "isAdmin", ascending: false)
+        let results = realm.objects(GroupParticipants.self).filter("partOfGroupID == %@", selectedGroup!.groupID!).sorted(byKeyPath: "isAdmin", ascending: false)
         
         notificationToken = results.observe { [weak self] (changes: RealmCollectionChange) in
             guard let tableView = self?.tableView else { return }
@@ -71,7 +74,7 @@ final class GroupSettingsViewController: UIViewController {
                 tableView.reloadData()
             case .update(_, let deletions, let insertions, let modifications):
                 // Query results have changed, so apply them to the UITableView
-                if realm.objects(Groups.self).filter("groupID CONTAINS %@", self!.groupID!).count == 0 {
+                if realm.objects(Groups.self).filter("groupID == %@", self!.groupID!).count == 0 {
                     NotificationCenter.default.post(name: Notification.Name("DismissModalAddParticipants"), object: nil)
                     self?.navigationController?.popToRootViewController(animated: true)
                 } else {
@@ -93,13 +96,17 @@ final class GroupSettingsViewController: UIViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
-        self.tabBarController?.tabBar.isHidden = false
         notificationToken?.invalidate()
     }
     
     ///Refreshes the number for the participant counter label and updates the UI
     private func refreshParticipantCounter() {
         numberOfParticipantsLabel.text = String((participantsArray?.count)!)
+    }
+    
+    
+    @IBAction func editGroupImageTapped(_ sender: UIButton) {
+        presentPhotoActionSheet()
     }
     
     @IBAction func addParticipantButtonPressed(_ sender: UIButton) {
@@ -163,6 +170,8 @@ final class GroupSettingsViewController: UIViewController {
         //go back to root view controller
         navigationController?.popToRootViewController(animated: true)
     }
+    
+   
 }
 
 //MARK: - TableView Delegate & Datasource
@@ -182,6 +191,10 @@ extension GroupSettingsViewController: UITableViewDelegate, UITableViewDataSourc
         let participantIsAdmin = participantsArray?[indexPath.row].isAdmin
         let imageName = participantsArray?[indexPath.row].profilePictureFileName
         
+        //Send information to GroupSettingsTableViewCell in order to manage delete button functionality
+        cell.deleteButton.tag = indexPath.row
+        cell.selectedGroup = selectedGroup!
+        
         ImageManager.shared.loadPictureFromDisk(fileName: imageName) { image in
             
             cell.profilePicture.image = image
@@ -189,59 +202,105 @@ extension GroupSettingsViewController: UITableViewDelegate, UITableViewDataSourc
             //Different setup to admin and self user
             if realmUserEmail == participantEmail && participantIsAdmin == true {
                 cell.userNameLabel.text = "Me"
-                cell.deleteLabel.text = "Admin"
-                cell.deleteLabel.textColor = .black
-                cell.isUserInteractionEnabled = false
+                cell.adminOrDeleteImage.image = #imageLiteral(resourceName: "AdminLabel")
+                cell.deleteButton.isHidden = true
                 
             } else if realmUserEmail == participantEmail && participantIsAdmin == false {
                 cell.userNameLabel.text = "Me"
-                cell.deleteLabel.text = ""
-                cell.isUserInteractionEnabled = false
+                cell.adminOrDeleteImage.image = nil
+                cell.deleteButton.isHidden = true
                 
             } else if realmUserEmail != participantEmail && participantIsAdmin == true {
                 cell.userNameLabel.text = participantsArray?[indexPath.row].fullName
-                cell.deleteLabel.text = "Admin"
-                cell.deleteLabel.textColor = .black
-                cell.isUserInteractionEnabled = false
+                cell.adminOrDeleteImage.image = #imageLiteral(resourceName: "AdminLabel.pdf")
+                cell.deleteButton.isHidden = true
                 
             } else {
                 let realm = try! Realm()
                 let realmUserEmail = realm.objects(RealmUser.self)[0].email
-                let realmGroupAdminEmail = realm.objects(GroupParticipants.self).filter("partOfGroupID CONTAINS %@", selectedGroup!.groupID!).filter("isAdmin == true")[0].email
+                let realmGroupAdminEmail = realm.objects(GroupParticipants.self).filter("partOfGroupID == %@", selectedGroup!.groupID!).filter("isAdmin == true")[0].email
                 
                 cell.userNameLabel.text = participantsArray?[indexPath.row].fullName
                 //Check if user is admin to enable delete button
                 if realmUserEmail == realmGroupAdminEmail {
-                    cell.deleteLabel.text = "Remove"
-                    cell.deleteLabel.textColor = .red
-                    cell.isUserInteractionEnabled = true
+                    cell.adminOrDeleteImage.image = #imageLiteral(resourceName: "DeleteButton.pdf")
+                    cell.deleteButton.isHidden = false
                 } else {
-                    cell.deleteLabel.text = ""
-                    cell.isUserInteractionEnabled = false
+                    cell.adminOrDeleteImage.image = nil
+                    cell.deleteButton.isHidden = true
                 }
             } 
         }
         return cell
     }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
+}
+
+//MARK: - Image Picker for profile picture
+
+extension GroupSettingsViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    
+    //Creates an action sheet with actions to see if user wants to use camera or choose photo from the library
+    func presentPhotoActionSheet() {
+        let actionSheet = UIAlertController(title: "Profile picture", message: "How would you like to select a picture?", preferredStyle: .actionSheet)
         
-        let participantToDelete = (participantsArray?[indexPath.row])!
+        actionSheet.addAction(UIAlertAction(title: "Cancel", style: .default, handler: nil))
         
-        //Create an alert to show as a confirmation when the user is trying to remove a participant
-        let alert = groupSettingLogic.createAlertAction()
+        actionSheet.addAction(UIAlertAction(title: "Take Photo", style: .default, handler: { [weak self] _ in
+            self?.presentCamera()
+        }))
         
-        //Add a completion block to alert that removes the user from groups in firebase and deletes the user from realm as well
-        alert.addAction(groupSettingLogic.createAlertCompletion(participantToDelete: participantToDelete, selectedGroup: selectedGroup!))
+        actionSheet.addAction(UIAlertAction(title: "Choose Photo", style: .default, handler: { [weak self] _ in
+            self?.presentPhotoPicker()
+        }))
         
-        //Add a cancel action to alert
-        alert.addAction( UIAlertAction(title: "Cancel", style: .default))
-        
-        //Present alert action
-        self.present(alert, animated: true)
+        present(actionSheet, animated: true)
     }
     
+    //Function called in action sheet to present camera
+    func presentCamera () {
+        let imagePicker = UIImagePickerController()
+        imagePicker.sourceType = .camera
+        imagePicker.delegate = self
+        imagePicker.allowsEditing = true
+        present(imagePicker, animated: true)
+    }
+    //Function called in the action sheet to present photo picker
+    func presentPhotoPicker () {
+        let imagePicker = UIImagePickerController()
+        imagePicker.sourceType = .photoLibrary
+        imagePicker.delegate = self
+        //allowEditing lets us have that crop delimitation to the pictures
+        imagePicker.allowsEditing = true
+        present(imagePicker, animated: true)
+    }
     
+    //Conforms to image picker controller protocol and tells what to do when finish picking media.
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        
+        //Dismiss pickerView
+        picker.dismiss(animated: true, completion: nil)
+        
+        //Sets the image view content to be equal to the edited chosen image
+        let selectedImage = info[UIImagePickerController.InfoKey.editedImage]
+        self.groupImage.image = (selectedImage as! UIImage)
+        
+        //Updates profile picture in local device memory
+        groupSettingLogic.updateProfilePictureInDeviceMemory(newImage: selectedImage as! UIImage, selectedGroup: selectedGroup!)
+        
+        let imageName = selectedGroup!.groupPictureName!
+        
+        //Uploads new Image To FirebaseStorage
+        FireStoreManager.shared.uploadImageToFireStore(image: groupImage.image!, imageName: imageName) { success in
+            if success == true {
+                //adds a need to update image node in realm to notify that picture changed
+                GroupSettingsFireDBManager.shared.notifyGroupUsersThatImageUpdated(selectedGroup: self.selectedGroup!)
+            }
+        }
+    }
+    //Conforms to image picker controller protocol and dismisses when cancel is tapped
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        picker.dismiss(animated: true, completion: nil)
+    }
     
 }

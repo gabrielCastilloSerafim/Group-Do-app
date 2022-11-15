@@ -30,7 +30,7 @@ extension CategoriesFireDBManager {
     func checkIfPersonalCategoryExistsInRealm(with addedCategory: PersonalCategories) -> Bool {
         
         let realm = try! Realm()
-        if realm.objects(PersonalCategories.self).filter("categoryID CONTAINS %@", addedCategory.categoryID!).count != 0 {
+        if realm.objects(PersonalCategories.self).filter("categoryID == %@", addedCategory.categoryID!).count != 0 {
             return true
         } else {
             return false
@@ -43,7 +43,7 @@ extension CategoriesFireDBManager {
         let realm = try! Realm()
         do {
             try realm.write({
-                if realm.objects(PersonalCategories.self).filter("categoryID CONTAINS %@", addedCategory.categoryID!).count == 0 {
+                if realm.objects(PersonalCategories.self).filter("categoryID == %@", addedCategory.categoryID!).count == 0 {
                     realm.add(addedCategory)
                 }
             })
@@ -80,7 +80,7 @@ extension CategoriesFireDBManager {
     func checkIfCategoryStillExistInRealm(for categoryID: String) -> Bool {
         
         let realm = try! Realm()
-        if realm.objects(PersonalCategories.self).filter("categoryID CONTAINS %@", categoryID).count != 0 {
+        if realm.objects(PersonalCategories.self).filter("categoryID == %@", categoryID).count != 0 {
             return true
         } else {
             return false
@@ -93,10 +93,10 @@ extension CategoriesFireDBManager {
         let realm = try! Realm()
         do {
             try realm.write({
-                let realmCategoryObject = realm.objects(PersonalCategories.self).filter("categoryID CONTAINS %@", deletedCategoryID)
+                let realmCategoryObject = realm.objects(PersonalCategories.self).filter("categoryID == %@", deletedCategoryID)
                 realm.delete(realmCategoryObject)
                 
-                let allRelatedItems = realm.objects(PersonalItems.self).filter("parentCategoryID CONTAINS %@", deletedCategoryID)
+                let allRelatedItems = realm.objects(PersonalItems.self).filter("parentCategoryID == %@", deletedCategoryID)
                 realm.delete(allRelatedItems)
             })
         } catch {

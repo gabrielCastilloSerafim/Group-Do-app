@@ -102,7 +102,7 @@ extension GroupSettingsFireDBManager {
     func getAllGroupItemsDictionaryArray(selectedGroup: Groups) -> [[String: Any]] {
         
         let realm = try! Realm()
-        let groupItemsArray = realm.objects(GroupItems.self).filter("fromGroupID CONTAINS %@", selectedGroup.groupID!)
+        let groupItemsArray = realm.objects(GroupItems.self).filter("fromGroupID == %@", selectedGroup.groupID!)
         var groupItemsDictionaryArray = [[String: Any]]()
         
         for item in groupItemsArray {

@@ -22,6 +22,12 @@ final class PersonalCategoriesViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        //Dismiss keyboard when tapped around
+        self.hideKeyboardWhenTappedAround()
+        
+        //Manage keyboard hiding textField
+        self.setupKeyboardHiding()
+        
         //Change navBar tint color
         navigationController?.navigationBar.tintColor = UIColor.white
         

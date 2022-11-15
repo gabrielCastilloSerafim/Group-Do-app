@@ -17,9 +17,12 @@ final class NewCategoryViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
+        //Dismiss keyboard when tapped around
+        self.hideKeyboardWhenTappedAround()
+        
+        //Manage keyboard hiding textField
+        self.setupKeyboardHiding()
     }
-    
     
     @IBAction func cancelButtonPressed(_ sender: UIButton) {
         dismiss(animated: true)
@@ -27,8 +30,15 @@ final class NewCategoryViewController: UIViewController {
     
     @IBAction func addCategoryPressed(_ sender: UIButton) {
         
-        //Variable that contains the text entered in the UITextField
         let newCategoryName = newCategoryTextField.text!
+        
+        //Check if user typed a category title
+        if newCategoryName == "" {
+            let alert = UIAlertController(title: "Error", message: "Please give the category a name.", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Dismiss", style: .default))
+            self.present(alert, animated: true)
+            return
+        }
         
         //Create new category object
         let newCategoryObj = newCategoryLogic.createNewCategoryObject(with: newCategoryName)

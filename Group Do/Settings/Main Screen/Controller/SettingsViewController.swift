@@ -20,7 +20,11 @@ final class SettingsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        //Prints realm location file location
         print(Realm.Configuration.defaultConfiguration.fileURL!)
+        
+        //Dismiss keyboard when tapped around
+        self.hideKeyboardWhenTappedAround()
         
         //Setup user name
         let realm = try! Realm()
@@ -30,6 +34,10 @@ final class SettingsViewController: UIViewController {
         //Setup Profile Picture
         pictureBackground.layer.cornerRadius = pictureBackground.frame.height/2
         profilePicture.layer.cornerRadius = profilePicture.frame.height/2
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         
         //Set profile picture
         settingsLogic.getProfilePicture { image in
@@ -38,18 +46,27 @@ final class SettingsViewController: UIViewController {
     }
     
     @IBAction func logOutButtonPressed(_ sender: UIButton) {
-        //Log out from firebase
-        settingsLogic.logUserOut()
         
-        //Delete user from realm database
-        settingsLogic.deleteAllRealmData()
+        let alert = UIAlertController(title: "Log Out", message: "Do you want to log out from this account ?", preferredStyle: .alert)
         
-        //Delete images from system files
-        ImageManager.shared.deleAllImagesFromUsersDir()
+        alert.addAction(UIAlertAction(title: "Dismiss", style: .default))
         
-        //Go to Groups VC
-        MainNavigationController.isLoggedIn = false
-        self.dismiss(animated: true)
+        alert.addAction(UIAlertAction(title: "Log Out", style: .default, handler: { [weak self] _ in
+            //Log out from firebase
+            self?.settingsLogic.logUserOut()
+            
+            //Delete user from realm database
+            self?.settingsLogic.deleteAllRealmData()
+            
+            //Delete images from system files
+            ImageManager.shared.deleAllImagesFromUsersDir()
+            
+            //Go to Groups VC
+            MainNavigationController.isLoggedIn = false
+            self?.dismiss(animated: true)
+        }))
+        
+        self.present(alert, animated: true)
     }
     
 

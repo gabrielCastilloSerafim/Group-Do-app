@@ -62,6 +62,27 @@ final class FireStoreManager {
         }
     }
     
+    ///Gets download URL to a image in firebase storage using its unique name and does not check if image already exists because we are making an update
+    public func getUpdateImageURL(imageName: String, completion: @escaping (URL) -> Void) {
+        
+        guard let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { return }
+        
+        let fileName = imageName
+        let fileURL = documentsDirectory.appendingPathComponent(fileName)
+        
+        let reference = storage.child("images/\(imageName)")
+        
+        reference.downloadURL { result in
+            switch result {
+            case .success(let url):
+                completion(url)
+            case .failure(let error):
+                print(error.localizedDescription)
+                return
+            }
+        }
+    }
+    
     ///Deletes a picture file from fireStore
     public func deleteImageFromFireStore(imageName: String) {
         

@@ -26,6 +26,9 @@ final class GroupsViewController: UIViewController {
         //Change navBar tint color
         navigationController?.navigationBar.tintColor = UIColor.white
         
+        //Dismiss keyboard when tapped around
+        self.hideKeyboardWhenTappedAround() 
+        
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(UINib(nibName: "GroupsTableViewCell", bundle: nil), forCellReuseIdentifier: "GroupsCell")

@@ -16,7 +16,7 @@ struct AddParticipantLogic {
         
         do {
             try realm.write({
-                let groupObject = realm.objects(Groups.self).filter("groupID CONTAINS %@", selectedGroup.groupID!).first
+                let groupObject = realm.objects(Groups.self).filter("groupID == %@", selectedGroup.groupID!).first
                 guard let groupObject = groupObject else {return}
                 groupObject.groupParticipants.append(objectsIn: newSelectedParticipantsArray)
             })

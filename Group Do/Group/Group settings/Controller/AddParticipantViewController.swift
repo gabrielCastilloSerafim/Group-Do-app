@@ -14,6 +14,7 @@ final class AddParticipantViewController: UIViewController {
 
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var searchBar: UISearchBar!
     
     var addParticipantLogic = AddParticipantLogic()
     let spinner = JGProgressHUD(style: .dark)
@@ -34,14 +35,16 @@ final class AddParticipantViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        searchBar.becomeFirstResponder()
 
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.register(UINib(nibName: "UsersResultsTableViewCell", bundle: nil), forCellReuseIdentifier: "UsersTableCell")
+        tableView.register(UINib(nibName: "AddParticipantTableViewCell", bundle: nil), forCellReuseIdentifier: "AddParticipantTableViewCell")
         
         collectionView.delegate = self
         collectionView.dataSource = self
-        collectionView.register(UINib(nibName: "NewGroupCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "customCollectionCell")
+        collectionView.register(UINib(nibName: "AddParticipantCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "AddParticipantCollectionViewCell")
         
         //Listen for delete notifications from parent VC
         NotificationCenter.default.addObserver(self, selector: #selector(self.methodOfReceivedNotification(notification:)), name: Notification.Name("DismissModalAddParticipants"), object: nil)
@@ -49,10 +52,6 @@ final class AddParticipantViewController: UIViewController {
     
     //When observer gets notified it means that the group has been deleted and needs to dismiss current modal presentation
     @objc func methodOfReceivedNotification(notification: Notification) {
-        dismiss(animated: true)
-    }
-    
-    @IBAction func cancelButtonPressed(_ sender: UIButton) {
         dismiss(animated: true)
     }
     
@@ -84,20 +83,20 @@ extension AddParticipantViewController: UITableViewDelegate, UITableViewDataSour
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: "UsersTableCell", for: indexPath) as! UsersResultsTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "AddParticipantTableViewCell", for: indexPath) as! AddParticipantTableViewCell
         
         let imageName = searchResultsArray[indexPath.row].profilePictureFileName
         let userName = searchResultsArray[indexPath.row].fullName
         
         FireStoreManager.shared.getImageURL(imageName: imageName!) { [weak self] resultUrl in
             if let url = resultUrl {
-                cell.profilePicture.sd_setImage(with: url)
+                cell.profilePictureImage.sd_setImage(with: url)
                 cell.nameLabel.text = userName
                 self?.spinner.dismiss(animated: true)
             } else {
                 //Already have image saved in user device just grab it
                 ImageManager.shared.loadPictureFromDisk(fileName: imageName) { profilePicture in
-                    cell.profilePicture.image = profilePicture
+                    cell.profilePictureImage.image = profilePicture
                     cell.nameLabel.text = userName
                     self?.spinner.dismiss(animated: true)
                 }
@@ -165,20 +164,22 @@ extension AddParticipantViewController: UICollectionViewDelegate, UICollectionVi
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "customCollectionCell", for: indexPath) as! NewGroupCollectionViewCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "AddParticipantCollectionViewCell", for: indexPath) as! AddParticipantCollectionViewCell
         
         let participant = participantsArray[indexPath.row]
         let imageName = participant.profilePictureFileName
         
         ImageManager.shared.loadPictureFromDisk(fileName: imageName) { [weak self] profileImage in
             
-            cell.imageView.image = profileImage
+            cell.profilePicture.image = profileImage
             
             if self!.newSelectedParticipantsArray.contains(participant) {
                 cell.xButtonImage.isHidden = false
+                cell.xButtonImageBackground.isHidden = false
                 cell.isUserInteractionEnabled = true
             } else {
                 cell.xButtonImage.isHidden = true
+                cell.xButtonImageBackground.isHidden = true
                 cell.isUserInteractionEnabled = false
             }
             spinner.dismiss(animated: true)

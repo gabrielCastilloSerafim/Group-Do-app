@@ -15,7 +15,7 @@ struct ItemsTableViewLogic {
         let realm = try! Realm()
         
         //Get an array from realm sorted in the same order as the one in the tableView's view controller, and since we have passed the indexPath for the tableView as the button's tag we can use it to get the exact element in which the taskCompleted button was pressed by using the tag to localise the element in the array in the array.
-        let realItemsArray = realm.objects(PersonalItems.self).filter("parentCategoryID CONTAINS %@", parentCategoryID).sorted(byKeyPath: "creationTimeSince1970", ascending: false)
+        let realItemsArray = realm.objects(PersonalItems.self).filter("parentCategoryID == %@", parentCategoryID).sorted(byKeyPath: "creationTimeSince1970", ascending: false)
         
         return realItemsArray[selectedIndexPath]
     }

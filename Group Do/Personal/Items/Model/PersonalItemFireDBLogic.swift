@@ -62,7 +62,7 @@ extension PersonalItemsFireDBManager {
     func checkIfRealmContainsItem(for itemObject: PersonalItems) -> Bool {
         
         let realm = try! Realm()
-        if realm.objects(PersonalItems.self).filter("itemID CONTAINS %@", itemObject.itemID!).count != 0 {
+        if realm.objects(PersonalItems.self).filter("itemID == %@", itemObject.itemID!).count != 0 {
             return true
         } else {
             return false
@@ -75,7 +75,7 @@ extension PersonalItemsFireDBManager {
         let realm = try! Realm()
         do {
             try realm.write({
-                let parentCategory = realm.objects(PersonalCategories.self).filter("categoryID CONTAINS %@", newItemObject.parentCategoryID!).first
+                let parentCategory = realm.objects(PersonalCategories.self).filter("categoryID == %@", newItemObject.parentCategoryID!).first
                 guard let parentCategory = parentCategory else {return}
                 parentCategory.itemsRelationship.append(newItemObject)
             })
@@ -91,7 +91,7 @@ extension PersonalItemsFireDBManager {
     func checkIfPersonalItemsAlreadyExists(with deletedItemObject: PersonalItems) -> Bool{
         
         let realm = try! Realm()
-        if realm.objects(PersonalItems.self).filter("itemID CONTAINS %@", deletedItemObject.itemID!).count != 0 {
+        if realm.objects(PersonalItems.self).filter("itemID == %@", deletedItemObject.itemID!).count != 0 {
             return true
         } else {
             return false
@@ -104,7 +104,7 @@ extension PersonalItemsFireDBManager {
         let realm = try! Realm()
         do {
             try realm.write({
-                let realmItemObjectToDelete = realm.objects(PersonalItems.self).filter("itemID CONTAINS %@", deletedItemObject.itemID!).first
+                let realmItemObjectToDelete = realm.objects(PersonalItems.self).filter("itemID == %@", deletedItemObject.itemID!).first
                 guard let realmItemObjectToDelete = realmItemObjectToDelete else {return}
                 realm.delete(realmItemObjectToDelete)
             })
@@ -120,7 +120,7 @@ extension PersonalItemsFireDBManager {
     func updatePersonalItemInRealm(with updatedItem: PersonalItems) {
         
         let realm = try! Realm()
-        let realmItemToUpdate = realm.objects(PersonalItems.self).filter("itemID CONTAINS %@", updatedItem.itemID!).first
+        let realmItemToUpdate = realm.objects(PersonalItems.self).filter("itemID == %@", updatedItem.itemID!).first
         guard let realmItemToUpdate = realmItemToUpdate else {return}
         do {
             try realm.write({

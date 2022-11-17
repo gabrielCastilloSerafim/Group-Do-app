@@ -33,6 +33,8 @@ class EditProfileViewController: UIViewController {
             profileImage.image = image
         }
         profileImage.layer.cornerRadius = profileImage.frame.height/2
+        profileImage.layer.borderWidth = 3
+        profileImage.layer.borderColor = #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)
     }
     
     @IBAction func editProfilePictureTapped(_ sender: UIButton) {

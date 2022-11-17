@@ -16,7 +16,6 @@ final class GroupSettingsViewController: UIViewController {
     @IBOutlet weak var numberOfParticipantsLabel: UILabel!
     @IBOutlet weak var exitGroupButton: UIButton!
     @IBOutlet weak var deleteGroupButton: UIButton!
-    @IBOutlet weak var whiteImageBackground: UIImageView!
     
     var groupSettingLogic = GroupSettingLogic()
     var selectedGroup: Groups? {
@@ -44,8 +43,6 @@ final class GroupSettingsViewController: UIViewController {
         ImageManager.shared.loadPictureFromDisk(fileName: groupPictureName) { image in
             groupImage.image = image
         }
-        groupImage.layer.cornerRadius = groupImage.frame.height/2
-        whiteImageBackground.layer.cornerRadius = whiteImageBackground.frame.height/2
         
         //Set the group name
         groupNameLAbel.text = selectedGroup?.groupName
@@ -56,6 +53,14 @@ final class GroupSettingsViewController: UIViewController {
         } else {
             deleteGroupButton.isHidden = true
         }
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        groupImage.layer.cornerRadius = groupImage.frame.height/2
+        groupImage.layer.borderWidth = 3
+        groupImage.layer.borderColor = #colorLiteral(red: 0.9999960065, green: 1, blue: 1, alpha: 1)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -242,7 +247,7 @@ extension GroupSettingsViewController: UIImagePickerControllerDelegate, UINaviga
     
     //Creates an action sheet with actions to see if user wants to use camera or choose photo from the library
     func presentPhotoActionSheet() {
-        let actionSheet = UIAlertController(title: "Profile picture", message: "How would you like to select a picture?", preferredStyle: .actionSheet)
+        let actionSheet = UIAlertController(title: "Group picture", message: "How would you like to select a picture?", preferredStyle: .actionSheet)
         
         actionSheet.addAction(UIAlertAction(title: "Cancel", style: .default, handler: nil))
         

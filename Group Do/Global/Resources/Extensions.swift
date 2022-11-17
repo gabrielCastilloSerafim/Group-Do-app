@@ -155,9 +155,11 @@ extension AuthErrorCode.Code {
             return "Password is not correct, please try again."
         case .weakPassword:
             return "Your password is too weak. The password must be 6 characters long or more."
-            
         default:
             return nil
         }
     }
 }
+
+
+

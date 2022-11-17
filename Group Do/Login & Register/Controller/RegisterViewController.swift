@@ -48,7 +48,7 @@ final class RegisterViewController: UIViewController {
         //Round profile picture and it's background corners
         profilePicture.layer.cornerRadius = profilePicture.frame.height/2
         profilePicture.layer.borderWidth = 4
-        profilePicture.layer.borderColor = CGColor(red: 255, green: 255, blue: 255, alpha: 1)
+        profilePicture.layer.borderColor = #colorLiteral(red: 0.9999960065, green: 1, blue: 1, alpha: 1)
     }
     
     @IBAction func profileButtonPressed(_ sender: UIButton) {

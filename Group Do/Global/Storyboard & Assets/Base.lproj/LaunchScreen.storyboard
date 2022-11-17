@@ -20,8 +20,8 @@
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="GroupTaskLogo" translatesAutoresizingMaskIntoConstraints="NO" id="ey0-qV-d4k">
                                 <rect key="frame" x="85" y="312" width="220" height="220"/>
                                 <constraints>
+                                    <constraint firstAttribute="width" secondItem="ey0-qV-d4k" secondAttribute="height" multiplier="1:1" id="MKU-Q8-DYS"/>
                                     <constraint firstAttribute="height" constant="220" id="Xta-4Q-0jw"/>
-                                    <constraint firstAttribute="width" constant="220" id="Y7f-pg-Rh0"/>
                                 </constraints>
                             </imageView>
                         </subviews>
@@ -30,6 +30,7 @@
                         <constraints>
                             <constraint firstItem="ey0-qV-d4k" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="R60-tP-AQ2"/>
                             <constraint firstItem="ey0-qV-d4k" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="XLT-Fd-IgN"/>
+                            <constraint firstItem="ey0-qV-d4k" firstAttribute="height" secondItem="Ze5-6b-2t3" secondAttribute="height" multiplier="0.260664" id="bJL-rg-8xj"/>
                         </constraints>
                     </view>
                 </viewController>

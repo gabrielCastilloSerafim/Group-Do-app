@@ -30,10 +30,6 @@ final class SettingsViewController: UIViewController {
         let realm = try! Realm()
         let name = realm.objects(RealmUser.self)[0].fullName
         userName.text = name
-        
-        //Setup Profile Picture
-        pictureBackground.layer.cornerRadius = pictureBackground.frame.height/2
-        profilePicture.layer.cornerRadius = profilePicture.frame.height/2
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -43,6 +39,14 @@ final class SettingsViewController: UIViewController {
         settingsLogic.getProfilePicture { image in
             profilePicture.image = image
         }
+    }
+    
+    override func viewDidLayoutSubviews() {
+        
+        //Setup Profile Picture
+        profilePicture.layer.cornerRadius = profilePicture.frame.height/2
+        profilePicture.layer.borderWidth = 4
+        profilePicture.layer.borderColor = #colorLiteral(red: 0.9999960065, green: 1, blue: 1, alpha: 1)
     }
     
     @IBAction func logOutButtonPressed(_ sender: UIButton) {

@@ -13,7 +13,6 @@ final class ConfirmGroupViewController: UIViewController {
     @IBOutlet weak var groupPicture: UIImageView!
     @IBOutlet weak var groupName: UITextField!
     @IBOutlet weak var collectionView: UICollectionView!
-    @IBOutlet weak var groupImageBackground: UIView!
     @IBOutlet weak var personImage: UIImageView!
     
     var groupParticipants = Array<RealmUser>()
@@ -22,10 +21,8 @@ final class ConfirmGroupViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        //Setup group image and group image background to be rounded
-        groupPicture.layer.cornerRadius = groupPicture.frame.height/2
-        groupImageBackground.layer.cornerRadius = groupImageBackground.frame.height/2
-        groupImageBackground.isHidden = true
+        //Setup group image and group image background to be hidden
+        groupPicture.isHidden = true
         
         //Dismiss keyboard when tapped around
         self.hideKeyboardWhenTappedAround()
@@ -35,6 +32,15 @@ final class ConfirmGroupViewController: UIViewController {
         collectionView.register(UINib(nibName: "ConfirmGroupCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "ConfirmGroupCollectionViewCell")
         
         groupParticipants.insert(confirmGroupLogic.selfUser(), at: 0)
+    }
+    
+    override func viewDidLayoutSubviews() {
+      super.viewDidLayoutSubviews()
+        
+        //Round profile picture and it's background corners
+        groupPicture.layer.cornerRadius = groupPicture.frame.height/2
+        groupPicture.layer.borderWidth = 3
+        groupPicture.layer.borderColor = #colorLiteral(red: 0.9999960065, green: 1, blue: 1, alpha: 1)
     }
     
     
@@ -162,8 +168,8 @@ extension ConfirmGroupViewController: UIImagePickerControllerDelegate, UINavigat
         picker.dismiss(animated: true)
         let selectedImage = info[UIImagePickerController.InfoKey.editedImage]
         self.groupPicture.image = (selectedImage as! UIImage)
-        self.groupImageBackground.isHidden = false
         self.personImage.isHidden = true
+        self.groupPicture.isHidden = false
     }
     
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {

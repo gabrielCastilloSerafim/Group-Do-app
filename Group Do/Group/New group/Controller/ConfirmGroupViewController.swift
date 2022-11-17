@@ -65,7 +65,7 @@ final class ConfirmGroupViewController: UIViewController {
         
         //Check if user selected a photo for group and if user did not then set the group picture to its default image
         if groupPicture.image == nil {
-            groupPicture.image = #imageLiteral(resourceName: "defaultGroupAvatar")
+            groupPicture.image = #imageLiteral(resourceName: "defaultGroupPicture.pdf")
         }
         
         //save group image to device memory

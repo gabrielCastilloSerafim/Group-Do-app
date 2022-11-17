@@ -38,12 +38,17 @@ final class RegisterViewController: UIViewController {
         //Change navBar tint color
         navigationController?.navigationBar.tintColor = #colorLiteral(red: 0.5943419933, green: 0.1176240817, blue: 0.9982598424, alpha: 1)
         
-        //Round profile picture and it's background corners
-        profilePicture.layer.cornerRadius = profilePicture.frame.height/2
-        profilePictureBackground.layer.cornerRadius = profilePictureBackground.frame.height/2
-        
         //Manage keyboard hiding textField
         self.setupKeyboardHiding()
+    }
+    
+    override func viewDidLayoutSubviews() {
+      super.viewDidLayoutSubviews()
+        
+        //Round profile picture and it's background corners
+        profilePicture.layer.cornerRadius = profilePicture.frame.height/2
+        profilePicture.layer.borderWidth = 4
+        profilePicture.layer.borderColor = CGColor(red: 255, green: 255, blue: 255, alpha: 1)
     }
     
     @IBAction func profileButtonPressed(_ sender: UIButton) {
@@ -92,7 +97,7 @@ final class RegisterViewController: UIViewController {
             
             //Check if user selected a profile picture, if user did not select photo save default one
             if self?.profilePicture.image == nil {
-                self?.profilePicture.image = #imageLiteral(resourceName: "defaultUserAvatar.jpg")
+                self?.profilePicture.image = #imageLiteral(resourceName: "defaultUserPicture.pdf")
             }
             
             //Save user profile picture to firebaseStore

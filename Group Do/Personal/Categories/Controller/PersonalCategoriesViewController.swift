@@ -25,9 +25,6 @@ final class PersonalCategoriesViewController: UIViewController {
         //Dismiss keyboard when tapped around
         self.hideKeyboardWhenTappedAround()
         
-        //Manage keyboard hiding textField
-        self.setupKeyboardHiding()
-        
         //Change navBar tint color
         navigationController?.navigationBar.tintColor = UIColor.white
         
@@ -181,7 +178,7 @@ extension PersonalCategoriesViewController: UISearchBarDelegate {
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         if searchBar.text?.count == 0 {
-            
+
             //Load data from realm and assigns it to categories array that is used as the tableview's datasource
             categoryLogic.loadRealmData { resultArray in
                 categoriesArray = resultArray

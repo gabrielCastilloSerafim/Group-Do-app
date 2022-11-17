@@ -27,6 +27,9 @@ final class AddGroupViewController: UIViewController {
         
         searchBar.becomeFirstResponder()
         
+        //Dismiss keyboard when tapped around
+        self.hideKeyboardWhenTappedAround()
+        
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(UINib(nibName: "UsersResultsTableViewCell", bundle: nil), forCellReuseIdentifier: "UsersTableCell")

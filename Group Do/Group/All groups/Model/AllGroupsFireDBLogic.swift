@@ -78,28 +78,30 @@ extension AllGroupsFireDBManager {
         return groupParticipantsArray
     }
     
-    ///Creates and returns an array with all the groupItems objects
-    func getGroupItemsObjectsArray(snapshot: DataSnapshot) -> [GroupItems]? {
+    ///Creates and returns an array with all the groupItems objects for the specific added group
+    func getGroupItemsObjectsArray(snapshot: DataSnapshot, groupID: String) -> [GroupItems]? {
         
         var groupItemsArray = [GroupItems]()
         
-        guard let arrayOfItemsDict = snapshot.value as? [[String:Any]] else {return nil}
+        guard let arrayOfItemsDict = snapshot.value as? [String:[String:Any]] else {return nil}
         
-        for dictionary in arrayOfItemsDict {
+        let filteredArrayOfItemsDict = arrayOfItemsDict.filter { $0.value["fromGroupID"] as? String == groupID }
+        
+        for dictionary in filteredArrayOfItemsDict {
          
             let itemObject = GroupItems()
             
-            guard let itemTitle = dictionary["itemTitle"] as? String,
-                  let creationDate = dictionary["creationDate"] as? String,
-                  let creationTimeSince1970 = dictionary["creationTimeSince1970"] as? Double,
-                  let priority = dictionary["priority"] as? String,
-                  let isDone = dictionary["isDone"] as? Bool,
-                  let deadLine = dictionary["deadLine"] as? String,
-                  let itemID = dictionary["itemID"] as? String,
-                  let creatorName = dictionary["creatorName"] as? String,
-                  let creatorEmail = dictionary["creatorEmail"] as? String,
-                  let fromGroupID = dictionary["fromGroupID"] as? String,
-                  let completedByUserEmail = dictionary["completedByUserEmail"] as? String
+            guard let itemTitle = dictionary.value["itemTitle"] as? String,
+                  let creationDate = dictionary.value["creationDate"] as? String,
+                  let creationTimeSince1970 = dictionary.value["creationTimeSince1970"] as? Double,
+                  let priority = dictionary.value["priority"] as? String,
+                  let isDone = dictionary.value["isDone"] as? Bool,
+                  let deadLine = dictionary.value["deadLine"] as? String,
+                  let itemID = dictionary.value["itemID"] as? String,
+                  let creatorName = dictionary.value["creatorName"] as? String,
+                  let creatorEmail = dictionary.value["creatorEmail"] as? String,
+                  let fromGroupID = dictionary.value["fromGroupID"] as? String,
+                  let completedByUserEmail = dictionary.value["completedByUserEmail"] as? String
             else {return nil}
             
             itemObject.itemTitle = itemTitle
@@ -144,6 +146,7 @@ extension AllGroupsFireDBManager {
         let realm = try! Realm()
         do {
             try realm.write({
+                
                 groupObject.groupParticipants.append(objectsIn: groupParticipantObjectsArray)
                 groupObject.groupItems.append(objectsIn: groupItemObjectsArray)
                 realm.add(groupObject)
@@ -279,8 +282,10 @@ extension AllGroupsFireDBManager {
         
         do {
             try realm .write({
-                realmGroup.groupItems.append(newItem)
-                realmGroup.isSeen = false
+                if realm.objects(GroupItems.self).filter("itemID == %@", newItem.itemID!).isEmpty {
+                    realmGroup.groupItems.append(newItem)
+                    realmGroup.isSeen = false
+                }
             })
         } catch {
             print(error.localizedDescription)
@@ -379,6 +384,8 @@ extension AllGroupsFireDBManager {
                 let groupToAddParticipant = realm.objects(Groups.self).filter("groupID == %@", participant.partOfGroupID!).first
                 guard let groupToAddParticipant = groupToAddParticipant else {return}
                 
+                if realm.objects(GroupParticipants.self).filter("partOfGroupID == %@", participant.partOfGroupID!).filter("email == %@", participant.email!).count != 0 {return}
+                
                 groupToAddParticipant.groupParticipants.append(participant)
                 
                 realm.add(participant)
@@ -458,7 +465,19 @@ extension AllGroupsFireDBManager {
         }
     }
 
-    
+    ///Deletes all data from realm
+    func deleteAllRealmData() {
+        
+        let realm = try! Realm()
+        do {
+            try realm.write {
+                realm.deleteAll()
+            }
+        } catch {
+            print(error.localizedDescription)
+            return
+        }
+    }
     
     
 }

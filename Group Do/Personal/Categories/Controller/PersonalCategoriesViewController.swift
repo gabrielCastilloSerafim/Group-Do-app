@@ -107,12 +107,15 @@ extension PersonalCategoriesViewController: UITableViewDelegate, UITableViewData
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "CategoriesTableViewCell", for: indexPath) as! CategoriesTableViewCell
         
-        let category = categoriesArray?[indexPath.row]
-        let numberOfUncompletedTasks = category!.itemsRelationship.filter("isDone == %@", false).count
-        
-        cell.categoryNameLabel?.text = "\(category!.categoryName!)"
-        cell.uncompletedTasksNumber.text = String(numberOfUncompletedTasks)
-        
+        //If statement prevents out of range crashes when deleting items from realm since the tableview is feeding of a realm Results<Array>
+        if indexPath.row < categoriesArray!.count {
+            
+            let category = categoriesArray?[indexPath.row]
+            let numberOfUncompletedTasks = category!.itemsRelationship.filter("isDone == %@", false).count
+            
+            cell.categoryNameLabel?.text = "\(category!.categoryName!)"
+            cell.uncompletedTasksNumber.text = String(numberOfUncompletedTasks)
+        }
         return cell
     }
     

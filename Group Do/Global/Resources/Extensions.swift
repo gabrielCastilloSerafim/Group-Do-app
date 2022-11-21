@@ -123,15 +123,13 @@ extension UIViewController {
             if let errorMessage = errorCode.errorMessage {
                 //Show custom alert "errorMessage did not return nil"
                 let alert = UIAlertController(title: "Error", message: errorMessage, preferredStyle: .alert)
-                let okAction = UIAlertAction(title: "Ok", style: .default)
-                alert.addAction(okAction)
+                alert.addAction(UIAlertAction(title: "Ok", style: .default))
                 present(alert, animated: true)
                         
             } else {
                 //Show localised description "errorMessage returned nil"
                 let alert = UIAlertController(title: "Error", message: error.localizedDescription, preferredStyle: .alert)
-                    let okAction = UIAlertAction(title: "Ok", style: .default)
-                    alert.addAction(okAction)
+                    alert.addAction(UIAlertAction(title: "Ok", style: .default))
                     present(alert, animated: true)
             }
         }
@@ -152,7 +150,7 @@ extension AuthErrorCode.Code {
         case .networkError:
             return "Network error. Please try again."
         case .wrongPassword:
-            return "Password is not correct, please try again."
+            return "Incorrect password, please try again."
         case .weakPassword:
             return "Your password is too weak. The password must be 6 characters long or more."
         default:

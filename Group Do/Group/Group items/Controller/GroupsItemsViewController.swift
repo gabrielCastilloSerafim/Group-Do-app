@@ -58,6 +58,7 @@ final class GroupsItemsViewController: UIViewController {
         
         //Start listening for changes in the realm database and handle those changes by updating tableView or the collectionView accordingly
         let realm = try! Realm()
+        
         //listen for item updates
         let itemResults = realm.objects(GroupItems.self).filter("fromGroupID == %@", groupID!).sorted(byKeyPath: "creationTimeSince1970", ascending: false)
         
@@ -69,11 +70,13 @@ final class GroupsItemsViewController: UIViewController {
                 // Results are now populated and can be accessed without blocking the UI
                 tableView.reloadData()
             case .update(_, let deletions, let insertions, let modifications):
-                //Check if parent category still exist if it doesn't pop to root VC else preform updates
+                //Check if parent group still exist if it doesn't pop to root VC else preform updates
                 if realm.objects(Groups.self).filter("groupID == %@", self!.groupID!).count == 0 {
                     NotificationCenter.default.post(name: Notification.Name("DismissModalNewGroupItem"), object: nil)
                     self?.navigationController?.popToRootViewController(animated: true)
+                    
                 } else {
+                    
                     tableView.performBatchUpdates({
                         tableView.deleteRows(at: deletions.map({IndexPath(row: $0, section: 0)}), with: .fade)
                         tableView.insertRows(at: insertions.map({IndexPath(row: $0, section: 0)}), with: .top)
@@ -89,7 +92,7 @@ final class GroupsItemsViewController: UIViewController {
         }
         
         //Listen for participant updates
-        let participantResults = realm.objects(GroupParticipants.self).filter("partOfGroupID == %@", selectedGroup!.groupID!).sorted(byKeyPath: "isAdmin", ascending: false)
+        let participantResults = realm.objects(GroupParticipants.self).filter("partOfGroupID == %@", groupID!).sorted(byKeyPath: "isAdmin", ascending: false)
         participantNotificationToken = participantResults.observe { [weak self] (changes: RealmCollectionChange) in
               guard let collectionView = self?.collectionView else { return }
               switch changes {
@@ -102,6 +105,7 @@ final class GroupsItemsViewController: UIViewController {
                   if realm.objects(Groups.self).filter("groupID == %@", self!.groupID!).count == 0 {
                       NotificationCenter.default.post(name: Notification.Name("DismissModalNewGroupItem"), object: nil)
                       self?.navigationController?.popToRootViewController(animated: true)
+                      
                   } else {
                       collectionView.performBatchUpdates({
                           collectionView.deleteItems(at: deletions.map({IndexPath(item: $0, section: 0)}))
@@ -121,10 +125,13 @@ final class GroupsItemsViewController: UIViewController {
         
         itemsNotificationToken?.invalidate()
         participantNotificationToken?.invalidate()
+        
         let realm = try! Realm()
-        try? realm.write({
-            selectedGroup?.isSeen = true
-        })
+        if realm.objects(Groups.self).filter("groupID == %@", self.groupID!).count != 0 {
+            try? realm.write({
+                selectedGroup?.isSeen = true
+            })
+        }
     }
     
     ///Checks if the no items label needs to be hidden or not and updates the UI
@@ -171,50 +178,54 @@ extension GroupsItemsViewController: UITableViewDelegate, UITableViewDataSource 
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
         let cell = tableView.dequeueReusableCell(withIdentifier: "GroupItemsCell", for: indexPath) as! GroupItemsTableViewCell
         
-        let item = itemsArray![indexPath.row]
-        let completedByUserEmail = item.completedByUserEmail!
-        let completedByUserFormattedEmail = completedByUserEmail.formattedEmail
-        let completedByUserProfileImageName = "\(completedByUserFormattedEmail)_profile_picture.png"
-        
-        ImageManager.shared.loadPictureFromDisk(fileName: completedByUserProfileImageName) { image in
-            cell.checkImage.image = image
+        //If statement prevents out of range crashes when deleting items from realm since the tableview is feeding of a realm Results<Array>
+        if indexPath.row < itemsArray!.count {
+            
+            let item = itemsArray![indexPath.row]
+            let completedByUserEmail = item.completedByUserEmail!
+            let completedByUserFormattedEmail = completedByUserEmail.formattedEmail
+            let completedByUserProfileImageName = "\(completedByUserFormattedEmail)_profile_picture.png"
+            
+            ImageManager.shared.loadPictureFromDisk(fileName: completedByUserProfileImageName) { image in
+                cell.checkImage.image = image
+            }
+            
+            if item.isDone == true {
+                cell.checkCircle.tintColor = #colorLiteral(red: 0.009343600007, green: 0.8226275974, blue: 0.722228879, alpha: 1)
+                
+                let strikeString = NSMutableAttributedString(string: item.itemTitle!)
+                strikeString.addAttribute(NSAttributedString.Key.strikethroughStyle, value: 1, range: NSRange(location: 0, length: strikeString.length))
+                
+                cell.itemTitleLabel.attributedText = strikeString
+                
+            } else {
+                cell.checkCircle.tintColor = #colorLiteral(red: 0.5943419933, green: 0.1176240817, blue: 0.9982598424, alpha: 1)
+                
+                let strikeString = NSMutableAttributedString(string: item.itemTitle!)
+                strikeString.addAttribute(NSAttributedString.Key.strikethroughStyle, value: 0, range: NSRange(location: 0, length: strikeString.length))
+                
+                cell.itemTitleLabel.attributedText = strikeString
+            }
+            
+            switch item.priority {
+            case "Low":
+                cell.priorityImage.image = priorityImagesArray[0]
+            case "Medium":
+                cell.priorityImage.image = priorityImagesArray[1]
+            default:
+                cell.priorityImage.image = priorityImagesArray[2]
+            }
+            
+            cell.itemTitleLabel.text = item.itemTitle
+            cell.createdBy.text = item.creatorName
+            cell.dueToLabel.text = item.deadLine
+            
+            cell.checkButton.tag = indexPath.row
+            cell.groupObject = selectedGroup!
         }
-        
-        if item.isDone == true {
-            cell.checkCircle.tintColor = #colorLiteral(red: 0.009343600007, green: 0.8226275974, blue: 0.722228879, alpha: 1)
-            
-            let strikeString = NSMutableAttributedString(string: item.itemTitle!)
-            strikeString.addAttribute(NSAttributedString.Key.strikethroughStyle, value: 1, range: NSRange(location: 0, length: strikeString.length))
-            
-            cell.itemTitleLabel.attributedText = strikeString
-            
-        } else {
-            cell.checkCircle.tintColor = #colorLiteral(red: 0.5943419933, green: 0.1176240817, blue: 0.9982598424, alpha: 1)
-            
-            let strikeString = NSMutableAttributedString(string: item.itemTitle!)
-            strikeString.addAttribute(NSAttributedString.Key.strikethroughStyle, value: 0, range: NSRange(location: 0, length: strikeString.length))
-            
-            cell.itemTitleLabel.attributedText = strikeString
-        }
-        
-        switch item.priority {
-        case "Low":
-            cell.priorityImage.image = priorityImagesArray[0]
-        case "Medium":
-            cell.priorityImage.image = priorityImagesArray[1]
-        default:
-            cell.priorityImage.image = priorityImagesArray[2]
-        }
-        
-        cell.itemTitleLabel.text = item.itemTitle
-        cell.createdBy.text = item.creatorName
-        cell.dueToLabel.text = item.deadLine
-        
-        cell.checkButton.tag = indexPath.row
-        cell.groupObject = selectedGroup!
-        
         return cell
     }
     
@@ -251,13 +262,18 @@ extension GroupsItemsViewController: UICollectionViewDelegate, UICollectionViewD
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ItemsCollectionViewCell", for: indexPath) as! GroupItemsCollectionViewCell
         
-        let imageName = participantsArray?[indexPath.row].profilePictureFileName
-        
-        ImageManager.shared.loadPictureFromDisk(fileName: imageName) { image in
+        //If statement prevents out of range crashes when deleting items from realm since the tableview is feeding of a realm Results<Array>
+        if indexPath.row < participantsArray!.count {
             
-            cell.profilePicture.image = image
+            let imageName = participantsArray?[indexPath.row].profilePictureFileName
+            
+            ImageManager.shared.loadPictureFromDisk(fileName: imageName) { image in
+                
+                cell.profilePicture.image = image
+            }
         }
         return cell
     }

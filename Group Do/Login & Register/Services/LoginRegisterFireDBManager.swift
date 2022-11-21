@@ -40,6 +40,8 @@ final class LoginRegisterFireDBManager {
         
         //Add user to users node
         database.child("\(formattedEmail)").updateChildValues(userDictionary)
+        //Add is active account node to users node
+        database.child("\(formattedEmail)/isActiveAccount/value").setValue(true)
     }
     
 }

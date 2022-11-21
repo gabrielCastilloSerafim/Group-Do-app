@@ -46,8 +46,7 @@ final class AddGroupViewController: UIViewController {
             performSegue(withIdentifier: "NewGroupToCreateGroup", sender: self)
         } else {
             let alert = UIAlertController(title: "No participants added", message: "Please add group participants in order to proceed.", preferredStyle: .alert)
-            let action = UIAlertAction(title: "Dismiss", style: .default)
-            alert.addAction(action)
+            alert.addAction(UIAlertAction(title: "Dismiss", style: .default))
             present(alert, animated: true)
         }
         
@@ -68,25 +67,29 @@ extension AddGroupViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
         let cell = tableView.dequeueReusableCell(withIdentifier: "UsersTableCell", for: indexPath) as! UsersResultsTableViewCell
         
         let imageName = usersArray[indexPath.row].profilePictureFileName!
         
         FireStoreManager.shared.getImageURL(imageName: imageName) { [weak self] resultUrl in
             if let url = resultUrl {
-                cell.nameLabel.text = self?.usersArray[indexPath.row].fullName
-                cell.profilePicture.sd_setImage(with: url)
-                self?.spinner.dismiss(animated: true)
+                DispatchQueue.main.async {
+                    cell.nameLabel.text = self?.usersArray[indexPath.row].fullName
+                    cell.profilePicture.sd_setImage(with: url, placeholderImage: #imageLiteral(resourceName: "defaultUserPicture.pdf"))
+                    self?.spinner.dismiss(animated: true)
+                }
             } else {
                 //Already have image stored in device memory just grab it
                 ImageManager.shared.loadPictureFromDisk(fileName: imageName) { profileImage in
-                    cell.nameLabel.text = self?.usersArray[indexPath.row].fullName
-                    cell.profilePicture.image = profileImage
-                    self?.spinner.dismiss(animated: true)
+                    DispatchQueue.main.async {
+                        cell.nameLabel.text = self?.usersArray[indexPath.row].fullName
+                        cell.profilePicture.image = profileImage
+                        self?.spinner.dismiss(animated: true)
+                    }
                 }
             }
         }
-        
         return cell
     }
     
@@ -150,7 +153,6 @@ extension AddGroupViewController: UICollectionViewDelegate, UICollectionViewData
                 cell.imageView.isHidden = false
                 cell.personImage.isHidden = true
                 cell.xButtonImage.isHidden = false
-                cell.whiteBackground.isHidden = false
                 cell.xButtonBackground.isHidden = false
                 spinner.dismiss(animated: true)
             }
@@ -159,7 +161,6 @@ extension AddGroupViewController: UICollectionViewDelegate, UICollectionViewData
                 cell.imageView.isHidden = true
                 cell.personImage.isHidden = false
                 cell.xButtonImage.isHidden = true
-                cell.whiteBackground.isHidden = true
                 cell.xButtonBackground.isHidden = true
             }
         }

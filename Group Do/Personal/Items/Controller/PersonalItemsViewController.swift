@@ -133,41 +133,45 @@ extension PersonalItemsViewController: UITableViewDelegate, UITableViewDataSourc
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "ItemsTableViewCell", for: indexPath) as! ItemsTableViewCell
-        let item = itemsArray?[indexPath.row]
         
-        cell.deadLineLabel.text = item?.deadLine
-        
-        switch item?.priority {
-        case "Low":
-            cell.priorityImage.image = priorityImagesArray[0]
-        case "Medium":
-            cell.priorityImage.image = priorityImagesArray[1]
-        default:
-            cell.priorityImage.image = priorityImagesArray[2]
+        //If statement prevents out of range crashes when deleting items from realm since the tableview is feeding of a realm Results<Array>
+        if indexPath.row < itemsArray!.count {
+            
+            let item = itemsArray?[indexPath.row]
+            
+            cell.deadLineLabel.text = item?.deadLine
+            
+            switch item?.priority {
+            case "Low":
+                cell.priorityImage.image = priorityImagesArray[0]
+            case "Medium":
+                cell.priorityImage.image = priorityImagesArray[1]
+            default:
+                cell.priorityImage.image = priorityImagesArray[2]
+            }
+            
+            if item?.isDone == true {
+                cell.taskCompletionCircle.isHidden = false
+                
+                let strikeString = NSMutableAttributedString(string: item!.itemTitle!)
+                strikeString.addAttribute(NSAttributedString.Key.strikethroughStyle, value: 1, range: NSRange(location: 0, length: strikeString.length))
+                
+                cell.itemTitleLabel.attributedText = strikeString
+                
+            } else {
+                cell.taskCompletionCircle.isHidden = true
+                
+                let strikeString = NSMutableAttributedString(string: item!.itemTitle!)
+                strikeString.addAttribute(NSAttributedString.Key.strikethroughStyle, value: 0, range: NSRange(location: 0, length: strikeString.length))
+                
+                cell.itemTitleLabel.attributedText = strikeString
+            }
+            //Set the parentCategoryID property on the nib tableViewCell class to be the same as the one in this class
+            cell.parentCategoryID = categoryID
+            
+            // Keep the value of indexPath.row in the 'tag' of the button to use it's value in the tableViewCell class
+            cell.taskCompletedButton.tag = indexPath.row
         }
-        
-        if item?.isDone == true {
-            cell.taskCompletionCircle.isHidden = false
-            
-            let strikeString = NSMutableAttributedString(string: item!.itemTitle!)
-            strikeString.addAttribute(NSAttributedString.Key.strikethroughStyle, value: 1, range: NSRange(location: 0, length: strikeString.length))
-            
-            cell.itemTitleLabel.attributedText = strikeString
-            
-        } else {
-            cell.taskCompletionCircle.isHidden = true
-            
-            let strikeString = NSMutableAttributedString(string: item!.itemTitle!)
-            strikeString.addAttribute(NSAttributedString.Key.strikethroughStyle, value: 0, range: NSRange(location: 0, length: strikeString.length))
-            
-            cell.itemTitleLabel.attributedText = strikeString
-        }
-        //Set the parentCategoryID property on the nib tableViewCell class to be the same as the one in this class
-        cell.parentCategoryID = categoryID
-        
-        // Keep the value of indexPath.row in the 'tag' of the button to use it's value in the tableViewCell class
-        cell.taskCompletedButton.tag = indexPath.row
-        
         return cell
     }
     

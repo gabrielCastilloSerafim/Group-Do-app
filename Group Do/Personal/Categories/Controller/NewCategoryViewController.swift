@@ -22,6 +22,8 @@ final class NewCategoryViewController: UIViewController {
         
         //Manage keyboard hiding textField
         self.setupKeyboardHiding()
+        
+        newCategoryTextField.delegate = self
     }
     
     @IBAction func cancelButtonPressed(_ sender: UIButton) {
@@ -57,4 +59,15 @@ final class NewCategoryViewController: UIViewController {
     
     
     
+}
+
+//MARK: - UITextField Delegate
+
+extension NewCategoryViewController: UITextFieldDelegate {
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        
+        textField.resignFirstResponder()
+        return true
+    }
 }

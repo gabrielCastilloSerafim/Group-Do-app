@@ -11,7 +11,6 @@ import RealmSwift
 
 final class SettingsViewController: UIViewController {
     
-    @IBOutlet weak var pictureBackground: UIView!
     @IBOutlet weak var profilePicture: UIImageView!
     @IBOutlet weak var userName: UILabel!
     
@@ -30,6 +29,9 @@ final class SettingsViewController: UIViewController {
         let realm = try! Realm()
         let name = realm.objects(RealmUser.self)[0].fullName
         userName.text = name
+        
+        //Listen for notification from delete account VC to dismiss self if account is deleted
+        NotificationCenter.default.addObserver(self, selector: #selector(self.methodOfReceivedNotification(notification:)), name: Notification.Name("DismissSettingsVC"), object: nil)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -39,6 +41,11 @@ final class SettingsViewController: UIViewController {
         settingsLogic.getProfilePicture { image in
             profilePicture.image = image
         }
+    }
+    
+    //When observer gets notified it means that the user has been deleted and needs to dismiss self
+    @objc func methodOfReceivedNotification(notification: Notification) {
+        self.dismiss(animated: false)
     }
     
     override func viewDidLayoutSubviews() {
@@ -55,7 +62,7 @@ final class SettingsViewController: UIViewController {
         
         alert.addAction(UIAlertAction(title: "Dismiss", style: .default))
         
-        alert.addAction(UIAlertAction(title: "Log Out", style: .default, handler: { [weak self] _ in
+        alert.addAction(UIAlertAction(title: "Log Out", style: .destructive, handler: { [weak self] _ in
             //Log out from firebase
             self?.settingsLogic.logUserOut()
             
@@ -67,7 +74,7 @@ final class SettingsViewController: UIViewController {
             
             //Go to Groups VC
             MainNavigationController.isLoggedIn = false
-            self?.dismiss(animated: true)
+            self?.dismiss(animated: false)
         }))
         
         self.present(alert, animated: true)

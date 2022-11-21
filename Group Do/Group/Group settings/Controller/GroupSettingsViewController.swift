@@ -73,6 +73,7 @@ final class GroupSettingsViewController: UIViewController {
         
         notificationToken = results.observe { [weak self] (changes: RealmCollectionChange) in
             guard let tableView = self?.tableView else { return }
+            
             switch changes {
             case .initial:
                 // Results are now populated and can be accessed without blocking the UI
@@ -82,6 +83,7 @@ final class GroupSettingsViewController: UIViewController {
                 if realm.objects(Groups.self).filter("groupID == %@", self!.groupID!).count == 0 {
                     NotificationCenter.default.post(name: Notification.Name("DismissModalAddParticipants"), object: nil)
                     self?.navigationController?.popToRootViewController(animated: true)
+                    
                 } else {
                     tableView.performBatchUpdates({
                         tableView.deleteRows(at: deletions.map({ IndexPath(row: $0, section: 0)}), with: .fade)
@@ -188,53 +190,58 @@ extension GroupSettingsViewController: UITableViewDelegate, UITableViewDataSourc
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
         let cell = tableView.dequeueReusableCell(withIdentifier: "GroupSettingsTableViewCell", for: indexPath) as! GroupSettingsTableViewCell
         
-        let realm = try! Realm()
-        let realmUserEmail = realm.objects(RealmUser.self)[0].email
-        let participantEmail = participantsArray?[indexPath.row].email
-        let participantIsAdmin = participantsArray?[indexPath.row].isAdmin
-        let imageName = participantsArray?[indexPath.row].profilePictureFileName
-        
-        //Send information to GroupSettingsTableViewCell in order to manage delete button functionality
-        cell.deleteButton.tag = indexPath.row
-        cell.selectedGroup = selectedGroup!
-        
-        ImageManager.shared.loadPictureFromDisk(fileName: imageName) { image in
+        //If statement prevents out of range crashes when deleting items from realm since the tableview is feeding of a realm Results<Array>
+        if indexPath.row < participantsArray!.count {
             
-            cell.profilePicture.image = image
+            let realm = try! Realm()
+            let realmUserEmail = realm.objects(RealmUser.self)[0].email
+            let participantEmail = participantsArray?[indexPath.row].email
+            let participantIsAdmin = participantsArray?[indexPath.row].isAdmin
+            let imageName = participantsArray?[indexPath.row].profilePictureFileName
             
-            //Different setup to admin and self user
-            if realmUserEmail == participantEmail && participantIsAdmin == true {
-                cell.userNameLabel.text = "Me"
-                cell.adminOrDeleteImage.image = #imageLiteral(resourceName: "AdminLabel")
-                cell.deleteButton.isHidden = true
+            //Send information to GroupSettingsTableViewCell in order to manage delete button functionality
+            cell.deleteButton.tag = indexPath.row
+            cell.selectedGroup = selectedGroup!
+            
+            ImageManager.shared.loadPictureFromDisk(fileName: imageName) { image in
                 
-            } else if realmUserEmail == participantEmail && participantIsAdmin == false {
-                cell.userNameLabel.text = "Me"
-                cell.adminOrDeleteImage.image = nil
-                cell.deleteButton.isHidden = true
+                cell.profilePicture.image = image
                 
-            } else if realmUserEmail != participantEmail && participantIsAdmin == true {
-                cell.userNameLabel.text = participantsArray?[indexPath.row].fullName
-                cell.adminOrDeleteImage.image = #imageLiteral(resourceName: "AdminLabel.pdf")
-                cell.deleteButton.isHidden = true
-                
-            } else {
-                let realm = try! Realm()
-                let realmUserEmail = realm.objects(RealmUser.self)[0].email
-                let realmGroupAdminEmail = realm.objects(GroupParticipants.self).filter("partOfGroupID == %@", selectedGroup!.groupID!).filter("isAdmin == true")[0].email
-                
-                cell.userNameLabel.text = participantsArray?[indexPath.row].fullName
-                //Check if user is admin to enable delete button
-                if realmUserEmail == realmGroupAdminEmail {
-                    cell.adminOrDeleteImage.image = #imageLiteral(resourceName: "DeleteButton.pdf")
-                    cell.deleteButton.isHidden = false
-                } else {
+                //Different setup to admin and self user
+                if realmUserEmail == participantEmail && participantIsAdmin == true {
+                    cell.userNameLabel.text = "Me"
+                    cell.adminOrDeleteImage.image = #imageLiteral(resourceName: "AdminLabel")
+                    cell.deleteButton.isHidden = true
+                    
+                } else if realmUserEmail == participantEmail && participantIsAdmin == false {
+                    cell.userNameLabel.text = "Me"
                     cell.adminOrDeleteImage.image = nil
                     cell.deleteButton.isHidden = true
+                    
+                } else if realmUserEmail != participantEmail && participantIsAdmin == true {
+                    cell.userNameLabel.text = participantsArray?[indexPath.row].fullName
+                    cell.adminOrDeleteImage.image = #imageLiteral(resourceName: "AdminLabel.pdf")
+                    cell.deleteButton.isHidden = true
+                    
+                } else {
+                    let realm = try! Realm()
+                    let realmUserEmail = realm.objects(RealmUser.self)[0].email
+                    let realmGroupAdminEmail = realm.objects(GroupParticipants.self).filter("partOfGroupID == %@", selectedGroup!.groupID!).filter("isAdmin == true")[0].email
+                    
+                    cell.userNameLabel.text = participantsArray?[indexPath.row].fullName
+                    //Check if user is admin to enable delete button
+                    if realmUserEmail == realmGroupAdminEmail {
+                        cell.adminOrDeleteImage.image = #imageLiteral(resourceName: "DeleteButton.pdf")
+                        cell.deleteButton.isHidden = false
+                    } else {
+                        cell.adminOrDeleteImage.image = nil
+                        cell.deleteButton.isHidden = true
+                    }
                 }
-            } 
+            }
         }
         return cell
     }

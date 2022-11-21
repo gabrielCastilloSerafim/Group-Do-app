@@ -36,4 +36,21 @@ struct EditProfileLogic {
         }
     }
     
+    ///Deletes all data from realm
+    func deleteAllRealmData() {
+        
+        let realm = try! Realm()
+        do {
+            try realm.write {
+                realm.deleteAll()
+            }
+        } catch {
+            print(error.localizedDescription)
+            return
+        }
+    }
+    
+    
+    
+    
 }

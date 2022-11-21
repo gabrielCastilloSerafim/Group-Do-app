@@ -26,6 +26,8 @@ final class AddGroupItemViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        itemTitleTextField.delegate = self
+        
         //Setup segment control appearance
         prioritySelector.selectedSegmentTintColor = #colorLiteral(red: 0.7826580405, green: 0.9515060782, blue: 0.8565776944, alpha: 1)
         
@@ -105,4 +107,15 @@ final class AddGroupItemViewController: UIViewController {
     }
     
 
+}
+
+//MARK: - UITextField Delegate
+
+extension AddGroupItemViewController: UITextFieldDelegate {
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        
+        textField.resignFirstResponder()
+        return true
+    }
 }

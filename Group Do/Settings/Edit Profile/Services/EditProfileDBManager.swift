@@ -42,6 +42,55 @@ final class EditProfileDBManager {
         }
     }
     
+    ///Deletes the entire current user's node from firebase database
+    public func deleteCurrentUserNode(realmUser: RealmUser) {
+        
+        let formattedUserEmail = realmUser.email!.formattedEmail
+        
+        database.child("\(formattedUserEmail)/isActiveAccount/value").removeValue()
+        database.child(formattedUserEmail).removeValue()
+    }
+    
+    ///Deletes deleted participant from group participants for all related users
+    public func deleteUserFromOtherUsersAccounts() {
+        
+        let realm = try! Realm()
+        let selfParticipantEmail = realm.objects(RealmUser.self)[0].email!
+        let allRealmParticipantsArray = realm.objects(GroupParticipants.self).filter("email != %@", selfParticipantEmail)
+        var allParticipantsArray = [GroupParticipants]()
+        
+        for participant in allRealmParticipantsArray {
+            allParticipantsArray.append(participant)
+        }
+        
+        for participant in allParticipantsArray {
+            
+            let formattedParticipantEmail = participant.email!.formattedEmail
+            let formattedGroupID = participant.partOfGroupID!.formattedID
+            let userToDeleteID = "\(selfParticipantEmail.formattedEmail)\(formattedGroupID)"
+            
+            database.child("\(formattedParticipantEmail)/groupParticipants/\(userToDeleteID)").removeValue()
+            
+            database.child("\(formattedParticipantEmail)/groups/\(formattedGroupID)/participants").observeSingleEvent(of: .value) { [weak self] snapshot  in
+                
+                var indexToDelete: Int?
+                var counter = 0
+                
+                let participantsDict = snapshot.value as! [[String:Any]]
+                
+                for participant in participantsDict {
+                    if participant["email"] as! String == selfParticipantEmail {
+                        indexToDelete = counter
+                    }
+                    counter += 1
+                }
+                
+                self?.database.child("\(formattedParticipantEmail)/groups/\(formattedGroupID)/participants/\(indexToDelete!)").removeValue()
+            }
+        }
+    }
+    
+    
     
     
 }

@@ -49,11 +49,17 @@ final class AllGroupsFireDBManager {
                                 let groupParticipantObjectsArray = self?.getGroupParticipantObjectsArray(snapshot: snapshot)
                                 guard let groupParticipantObjectsArray = groupParticipantObjectsArray else {return}
                                 
-                                //Get all the group items for the added group
-                                self?.database.child("\(formattedEmail)/groups/\(formattedGroupID)/items").observeSingleEvent(of: .value, with: { snapshot in
+                                //Use a group participant email in order to get all the items for the added group
+                                let withoutSelfParticipant = groupParticipantObjectsArray.filter { $0.email != userEmail }
+                                let someParticipantEmail = withoutSelfParticipant.first?.email?.formattedEmail
+                                guard let someParticipantEmail = someParticipantEmail else {return}
+                                
+                                //Get all the group items for the added group from a group participant account
+                                self?.database.child("\(someParticipantEmail)/groupItems").observeSingleEvent(of: .value, with: { snapshot in
                                     
                                     //Create array of groupItem objects
-                                    let groupItemsObjectsArray = self?.getGroupItemsObjectsArray(snapshot: snapshot)
+                                    let groupID = groupObject.groupID!
+                                    let groupItemsObjectsArray = self?.getGroupItemsObjectsArray(snapshot: snapshot, groupID: groupID)
                                     
                                     //Download and save every participants profile picture to device's local storage
                                     self?.downloadAndSaveParticipantsPictures(with: groupParticipantObjectsArray, completion: {
@@ -178,7 +184,7 @@ final class AllGroupsFireDBManager {
             guard let addedParticipantObject = addedParticipantObject else {return}
             let participantProfileImageName = addedParticipantObject.profilePictureFileName!
             
-            //Before proceeding with addition check if the object that we are trying to add already exists in realm
+            //Before proceeding with addition check if the user object that we are trying to add already exists in realm
             if self?.checkIfParticipantExistsInRealm(participant: addedParticipantObject) == false {
                 
                 //Download added user's profile picture and save it to device's memory if it is not saved already
@@ -222,6 +228,27 @@ final class AllGroupsFireDBManager {
                 //Check if participants profile picture is being used somewhere else if its not delete it from device memory
                 self?.deleteProfilePictureFromDevice(selectedUser: deletedParticipantObject)
             }
+        }
+    }
+    
+    //MARK: - Listen for self user deletion
+    
+    ///Listens for a deletion of self user's account an exits to the log in area
+    public func listenForSelfAccountDeletion(userEmail: String) {
+        
+        let formattedUserEmail = userEmail.formattedEmail
+        
+        database.child("\(formattedUserEmail)/isActiveAccount").observe(.childRemoved) { [weak self] _ in
+            
+            //Clear realm
+            self?.deleteAllRealmData()
+            //Delete images from system files
+            ImageManager.shared.deleAllImagesFromUsersDir()
+            //Go to login area
+            MainNavigationController.isLoggedIn = false
+            NotificationCenter.default.post(name: Notification.Name("DismissGroupsVC"), object: nil)
+            
+            print("GOT REMOVED")
         }
     }
     

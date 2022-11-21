@@ -11,14 +11,14 @@ import RealmSwift
 struct AddGroupLogic {
     
     ///Perform search for users in firebase and include matches in an array of realm users that is passed back in the completion block
-    func performUserSearch(with searchText: String, completion: @escaping (Array<RealmUser>) -> Void) {
+    func performUserSearch(with searchText: String, completion: @escaping ([RealmUser]) -> Void) {
         
         NewGroupFireDBManager.shared.getAllUsers { firebaseUsersArray in
             
             let realm = try! Realm()
             let selfUserEmail = realm.objects(RealmUser.self)[0].email!
             
-            var filteredUsersArray = Array<RealmUser>()
+            var filteredUsersArray = [RealmUser]()
             
             for user in firebaseUsersArray {
                 
@@ -43,7 +43,7 @@ struct AddGroupLogic {
     
     ///Creates user already in use alert
     func noUsersFoundAlert() -> UIAlertController {
-        let alert = UIAlertController(title: "No users found", message: "Could not find user match", preferredStyle: .alert)
+        let alert = UIAlertController(title: "No users found", message: "Could not find user match.", preferredStyle: .alert)
         let action = UIAlertAction(title: "Dismiss", style: .default)
         alert.addAction(action)
         return alert

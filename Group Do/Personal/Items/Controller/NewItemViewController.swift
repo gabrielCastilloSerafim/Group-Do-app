@@ -20,6 +20,8 @@ final class NewItemViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        newItemTextField.delegate = self
+        
         //Setup segment control appearance
         prioritySelector.selectedSegmentTintColor = #colorLiteral(red: 0.7826580405, green: 0.9515060782, blue: 0.8565776944, alpha: 1)
         
@@ -107,4 +109,15 @@ final class NewItemViewController: UIViewController {
     }
     
 
+}
+
+//MARK: - UITextField Delegate
+
+extension NewItemViewController: UITextFieldDelegate {
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        
+        textField.resignFirstResponder()
+        return true
+    }
 }

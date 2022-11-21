@@ -56,6 +56,15 @@ final class AddParticipantViewController: UIViewController {
     }
     
     @IBAction func addButtonPressed(_ sender: UIButton) {
+        
+        //Check if user added someone and if not show alert
+        if newSelectedParticipantsArray.isEmpty {
+            let alert = UIAlertController(title: "Error", message: "Please select new participants.", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Dismiss", style: .default))
+            self.present(alert, animated: true)
+            return
+        }
+        
         //Update realm with the new participants on group
         addParticipantLogic.addNewParticipantsToRealm(for: selectedGroup!, with: newSelectedParticipantsArray)
         
@@ -90,15 +99,19 @@ extension AddParticipantViewController: UITableViewDelegate, UITableViewDataSour
         
         FireStoreManager.shared.getImageURL(imageName: imageName!) { [weak self] resultUrl in
             if let url = resultUrl {
-                cell.profilePictureImage.sd_setImage(with: url)
-                cell.nameLabel.text = userName
-                self?.spinner.dismiss(animated: true)
+                DispatchQueue.main.async {
+                    cell.nameLabel.text = userName
+                    cell.profilePictureImage.sd_setImage(with: url, placeholderImage: #imageLiteral(resourceName: "defaultUserPicture.pdf"))
+                    self?.spinner.dismiss(animated: true)
+                }
             } else {
                 //Already have image saved in user device just grab it
                 ImageManager.shared.loadPictureFromDisk(fileName: imageName) { profilePicture in
-                    cell.profilePictureImage.image = profilePicture
-                    cell.nameLabel.text = userName
-                    self?.spinner.dismiss(animated: true)
+                    DispatchQueue.main.async {
+                        cell.profilePictureImage.image = profilePicture
+                        cell.nameLabel.text = userName
+                        self?.spinner.dismiss(animated: true)
+                    }
                 }
             }
         }
@@ -171,16 +184,22 @@ extension AddParticipantViewController: UICollectionViewDelegate, UICollectionVi
         
         ImageManager.shared.loadPictureFromDisk(fileName: imageName) { [weak self] profileImage in
             
-            cell.profilePicture.image = profileImage
+            DispatchQueue.main.async {
+                cell.profilePicture.image = profileImage
+            }
             
             if self!.newSelectedParticipantsArray.contains(participant) {
-                cell.xButtonImage.isHidden = false
-                cell.xButtonImageBackground.isHidden = false
-                cell.isUserInteractionEnabled = true
+                DispatchQueue.main.async {
+                    cell.xButtonImage.isHidden = false
+                    cell.xButtonImageBackground.isHidden = false
+                    cell.isUserInteractionEnabled = true
+                }
             } else {
-                cell.xButtonImage.isHidden = true
-                cell.xButtonImageBackground.isHidden = true
-                cell.isUserInteractionEnabled = false
+                DispatchQueue.main.async {
+                    cell.xButtonImage.isHidden = true
+                    cell.xButtonImageBackground.isHidden = true
+                    cell.isUserInteractionEnabled = false
+                }
             }
             spinner.dismiss(animated: true)
         }
@@ -208,9 +227,19 @@ extension AddParticipantViewController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         spinner.show(in: view)
         
-        addParticipantLogic.getFilteredParticipantsArray(participantsArray: participantsArray) { [weak self] filteredParticipantsArray in
+        let searchBarText = searchBar.text!
+        
+        addParticipantLogic.getFilteredParticipantsArray(participantsArray: participantsArray, searchBarText: searchBarText) { [weak self] filteredParticipantsArray in
             
-            self?.searchResultsArray = filteredParticipantsArray
+            if filteredParticipantsArray.isEmpty {
+                
+                let alert = UIAlertController(title: "No users found", message: "Could not find user match.", preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "Dismiss", style: .default))
+                self?.present(alert, animated: true)
+            } else {
+                
+                self?.searchResultsArray = filteredParticipantsArray
+            }
             
             DispatchQueue.main.async {
                 searchBar.resignFirstResponder()

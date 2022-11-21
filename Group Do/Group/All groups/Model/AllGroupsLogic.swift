@@ -47,6 +47,8 @@ struct AllGroupsLogic {
         AllGroupsFireDBManager.shared.listenForGroupUpdates(userEmail: userEmail)
         //Start listening for profile pictures and group images updates
         AllGroupsFireDBManager.shared.listenForNeedToUpdateImages(userEmail: userEmail)
+        //Starts listening for a deletion of the self user's account
+        AllGroupsFireDBManager.shared.listenForSelfAccountDeletion(userEmail: userEmail)
     }
     
 }

@@ -119,7 +119,6 @@ final class RegisterViewController: UIViewController {
     
 }
 
-
 //MARK: - Image Picker for profile picture
 
 extension RegisterViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
@@ -128,7 +127,7 @@ extension RegisterViewController: UIImagePickerControllerDelegate, UINavigationC
     func presentPhotoActionSheet() {
         let actionSheet = UIAlertController(title: "Profile picture", message: "How would you like to select a picture?", preferredStyle: .actionSheet)
         
-        actionSheet.addAction(UIAlertAction(title: "Cancel", style: .default, handler: nil))
+        actionSheet.addAction(UIAlertAction(title: "Cancel", style: .default))
         
         actionSheet.addAction(UIAlertAction(title: "Take Photo", style: .default, handler: { [weak self] _ in
             self?.presentCamera()

@@ -7,18 +7,21 @@
 
 import UIKit
 import RealmSwift
+import FirebaseAuth
+import JGProgressHUD
 
-class EditProfileViewController: UIViewController {
+final class EditProfileViewController: UIViewController {
     
     @IBOutlet weak var userNameLabel: UILabel!
     @IBOutlet weak var profileImage: UIImageView!
     @IBOutlet weak var userEmailLabel: UILabel!
     
     private var editProfileLogic = EditProfileLogic()
+    private let spinner = JGProgressHUD(style: .dark)
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         //Change navBar tint color
         navigationController?.navigationBar.tintColor = UIColor.white
         
@@ -41,9 +44,87 @@ class EditProfileViewController: UIViewController {
         
         presentPhotoActionSheet()
     }
-   
+    
+    @IBAction func deleteAccountTapped(_ sender: UIButton) {
+        
+        //Present alert asking user if really wants to delete account
+        let alert = UIAlertController(title: "Delete Account", message: "Are you sure you want to delete your account permanently?", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Cancel", style: .default))
+        alert.addAction(UIAlertAction(title: "Yes", style: .destructive, handler: { _ in
+            
+            //User decide to delete account so present another alert asking user to reenter password to reauthenticate and then be able to delete user's account
+            let alert = UIAlertController(title: "Enter Password", message: "In order to delete your account you must reenter your password.", preferredStyle: .alert)
+            alert.addTextField { UITextField in
+                UITextField.placeholder = "Password"
+                UITextField.isSecureTextEntry = true
+            }
+            alert.addAction(UIAlertAction(title: "Done", style: .destructive, handler: { _ in
+                
+                self.spinner.show(in: self.view)
+                
+                let password = alert.textFields?[0].text ?? ""
+                let currentUser = Auth.auth().currentUser
+                
+                //Reauthenticate user using typed in password
+                let credential = EmailAuthProvider.credential(withEmail: currentUser!.email!, password: password)
+                
+                currentUser!.reauthenticate(with: credential) { _, error in
+                    if let error = error {
+                        
+                        //User typed in a invalid password, show alert saying it
+                        let alert = UIAlertController(title: "Error", message: "Invalid password, please try again.", preferredStyle: .alert)
+                        alert.addAction(UIAlertAction(title: "Dismiss", style: .default))
+                        self.present(alert, animated: true)
+                        
+                        print(error.localizedDescription)
+                        self.spinner.dismiss(animated: true)
+                        
+                        return
+                    } else {
+                        
+                        //Proceed with user's account deletion.
+                        let realm = try! Realm()
+                        let realmUser = realm.objects(RealmUser.self)[0]
+                        
+                        //Delete user profile image from firebase storage
+                        FireStoreManager.shared.deleteImageFromFireStore(imageName: realmUser.profilePictureFileName!)
 
+                        //Delete self user node from firebase
+                        EditProfileDBManager.shared.deleteCurrentUserNode(realmUser: realmUser)
+                        
+                        //Delete participant from group participants for all related users
+                        EditProfileDBManager.shared.deleteUserFromOtherUsersAccounts()
+                        
+                        //Delete user account
+                        currentUser?.delete { [weak self] error in
 
+                            if let error = error {
+                                print(error.localizedDescription)
+                                return
+                            } else {
+                                //Delete images from system files
+                                ImageManager.shared.deleAllImagesFromUsersDir()
+
+                                //Delete all data from realm
+                                self?.editProfileLogic.deleteAllRealmData()
+
+                                //Dismiss spinner
+                                self?.spinner.dismiss(animated: true)
+
+                                //Set is loggedIn to false and send notification to settings controller to dismiss it self to
+                                MainNavigationController.isLoggedIn = false
+                                self?.dismiss(animated: false)
+                                NotificationCenter.default.post(name: Notification.Name("DismissSettingsVC"), object: nil)
+                            }
+                        }
+                    }
+                }
+            }))
+            self.present(alert, animated: true)
+        }))
+        self.present(alert, animated: true)
+    }
+    
 }
 
 //MARK: - Image Picker for profile picture
@@ -54,7 +135,7 @@ extension EditProfileViewController: UIImagePickerControllerDelegate, UINavigati
     func presentPhotoActionSheet() {
         let actionSheet = UIAlertController(title: "Profile picture", message: "How would you like to select a picture?", preferredStyle: .actionSheet)
         
-        actionSheet.addAction(UIAlertAction(title: "Cancel", style: .default, handler: nil))
+        actionSheet.addAction(UIAlertAction(title: "Cancel", style: .default))
         
         actionSheet.addAction(UIAlertAction(title: "Take Photo", style: .default, handler: { [weak self] _ in
             self?.presentCamera()

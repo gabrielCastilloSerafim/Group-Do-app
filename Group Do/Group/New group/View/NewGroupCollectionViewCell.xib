@@ -20,10 +20,6 @@
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="116-yP-M3o">
                         <rect key="frame" x="0.0" y="0.0" width="65" height="65"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="bRZ-iG-6dD">
-                                <rect key="frame" x="3" y="3" width="59" height="59"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            </imageView>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Igh-Ga-bDh">
                                 <rect key="frame" x="5" y="5" width="55" height="55"/>
                             </imageView>
@@ -53,17 +49,13 @@
                             <constraint firstAttribute="trailing" secondItem="ZBJ-5y-abJ" secondAttribute="trailing" id="6y3-9V-4pu"/>
                             <constraint firstItem="Y6f-ST-36s" firstAttribute="top" secondItem="116-yP-M3o" secondAttribute="top" id="7bV-wE-krw"/>
                             <constraint firstAttribute="trailing" secondItem="VtJ-VL-C3u" secondAttribute="trailing" id="KKM-sQ-WX9"/>
-                            <constraint firstAttribute="bottom" secondItem="bRZ-iG-6dD" secondAttribute="bottom" constant="3" id="LfY-vB-CXz"/>
                             <constraint firstItem="VtJ-VL-C3u" firstAttribute="leading" secondItem="116-yP-M3o" secondAttribute="leading" constant="2.6699999999999999" id="Lke-dL-ucI"/>
-                            <constraint firstItem="bRZ-iG-6dD" firstAttribute="leading" secondItem="116-yP-M3o" secondAttribute="leading" constant="3" id="Lwq-3N-HHj"/>
                             <constraint firstAttribute="trailing" secondItem="Igh-Ga-bDh" secondAttribute="trailing" constant="5" id="Nzq-H4-R3y"/>
                             <constraint firstAttribute="trailing" secondItem="Y6f-ST-36s" secondAttribute="trailing" id="T4X-7S-ZhU"/>
                             <constraint firstAttribute="bottom" secondItem="Igh-Ga-bDh" secondAttribute="bottom" constant="5" id="TyP-Ji-BIH"/>
                             <constraint firstItem="Igh-Ga-bDh" firstAttribute="top" secondItem="116-yP-M3o" secondAttribute="top" constant="5" id="VAC-L0-SO6"/>
                             <constraint firstItem="ZBJ-5y-abJ" firstAttribute="top" secondItem="116-yP-M3o" secondAttribute="top" id="ebH-xJ-5dW"/>
-                            <constraint firstItem="bRZ-iG-6dD" firstAttribute="top" secondItem="116-yP-M3o" secondAttribute="top" constant="3" id="hO6-mB-MCE"/>
                             <constraint firstItem="Igh-Ga-bDh" firstAttribute="leading" secondItem="116-yP-M3o" secondAttribute="leading" constant="5" id="iyo-U7-JwC"/>
-                            <constraint firstAttribute="trailing" secondItem="bRZ-iG-6dD" secondAttribute="trailing" constant="3" id="m7h-QX-hg0"/>
                             <constraint firstAttribute="bottom" secondItem="VtJ-VL-C3u" secondAttribute="bottom" id="odz-f7-Ibf"/>
                         </constraints>
                     </view>
@@ -80,7 +72,6 @@
             <connections>
                 <outlet property="imageView" destination="Igh-Ga-bDh" id="fij-6s-9PC"/>
                 <outlet property="personImage" destination="VtJ-VL-C3u" id="eos-7r-SIC"/>
-                <outlet property="whiteBackground" destination="bRZ-iG-6dD" id="wZe-KI-ppt"/>
                 <outlet property="xButtonBackground" destination="Y6f-ST-36s" id="m3b-80-LqU"/>
                 <outlet property="xButtonImage" destination="ZBJ-5y-abJ" id="iAI-fO-Zsc"/>
             </connections>

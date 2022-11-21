@@ -9,7 +9,6 @@ import UIKit
 
 final class NewGroupCollectionViewCell: UICollectionViewCell {
 
-    @IBOutlet weak var whiteBackground: UIImageView!
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var xButtonImage: UIImageView!
     @IBOutlet weak var xButtonBackground: UIImageView!
@@ -18,9 +17,9 @@ final class NewGroupCollectionViewCell: UICollectionViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        whiteBackground.layer.cornerRadius = whiteBackground.frame.height/2
-        
         imageView.layer.cornerRadius = imageView.frame.height/2
+        imageView.layer.borderWidth = 2
+        imageView.layer.borderColor = #colorLiteral(red: 0.9999960065, green: 1, blue: 1, alpha: 1)
         
     }
     

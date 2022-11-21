@@ -52,24 +52,30 @@ struct AddParticipantLogic {
     }
     
     ///Returns completion with a filtered array of realmUser objects that can be added to group participants to display as search results in tableview
-    func getFilteredParticipantsArray(participantsArray: [GroupParticipants], completion: @escaping ([RealmUser]) -> Void) {
+    func getFilteredParticipantsArray(participantsArray: [GroupParticipants], searchBarText: String, completion: @escaping ([RealmUser]) -> Void) {
         
         NewGroupFireDBManager.shared.getAllUsers { resultParticipantsArray in
             
-            var filteredParticipantArray = [RealmUser]()
+            //Create a array of old participants emails to compare with all users and then remove users that already participate in group from search results
+            var oldParticipantsEmails = [String]()
+            for participant in participantsArray {
+                oldParticipantsEmails.append(participant.email!)
+            }
+            
+            var filteredArray = [RealmUser]()
             
             for participant in resultParticipantsArray {
-                let participantEmail = participant.email!
-                if participantsArray.contains(where: {$0.email! == participantEmail}) == false {
-                    filteredParticipantArray.append(participant)
+                
+                let isOldParticipant = oldParticipantsEmails.contains(participant.email!)
+                
+                if participant.fullName?.lowercased().hasPrefix(searchBarText.lowercased()) == true && isOldParticipant == false {
+                    
+                    filteredArray.append(participant)
                 }
             }
-            completion(filteredParticipantArray)
+            completion(filteredArray)
         }
     }
-    
-    
-    
     
     
     

@@ -1,3 +1,5 @@
 .DS_Store
 Pods
 GoogleService-Info.plist
+PushNotificationSender.swift
+Group Task.entitlements

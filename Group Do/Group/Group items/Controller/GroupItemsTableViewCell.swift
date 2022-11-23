@@ -23,12 +23,6 @@ final class GroupItemsTableViewCell: UITableViewCell {
         
         checkImage.layer.cornerRadius = checkImage.frame.height/2
     }
-
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
-    }
     
     private var groupItemsTableViewLogic = GroupItemsTableViewLogic()
     var groupObject: Groups?
@@ -47,6 +41,9 @@ final class GroupItemsTableViewCell: UITableViewCell {
             
             //Update completed task in firebase
             GroupItemsFireDBManager.shared.updateCompletedGroupItemInFirebase(completedItem: selectedItem, selectedGroup: groupObject!, selfUserEmail: selfUserEmail)
+            
+            //Send push notification with completed item to group participants
+            groupItemsTableViewLogic.sendPushNotificationToParticipants(participantsArray: groupObject!.groupParticipants, itemTitle: selectedItem.itemTitle!, selectedGroup: groupObject!)
             
         } else {
             

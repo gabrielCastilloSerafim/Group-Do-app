@@ -28,12 +28,15 @@ struct ConfirmGroupLogic {
         for participant in groupParticipantsArray {
             
             let groupParticipant = GroupParticipants()
+            
             groupParticipant.fullName = participant.fullName
             groupParticipant.firstName = participant.firstName
             groupParticipant.lastName = participant.lastName
             groupParticipant.email = participant.email
             groupParticipant.profilePictureFileName = participant.profilePictureFileName
             groupParticipant.partOfGroupID = groupID
+            groupParticipant.notificationToken = participant.notificationToken
+            
             if counter == 0 {
                 groupParticipant.isAdmin = true
             } else {
@@ -75,6 +78,27 @@ struct ConfirmGroupLogic {
             return
         }
     }
+    
+    ///Sends a push notification to all group participants informing that they were added to this new group
+    func sendPushNotificationToParticipants(newGroup: Groups, participantsArray: [GroupParticipants]) {
+        
+        let realm = try! Realm()
+        let selfUser = realm.objects(RealmUser.self)[0]
+        let userName = selfUser.fullName!
+        let userEmail = selfUser.email!
+        
+        for participant in participantsArray {
+            
+            let token = participant.notificationToken!
+            let participantEmail = participant.email!
+            
+            if participantEmail != userEmail {
+                
+                PushNotificationSender.shared.sendPushNotification(to: token, title: "New Group", body: #"\#(userName) added you to group: "\#(newGroup.groupName!)". "#)
+            }
+        }
+    }
+    
     
     
 }

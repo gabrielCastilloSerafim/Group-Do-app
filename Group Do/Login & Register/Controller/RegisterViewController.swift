@@ -17,7 +17,6 @@ final class RegisterViewController: UIViewController {
     @IBOutlet weak var emailTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
     @IBOutlet weak var profilePicture: UIImageView!
-    @IBOutlet weak var profilePictureBackground: UIImageView!
     
     //Instance of spinner imported from the JGProgressHUD pod
     private let spinner = JGProgressHUD(style: .dark)
@@ -64,7 +63,7 @@ final class RegisterViewController: UIViewController {
               let password = passwordTextField.text
         else {return}
         
-        //Check if firstName or lastName are not empty and if one of them are show alert and return
+        //Check if firstName or lastName are not empty and if one of them are, show alert and return
         if firstName == "" || lastName == "" {
             let alert = UIAlertController(title: "Error", message: "Please make sure to fill all fields.", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "Dismiss", style: .default))

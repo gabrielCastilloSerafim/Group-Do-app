@@ -37,6 +37,7 @@ struct AddParticipantLogic {
         participantObject.profilePictureFileName = selectedUser.profilePictureFileName
         participantObject.partOfGroupID = selectedGroup.groupID!
         participantObject.isAdmin = false
+        participantObject.notificationToken = selectedUser.notificationToken!
         
         return participantObject
     }
@@ -77,6 +78,18 @@ struct AddParticipantLogic {
         }
     }
     
-    
+    ///Sends push notification to users that has been added to the group informing about addition
+    func sendPushNotificationToNewParticipants(group: Groups, newParticipants: [GroupParticipants]) {
+        
+        let realm = try! Realm()
+        let userName = realm.objects(RealmUser.self)[0].fullName!
+        
+        for participant in newParticipants {
+            
+            let token = participant.notificationToken!
+            
+            PushNotificationSender.shared.sendPushNotification(to: token, title: "New Group", body: #"\#(userName) added you to group: "\#(group.groupName!)". "#)
+        }
+    }
     
 }

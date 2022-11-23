@@ -76,6 +76,9 @@ final class AddParticipantViewController: UIViewController {
         //Add complete group object to users that are being added to the group on firebase
         GroupSettingsFireDBManager.shared.addGroupToNewParticipants(selectedGroup: selectedGroup!, newParticipantsArray: newSelectedParticipantsArray, oldParticipantsArray: oldParticipantsArray)
         
+        //Send push notification to participant that was added to group informing about addition
+        addParticipantLogic.sendPushNotificationToNewParticipants(group: selectedGroup!, newParticipants: newSelectedParticipantsArray)
+        
         dismiss(animated: true)
     }
     

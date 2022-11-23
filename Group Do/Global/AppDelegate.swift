@@ -8,19 +8,27 @@
 import UIKit
 import FirebaseCore
 import FirebaseDatabase
+import FirebaseMessaging
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customisation after application launch.
+        
+        let pushManager = PushNotificationManager()
+        
+        pushManager.registerForPushNotifications()
+        
+        application.registerForRemoteNotifications()
+        
         FirebaseApp.configure()
-    
+        
         Database.database().isPersistenceEnabled = true
         
         return true
     }
-
+  
     // MARK: UISceneSession Lifecycle
 
     func application(_ application: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options: UIScene.ConnectionOptions) -> UISceneConfiguration {
@@ -38,3 +46,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 }
 
+//MARK: - UNUserNotificationCenterDelegate
+
+extension AppDelegate: UNUserNotificationCenterDelegate {
+    
+    
+    
+    
+}

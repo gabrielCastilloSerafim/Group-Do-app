@@ -26,7 +26,8 @@ extension NewGroupFireDBManager {
                                                        "email":participant.email!,
                                                        "profilePictureFileName":participant.profilePictureFileName!,
                                                        "partOfGroupID":participant.partOfGroupID!,
-                                                       "isAdmin":participant.isAdmin
+                                                       "isAdmin":participant.isAdmin,
+                                                       "notificationToken":participant.notificationToken!
             ]
             arrayOfParticipantsDict.append(participantDictionary)
         }

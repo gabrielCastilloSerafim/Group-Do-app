@@ -7,6 +7,7 @@
 
 import Foundation
 import FirebaseDatabase
+import FirebaseMessaging
 
 final class LoginRegisterFireDBManager {
     
@@ -15,6 +16,15 @@ final class LoginRegisterFireDBManager {
     private let database = Database.database().reference()
     
     //MARK: - Login
+    
+    ///Updates user's notification token on firebase
+    public func updateUsersNotificationToken(userEmail: String, completion: () -> Void) {
+        
+        let token = Messaging.messaging().fcmToken!
+        
+        database.child("\(userEmail.formattedEmail)/notificationToken").setValue(token)
+        completion()
+    }
     
     ///Download users's data for a specific user from database and return the user object
     public func downloadUserInfo(email: String, completion: @escaping (RealmUser) -> Void) {
@@ -28,6 +38,7 @@ final class LoginRegisterFireDBManager {
             
             completion(realmUser)
         }
+        
     }
     
     //MARK: - Register

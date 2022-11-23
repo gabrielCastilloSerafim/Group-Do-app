@@ -103,8 +103,12 @@ final class AddGroupItemViewController: UIViewController {
         //Add group item to Firebase
         newGroupItemsLogic.addGroupItemToFirebase(participantsArray: participantArray!, newItemObject: newItemObject)
         
+        //Send push notification to group participants
+        newGroupItemsLogic.sendPushNotificationToParticipants(participantsArray: participantArray!, itemTitle: itemTitle, selectedGroup: selectedGroup!)
+        
         dismiss(animated: true)
     }
+    
     
 
 }

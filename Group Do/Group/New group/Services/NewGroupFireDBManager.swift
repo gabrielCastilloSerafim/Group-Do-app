@@ -66,6 +66,7 @@ final class NewGroupFireDBManager {
                  user.fullName = dict["full_name"] as? String
                  user.lastName = dict["last_name"] as? String
                  user.profilePictureFileName = dict["profilePictureName"] as? String
+                 user.notificationToken = dict["notificationToken"] as? String
                  
                  usersArray.append(user)
              }

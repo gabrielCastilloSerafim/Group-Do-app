@@ -41,7 +41,7 @@ struct AddGroupLogic {
         return alert
     }
     
-    ///Creates user already in use alert
+    ///Creates user not found
     func noUsersFoundAlert() -> UIAlertController {
         let alert = UIAlertController(title: "No users found", message: "Could not find user match.", preferredStyle: .alert)
         let action = UIAlertAction(title: "Dismiss", style: .default)

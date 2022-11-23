@@ -7,6 +7,7 @@
 
 import Foundation
 import RealmSwift
+import FirebaseMessaging
 
 struct RegisterLogic {
     
@@ -23,6 +24,7 @@ struct RegisterLogic {
         realmUser.lastName = lastName
         realmUser.email = email
         realmUser.profilePictureFileName =  profilePictureFileName
+        realmUser.notificationToken = Messaging.messaging().fcmToken
         
         return realmUser
     }

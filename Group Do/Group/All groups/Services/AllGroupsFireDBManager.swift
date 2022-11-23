@@ -247,8 +247,6 @@ final class AllGroupsFireDBManager {
             //Go to login area
             MainNavigationController.isLoggedIn = false
             NotificationCenter.default.post(name: Notification.Name("DismissGroupsVC"), object: nil)
-            
-            print("GOT REMOVED")
         }
     }
     

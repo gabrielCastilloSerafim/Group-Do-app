@@ -87,6 +87,9 @@ final class ConfirmGroupViewController: UIViewController {
             if boolResult == true {
                 //Only when image finishes uploading save group to firebase database
                 NewGroupFireDBManager.shared.addGroupToFirebase(groupObject: newGroupObject, participantsObjectArray: groupParticipantsObjectsArray)
+                
+                //Send push notification to all group participants informing that they were added to this new group
+                self.confirmGroupLogic.sendPushNotificationToParticipants(newGroup: newGroupObject, participantsArray: groupParticipantsObjectsArray)
             }
         }
     }

@@ -8,6 +8,7 @@
 import UIKit
 import FirebaseAuth
 import RealmSwift
+import FirebaseMessaging
 
 final class SettingsViewController: UIViewController {
     

@@ -21,7 +21,8 @@ extension LoginRegisterFireDBManager {
               let firstName = userInfoDictionary["first_name"],
               let fullName = userInfoDictionary["full_name"],
               let lastName = userInfoDictionary["last_name"],
-              let profilePictureName = userInfoDictionary["profilePictureName"]
+              let profilePictureName = userInfoDictionary["profilePictureName"],
+              let notificationToken = userInfoDictionary["notificationToken"]
         else {return nil}
         
         let realmUser = RealmUser()
@@ -30,6 +31,7 @@ extension LoginRegisterFireDBManager {
         realmUser.firstName = firstName as? String
         realmUser.lastName = lastName as? String
         realmUser.profilePictureFileName = profilePictureName as? String
+        realmUser.notificationToken = notificationToken as? String
         
         return realmUser
     }
@@ -43,6 +45,7 @@ extension LoginRegisterFireDBManager {
                                             "last_name":user.lastName!,
                                             "email":user.email!,
                                             "profilePictureName":user.profilePictureFileName!,
+                                            "notificationToken":user.notificationToken!,
                                             "needsToUpdateProfilePicture":false
                                             ]
         return userDictionary

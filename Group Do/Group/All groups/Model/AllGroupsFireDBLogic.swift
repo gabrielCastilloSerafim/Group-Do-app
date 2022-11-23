@@ -62,7 +62,8 @@ extension AllGroupsFireDBManager {
                   let email = dictionary["email"] as? String,
                   let profilePictureFileName = dictionary["profilePictureFileName"] as? String,
                   let partOfGroupID = dictionary["partOfGroupID"] as? String,
-                  let isAdmin = dictionary["isAdmin"] as? Bool
+                  let isAdmin = dictionary["isAdmin"] as? Bool,
+                  let notificationToken = dictionary["notificationToken"] as? String
             else {return nil}
             
             participantObject.fullName = fullName
@@ -72,6 +73,7 @@ extension AllGroupsFireDBManager {
             participantObject.profilePictureFileName = profilePictureFileName
             participantObject.partOfGroupID = partOfGroupID
             participantObject.isAdmin = isAdmin
+            participantObject.notificationToken = notificationToken
             
             groupParticipantsArray.append(participantObject)
         }
@@ -348,7 +350,8 @@ extension AllGroupsFireDBManager {
               let email = snapDict["email"] as? String,
               let profilePictureFileName = snapDict["profilePictureFileName"] as? String,
               let partOfGroupID = snapDict["partOfGroupID"] as? String,
-              let isAdmin = snapDict ["isAdmin"] as? Bool
+              let isAdmin = snapDict["isAdmin"] as? Bool,
+              let notificationToken = snapDict["notificationToken"] as? String
         else {return nil}
               
         let groupParticipantObject = GroupParticipants()
@@ -359,6 +362,7 @@ extension AllGroupsFireDBManager {
         groupParticipantObject.profilePictureFileName = profilePictureFileName
         groupParticipantObject.partOfGroupID = partOfGroupID
         groupParticipantObject.isAdmin = isAdmin
+        groupParticipantObject.notificationToken = notificationToken
         
         return groupParticipantObject
     }

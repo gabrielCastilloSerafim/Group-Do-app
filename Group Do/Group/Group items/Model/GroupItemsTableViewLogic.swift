@@ -39,6 +39,26 @@ struct GroupItemsTableViewLogic {
             return
         }
     }
+    
+    ///Sends push notifications to all participants of  the group containing the new completed item information
+    func sendPushNotificationToParticipants(participantsArray: List<GroupParticipants>, itemTitle: String, selectedGroup: Groups) {
+        
+        let realm = try! Realm()
+        let selfUser = realm.objects(RealmUser.self)[0]
+        let userName = selfUser.fullName!
+        let userEmail = selfUser.email!
+        
+        for participant in participantsArray {
+            
+            let token = participant.notificationToken!
+            let participantEmail = participant.email!
+            
+            if participantEmail != userEmail {
+                
+                PushNotificationSender.shared.sendPushNotification(to: token, title: "Task completed", body: #"\#(userName) completed task: "\#(itemTitle)" from group: "\#(selectedGroup.groupName!)". "#)
+            }
+        }
+    }
 
     
 }

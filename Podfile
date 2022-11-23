@@ -11,6 +11,7 @@ target 'Group Task' do
   pod 'FirebaseAuth'
   pod 'FirebaseDatabase'
   pod 'FirebaseStorage'
+  pod 'FirebaseMessaging'
   pod 'JGProgressHUD'
   pod 'SDWebImage'
   pod 'TextFieldEffects'

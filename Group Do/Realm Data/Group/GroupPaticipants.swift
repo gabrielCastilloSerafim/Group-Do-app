@@ -17,6 +17,7 @@ class GroupParticipants: Object {
     @objc dynamic var profilePictureFileName: String?
     @objc dynamic var partOfGroupID: String?
     @objc dynamic var isAdmin: Bool = false
+    @objc dynamic var notificationToken: String?
     
     let reverseRelationship = LinkingObjects(fromType: Groups.self, property: "groupParticipants")
 }

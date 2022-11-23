@@ -9,7 +9,6 @@ import UIKit
 import RealmSwift
 
 final class GroupsViewController: UIViewController {
-
     
     @IBOutlet weak var searchField: UISearchBar!
     @IBOutlet weak var noGroupsImage: UIImageView!

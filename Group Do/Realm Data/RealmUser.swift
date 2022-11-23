@@ -15,5 +15,6 @@ class RealmUser: Object {
     @objc dynamic var lastName: String?
     @objc dynamic var email: String?
     @objc dynamic var profilePictureFileName: String?
+    @objc dynamic var notificationToken: String?
     
 }

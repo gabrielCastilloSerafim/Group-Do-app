@@ -89,7 +89,8 @@ extension GroupSettingsFireDBManager {
                                                    "email": participant.email!,
                                                    "profilePictureFileName": participant.profilePictureFileName!,
                                                    "partOfGroupID": participant.partOfGroupID!,
-                                                   "isAdmin": participant.isAdmin
+                                                   "isAdmin": participant.isAdmin,
+                                                   "notificationToken": participant.notificationToken!
                                                 ]
             participantsDictionaryArray.append(participantDict)
         }

@@ -25,7 +25,7 @@
                         </constraints>
                     </imageView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="Gabriel Castillo" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NVb-Wu-ut1">
-                        <rect key="frame" x="65" y="20" width="109.33333333333331" height="20"/>
+                        <rect key="frame" x="65" y="20" width="177" height="20"/>
                         <fontDescription key="fontDescription" type="system" pointSize="16"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
@@ -54,6 +54,7 @@
                     <constraint firstItem="zyu-al-5Rb" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="1bQ-wj-ehH"/>
                     <constraint firstItem="bgD-ES-e8z" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="15" id="6AN-NB-8nF"/>
                     <constraint firstItem="g0I-it-EBW" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="CXs-n5-7Da"/>
+                    <constraint firstItem="NVb-Wu-ut1" firstAttribute="width" secondItem="H2p-sc-9uM" secondAttribute="width" multiplier="0.553125" id="Cvn-AU-hA5"/>
                     <constraint firstAttribute="trailing" secondItem="g0I-it-EBW" secondAttribute="trailing" constant="15" id="Kzg-Fi-Tdc"/>
                     <constraint firstItem="NVb-Wu-ut1" firstAttribute="leading" secondItem="bgD-ES-e8z" secondAttribute="trailing" constant="10" id="RKk-Ec-fH5"/>
                     <constraint firstAttribute="trailing" secondItem="zyu-al-5Rb" secondAttribute="trailing" constant="15" id="SIa-Z1-hgA"/>

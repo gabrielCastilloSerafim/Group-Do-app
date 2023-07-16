@@ -55,33 +55,30 @@ final class LoginViewController: UIViewController {
                 return
             }
             
-            //Update users notification token on firebase before downloading and saving user's information
-            LoginRegisterFireDBManager.shared.updateUsersNotificationToken(userEmail: email) {
-                
-                //Download user data from firebase to populate realm local database
-                LoginRegisterFireDBManager.shared.downloadUserInfo(email: email) { [weak self] realmUser in
-                    
-                    let userProfilePictureName = realmUser.profilePictureFileName!
-                    
-                    //Get user's profilePicture DownloadURL
-                    FireStoreManager.shared.getImageURL(imageName: userProfilePictureName) { resultUrl in
-                        guard let url = resultUrl else {return}
-                        
-                        //Download user's profile picture using the download URL
-                        FireStoreManager.shared.downloadImageWithURL(imageURL: url) { image in
-                            
-                            //Save user's profile picture to device's local storage
-                            ImageManager.shared.saveImageToDeviceMemory(imageName: userProfilePictureName, image: image) {
-                                //Set Main nav controller login property to true to show logged in screen when dismissed
-                                MainNavigationController.isLoggedIn = true
-                                
-                                DispatchQueue.main.async {
-                                    //Save user to realm
-                                    self?.loginLogic.saveUserToRealm(realmUser)
-                                    
-                                    self?.spinner.dismiss(animated: true)
-                                    self?.dismiss(animated: true)
-                                }
+            //Download user data from firebase to populate realm local database
+            LoginRegisterFireDBManager.shared.downloadUserInfo(email: email) { [weak self] realmUser in
+                print("HEEEREEEE2")
+                let userProfilePictureName = realmUser.profilePictureFileName!
+                //Update users notification token on firebase
+                LoginRegisterFireDBManager.shared.updateUsersNotificationToken(userEmail: email)
+                //Get user's profilePicture DownloadURL
+                FireStoreManager.shared.getImageURL(imageName: userProfilePictureName) { resultUrl in
+                    guard let url = resultUrl else { print("Did not get url"); return }
+                    print("HEEEREEEE3")
+                    //Download user's profile picture using the download URL
+                    FireStoreManager.shared.downloadImageWithURL(imageURL: url) { image in
+                        print("HEEEREEEE4")
+                        //Save user's profile picture to device's local storage
+                        ImageManager.shared.saveImageToDeviceMemory(imageName: userProfilePictureName, image: image) {
+                            //Set Main nav controller login property to true to show logged in screen when dismissed
+                            MainNavigationController.isLoggedIn = true
+                            print("HEEEREEEE5")
+                            DispatchQueue.main.async {
+                                //Save user to realm
+                                self?.loginLogic.saveUserToRealm(realmUser)
+                                print("HEEEREEEE6")
+                                self?.spinner.dismiss(animated: true)
+                                self?.dismiss(animated: true)
                             }
                         }
                     }

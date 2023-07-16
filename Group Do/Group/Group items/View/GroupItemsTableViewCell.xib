@@ -28,30 +28,19 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Item Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="12L-LP-98W">
-                                <rect key="frame" x="10" y="10" width="83.666666666666671" height="24"/>
-                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="20"/>
+                                <rect key="frame" x="10" y="10.000000000000002" width="197" height="21.666666666666671"/>
+                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="18"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <stackView opaque="NO" contentMode="scaleToFill" spacing="3" translatesAutoresizingMaskIntoConstraints="NO" id="hZA-fU-b9H">
-                                <rect key="frame" x="10.000000000000007" y="40" width="118.66666666666669" height="15.666666666666664"/>
-                                <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="By:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GuF-cM-6sa">
-                                        <rect key="frame" x="0.0" y="0.0" width="21.333333333333332" height="15.666666666666666"/>
-                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="13"/>
-                                        <color key="textColor" red="0.58428549770000004" green="0.58039432759999998" blue="0.58039212230000004" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Gabriel Castillo" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hCh-L5-Mcg">
-                                        <rect key="frame" x="24.333333333333336" y="0.0" width="94.333333333333314" height="15.666666666666666"/>
-                                        <fontDescription key="fontDescription" type="system" weight="medium" pointSize="13"/>
-                                        <color key="textColor" red="0.58428549770000004" green="0.58039432759999998" blue="0.58039212230000004" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                </subviews>
-                            </stackView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="By:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GuF-cM-6sa">
+                                <rect key="frame" x="9.9999999999999982" y="37.666666666666664" width="21.333333333333329" height="15.666666666666664"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="13"/>
+                                <color key="textColor" red="0.58428549770000004" green="0.58039432759999998" blue="0.58039212230000004" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                             <stackView opaque="NO" contentMode="scaleToFill" spacing="-2" translatesAutoresizingMaskIntoConstraints="NO" id="6OL-bw-ij4">
-                                <rect key="frame" x="10.000000000000007" y="61.666666666666671" width="110.66666666666669" height="15"/>
+                                <rect key="frame" x="10.000000000000007" y="59.333333333333329" width="110.66666666666669" height="15"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Priority:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dT0-vP-ors">
                                         <rect key="frame" x="0.0" y="0.0" width="52.666666666666664" height="15"/>
@@ -68,17 +57,26 @@
                                     </imageView>
                                 </subviews>
                             </stackView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Gabriel Castillo" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hCh-L5-Mcg">
+                                <rect key="frame" x="34.333333333333343" y="37.666666666666664" width="207" height="15.666666666666664"/>
+                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="13"/>
+                                <color key="textColor" red="0.58428549770000004" green="0.58039432759999998" blue="0.58039212230000004" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="hZA-fU-b9H" firstAttribute="top" secondItem="12L-LP-98W" secondAttribute="bottom" constant="6" id="2zD-Wh-IDN"/>
-                            <constraint firstItem="hZA-fU-b9H" firstAttribute="leading" secondItem="QM9-3w-DMP" secondAttribute="leading" constant="10" id="R9G-Vs-mZm"/>
+                            <constraint firstItem="GuF-cM-6sa" firstAttribute="leading" secondItem="QM9-3w-DMP" secondAttribute="leading" constant="10" id="1ko-jm-wdQ"/>
+                            <constraint firstItem="6OL-bw-ij4" firstAttribute="top" secondItem="hCh-L5-Mcg" secondAttribute="bottom" constant="6" id="BsG-PJ-9vl"/>
+                            <constraint firstItem="hCh-L5-Mcg" firstAttribute="leading" secondItem="GuF-cM-6sa" secondAttribute="trailing" constant="3" id="HSM-qZ-yCy"/>
+                            <constraint firstItem="6OL-bw-ij4" firstAttribute="top" secondItem="GuF-cM-6sa" secondAttribute="bottom" constant="6" id="OW0-7R-z9j"/>
+                            <constraint firstItem="hCh-L5-Mcg" firstAttribute="top" secondItem="12L-LP-98W" secondAttribute="bottom" constant="6" id="S0a-ja-zfe"/>
                             <constraint firstItem="12L-LP-98W" firstAttribute="leading" secondItem="QM9-3w-DMP" secondAttribute="leading" constant="10" id="Tbb-EQ-lUw"/>
                             <constraint firstItem="6OL-bw-ij4" firstAttribute="leading" secondItem="QM9-3w-DMP" secondAttribute="leading" constant="10" id="V4l-1G-Ly6"/>
+                            <constraint firstItem="GuF-cM-6sa" firstAttribute="top" secondItem="12L-LP-98W" secondAttribute="bottom" constant="6" id="XVf-rB-xZC"/>
                             <constraint firstItem="12L-LP-98W" firstAttribute="top" secondItem="QM9-3w-DMP" secondAttribute="top" constant="10" id="eMn-kP-OIr"/>
                             <constraint firstItem="eS4-QA-yD2" firstAttribute="top" secondItem="QM9-3w-DMP" secondAttribute="top" constant="5" id="iM4-w5-VHR"/>
                             <constraint firstAttribute="trailing" secondItem="eS4-QA-yD2" secondAttribute="trailing" constant="8" id="sFh-YX-we3"/>
-                            <constraint firstItem="6OL-bw-ij4" firstAttribute="top" secondItem="hZA-fU-b9H" secondAttribute="bottom" constant="6" id="wAU-uy-yfS"/>
                         </constraints>
                         <userDefinedRuntimeAttributes>
                             <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
@@ -127,9 +125,11 @@
                 </subviews>
                 <color key="backgroundColor" systemColor="systemGray6Color"/>
                 <constraints>
+                    <constraint firstItem="12L-LP-98W" firstAttribute="width" secondItem="H2p-sc-9uM" secondAttribute="width" multiplier="0.615625" id="7Vo-VW-6gI"/>
                     <constraint firstItem="QM9-3w-DMP" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="7" id="DFx-8E-qcH"/>
                     <constraint firstAttribute="trailing" secondItem="QM9-3w-DMP" secondAttribute="trailing" constant="10" id="Ec7-wu-gup"/>
                     <constraint firstAttribute="bottom" secondItem="DBk-PR-TqH" secondAttribute="bottom" constant="20" id="FoF-dB-K1T"/>
+                    <constraint firstItem="hCh-L5-Mcg" firstAttribute="width" secondItem="H2p-sc-9uM" secondAttribute="width" multiplier="0.646875" id="hEI-dN-Bg6"/>
                     <constraint firstAttribute="trailing" secondItem="DBk-PR-TqH" secondAttribute="trailing" constant="25" id="rBD-WP-Wh9"/>
                     <constraint firstAttribute="bottom" secondItem="QM9-3w-DMP" secondAttribute="bottom" constant="7" id="xCJ-Lf-HEO"/>
                     <constraint firstItem="QM9-3w-DMP" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="10" id="zDP-t8-m28"/>

@@ -7,6 +7,7 @@
 
 import Foundation
 import FirebaseDatabase
+import FirebaseMessaging
 
 extension LoginRegisterFireDBManager {
     
@@ -21,8 +22,7 @@ extension LoginRegisterFireDBManager {
               let firstName = userInfoDictionary["first_name"],
               let fullName = userInfoDictionary["full_name"],
               let lastName = userInfoDictionary["last_name"],
-              let profilePictureName = userInfoDictionary["profilePictureName"],
-              let notificationToken = userInfoDictionary["notificationToken"]
+              let profilePictureName = userInfoDictionary["profilePictureName"]
         else {return nil}
         
         let realmUser = RealmUser()
@@ -31,7 +31,7 @@ extension LoginRegisterFireDBManager {
         realmUser.firstName = firstName as? String
         realmUser.lastName = lastName as? String
         realmUser.profilePictureFileName = profilePictureName as? String
-        realmUser.notificationToken = notificationToken as? String
+        realmUser.notificationToken = Messaging.messaging().fcmToken!
         
         return realmUser
     }

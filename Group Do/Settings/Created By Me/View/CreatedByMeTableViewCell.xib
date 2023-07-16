@@ -51,7 +51,7 @@
                         </subviews>
                     </stackView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Item Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4I5-Xf-tz2">
-                        <rect key="frame" x="10" y="5" width="73" height="20.333333333333332"/>
+                        <rect key="frame" x="10" y="5" width="232" height="20"/>
                         <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
@@ -80,6 +80,7 @@
                     <constraint firstAttribute="bottom" secondItem="rZW-Td-L1E" secondAttribute="bottom" constant="10" id="1hc-Nk-dtH"/>
                     <constraint firstItem="rZW-Td-L1E" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="10" id="DPn-UJ-PmX"/>
                     <constraint firstItem="4I5-Xf-tz2" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="10" id="FmL-Vl-nw1"/>
+                    <constraint firstItem="4I5-Xf-tz2" firstAttribute="width" secondItem="H2p-sc-9uM" secondAttribute="width" multiplier="0.725" id="JOh-Be-vDZ"/>
                     <constraint firstAttribute="bottom" secondItem="kl7-bQ-uqe" secondAttribute="bottom" constant="10" id="TLh-XQ-DBd"/>
                     <constraint firstItem="4I5-Xf-tz2" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="5" id="XSu-AO-uyJ"/>
                     <constraint firstAttribute="trailing" secondItem="kl7-bQ-uqe" secondAttribute="trailing" constant="10" id="iT4-4p-5fp"/>
@@ -93,7 +94,7 @@
                 <outlet property="priorityImage" destination="AMu-Yj-WW0" id="TjY-Vs-z23"/>
                 <outlet property="typeOfItem" destination="hYY-q1-05v" id="0cK-ca-nOL"/>
             </connections>
-            <point key="canvasLocation" x="174" y="-8"/>
+            <point key="canvasLocation" x="173.84615384615384" y="-8.5308056872037916"/>
         </tableViewCell>
     </objects>
 </document>

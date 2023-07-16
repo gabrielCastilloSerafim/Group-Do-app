@@ -18,12 +18,11 @@ final class LoginRegisterFireDBManager {
     //MARK: - Login
     
     ///Updates user's notification token on firebase
-    public func updateUsersNotificationToken(userEmail: String, completion: () -> Void) {
+    public func updateUsersNotificationToken(userEmail: String) {
         
         let token = Messaging.messaging().fcmToken!
         
         database.child("\(userEmail.formattedEmail)/notificationToken").setValue(token)
-        completion()
     }
     
     ///Download users's data for a specific user from database and return the user object

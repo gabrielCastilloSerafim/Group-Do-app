@@ -17,12 +17,15 @@ final class ImageManager {
     ///Saves an image to devices documents directory using its imageName
     public func saveImageToDeviceMemory(imageName: String, image: UIImage, completion: @escaping () -> Void) {
         
-        guard let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { return }
+        guard let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
+            print("Did not find documents directory")
+            return
+        }
         
         let fileName = imageName
         let fileURL = documentsDirectory.appendingPathComponent(fileName)
         
-        guard let data = image.jpegData(compressionQuality: 1) else { return }
+        guard let data = image.jpegData(compressionQuality: 1) else {print("Error getting image data");  return }
         
         //Checks if file exists, removes it if so.
         if FileManager.default.fileExists(atPath: fileURL.path) {

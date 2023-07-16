@@ -5,7 +5,7 @@
 //  Created by Gabriel Castillo Serafim on 7/10/22.
 //
 
-import Foundation
+import UIKit
 import FirebaseStorage
 
 final class FireStoreManager {

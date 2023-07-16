@@ -25,7 +25,7 @@
                         </constraints>
                     </imageView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Group Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8v7-cg-Ngw">
-                        <rect key="frame" x="85" y="14.000000000000002" width="105.33333333333331" height="21.666666666666671"/>
+                        <rect key="frame" x="85" y="14" width="189" height="22"/>
                         <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="18"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
@@ -69,6 +69,7 @@
                     </imageView>
                 </subviews>
                 <constraints>
+                    <constraint firstItem="8v7-cg-Ngw" firstAttribute="width" secondItem="H2p-sc-9uM" secondAttribute="width" multiplier="0.590625" id="54P-9o-OkV"/>
                     <constraint firstItem="BiV-Ik-LEA" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="56E-xR-9np"/>
                     <constraint firstItem="8v7-cg-Ngw" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="14" id="5gv-M4-og1"/>
                     <constraint firstAttribute="trailing" secondItem="sje-dY-9da" secondAttribute="trailing" constant="20" id="HUW-ws-Ux6"/>

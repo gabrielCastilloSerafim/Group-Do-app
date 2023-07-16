@@ -25,7 +25,7 @@
                         </constraints>
                     </imageView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9eV-hb-u3V">
-                        <rect key="frame" x="85" y="40" width="0.0" height="0.0"/>
+                        <rect key="frame" x="85" y="40" width="219" height="0.0"/>
                         <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
@@ -37,6 +37,7 @@
                     <constraint firstAttribute="bottom" secondItem="ds1-hR-LD3" secondAttribute="bottom" constant="10" id="KMJ-64-ejU"/>
                     <constraint firstItem="9eV-hb-u3V" firstAttribute="leading" secondItem="ds1-hR-LD3" secondAttribute="trailing" constant="10" id="sqy-Zb-Xda"/>
                     <constraint firstItem="ds1-hR-LD3" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="10" id="tOp-dX-PgK"/>
+                    <constraint firstItem="9eV-hb-u3V" firstAttribute="width" secondItem="H2p-sc-9uM" secondAttribute="width" multiplier="0.684375" id="xjf-3x-sfN"/>
                 </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>

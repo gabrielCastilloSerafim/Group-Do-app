@@ -33,6 +33,9 @@ final class SettingsViewController: UIViewController {
         
         //Listen for notification from delete account VC to dismiss self if account is deleted
         NotificationCenter.default.addObserver(self, selector: #selector(self.methodOfReceivedNotification(notification:)), name: Notification.Name("DismissSettingsVC"), object: nil)
+        
+        //Listen for notification from EditProfile VC to fresh data whenever user changes profile picture
+        NotificationCenter.default.addObserver(self, selector: #selector(self.reloadProfilePicture(notification:)), name: Notification.Name("ReloadProfilePicture"), object: nil)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -49,6 +52,13 @@ final class SettingsViewController: UIViewController {
         self.dismiss(animated: false)
     }
     
+    @objc func reloadProfilePicture(notification: Notification) {
+        //reset profile picture
+        settingsLogic.getProfilePicture { image in
+            profilePicture.image = image
+        }
+    }
+    
     override func viewDidLayoutSubviews() {
         
         //Setup Profile Picture
@@ -60,12 +70,17 @@ final class SettingsViewController: UIViewController {
     @IBAction func logOutButtonPressed(_ sender: UIButton) {
         
         let alert = UIAlertController(title: "Log Out", message: "Do you want to log out from this account ?", preferredStyle: .alert)
-        
         alert.addAction(UIAlertAction(title: "Dismiss", style: .default))
-        
         alert.addAction(UIAlertAction(title: "Log Out", style: .destructive, handler: { [weak self] _ in
+            
+            let realm = try! Realm()
+            let userEmail = realm.objects(RealmUser.self)[0].email!
+            
             //Log out from firebase
             self?.settingsLogic.logUserOut()
+            
+            //Set notification token to loggedOut user to be a empty string
+            self?.settingsLogic.setNotificationTokenToBlankInFirebase(userEmail: userEmail)
             
             //Delete user from realm database
             self?.settingsLogic.deleteAllRealmData()

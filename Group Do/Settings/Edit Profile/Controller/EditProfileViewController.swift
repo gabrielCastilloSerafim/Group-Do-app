@@ -179,6 +179,9 @@ extension EditProfileViewController: UIImagePickerControllerDelegate, UINavigati
         //Updates profile picture in local device memory
         editProfileLogic.updateProfilePictureInDeviceMemory(newImage: selectedImage as! UIImage)
         
+        //Send notification to main setting VC to reload profile picture
+        NotificationCenter.default.post(name: Notification.Name("ReloadProfilePicture"), object: nil)
+        
         let realm = try! Realm()
         let imageName = realm.objects(RealmUser.self)[0].profilePictureFileName!
         //Uploads newImageToFirebaseStorage

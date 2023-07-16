@@ -8,6 +8,7 @@
 import UIKit
 import FirebaseAuth
 import RealmSwift
+import FirebaseDatabase
 
 struct SettingsLogic {
     
@@ -46,6 +47,14 @@ struct SettingsLogic {
             print(error.localizedDescription)
             return
         }
+    }
+    
+    ///Sets the notification token for logged out user to an empty string
+    func setNotificationTokenToBlankInFirebase(userEmail: String) {
+        
+        let database = Database.database().reference()
+        
+        database.child("\(userEmail.formattedEmail)/notificationToken").setValue("")
     }
     
 }

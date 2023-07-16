@@ -164,6 +164,16 @@ final class GroupsItemsViewController: UIViewController {
             let destinationVC = segue.destination as! AddGroupItemViewController
             destinationVC.selectedGroup = selectedGroup
         }
+        
+        if segue.identifier == "DetailedItemView" {
+            let destinationVC = segue.destination as! DetailedItemViewController
+            
+            let selectedRow = tableView.indexPathForSelectedRow?.item
+            
+            let itemObject = itemsArray?[selectedRow!]
+            
+            destinationVC.itemObject = itemObject
+        }
     }
 
     
@@ -251,6 +261,10 @@ extension GroupsItemsViewController: UITableViewDelegate, UITableViewDataSource 
         return configuration
     }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        performSegue(withIdentifier: "DetailedItemView", sender: self)
+    }
     
 }
 

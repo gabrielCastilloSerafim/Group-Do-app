@@ -117,6 +117,16 @@ final class PersonalItemsViewController: UIViewController {
             let destinationVC = segue.destination as! NewItemViewController
             destinationVC.currentCategory = self.selectedCategory
         }
+        
+        if segue.identifier == "PersonalItemDetailedView" {
+            let destinationVC = segue.destination as! DetailedPersonalItemViewController
+            
+            let selectedRow = tableView.indexPathForSelectedRow?.item
+            
+            let itemObject = itemsArray?[selectedRow!]
+            
+            destinationVC.itemObject = itemObject
+        }
     }
     
     
@@ -200,6 +210,10 @@ extension PersonalItemsViewController: UITableViewDelegate, UITableViewDataSourc
         return configuration
     }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        performSegue(withIdentifier: "PersonalItemDetailedView", sender: self)
+    }
     
 }
 

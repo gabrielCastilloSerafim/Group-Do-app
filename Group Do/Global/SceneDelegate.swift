@@ -53,7 +53,5 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         //Sets the notification badge to zero
         UIApplication.shared.applicationIconBadgeNumber = 0
     }
-
-
 }
 

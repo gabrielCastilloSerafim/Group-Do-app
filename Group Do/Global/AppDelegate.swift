@@ -17,14 +17,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         // Override point for customisation after application launch.
         
         let pushManager = PushNotificationManager()
-        
         pushManager.registerForPushNotifications()
-        
         application.registerForRemoteNotifications()
-        
         FirebaseApp.configure()
-        
         Database.database().isPersistenceEnabled = true
+        
+        pingToGoServer()
         
         return true
     }
@@ -43,5 +41,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         // Use this method to release any resources that were specific to the discarded scenes, as they will not return.
     }
     
-
+    func pingToGoServer() {
+        
+        let baseURL = "https://adwizardapi-production.up.railway.app/ping"
+        
+        guard let URL = URL(string: baseURL) else { return }
+        
+        Task {
+            var request = URLRequest(url: URL)
+            request.httpMethod = "GET"
+            
+            _ = try await URLSession.shared.data(for: request)
+        }
+    }
 }

@@ -76,6 +76,7 @@ final class RegisterViewController: UIViewController {
         
         //Create user in Firebase Auth
         Auth.auth().createUser(withEmail: email, password: password) { [weak self] _, error in
+            
             guard error == nil else {
                 //Handle Firebase Auth Errors
                 self?.handleFireAuthError(error: error!)
@@ -83,6 +84,9 @@ final class RegisterViewController: UIViewController {
                 self?.spinner.dismiss(animated: true)
                 return
             }
+            
+            // Send AdWizard event
+            AdWizardManager.shared.registerEvent(event: .registration)
             
             //Create user object
             let userObject = self?.registerLogic.getUserObject(email: email, firstName: firstName, lastName: lastName)

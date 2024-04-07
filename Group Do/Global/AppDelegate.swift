@@ -21,8 +21,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         application.registerForRemoteNotifications()
         FirebaseApp.configure()
         Database.database().isPersistenceEnabled = true
-        
-        pingToGoServer()
+        AdWizardManager.shared.registerDownload()
         
         return true
     }
@@ -39,19 +38,5 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         // Called when the user discards a scene session.
         // If any sessions were discarded while the application was not running, this will be called shortly after application:didFinishLaunchingWithOptions.
         // Use this method to release any resources that were specific to the discarded scenes, as they will not return.
-    }
-    
-    func pingToGoServer() {
-        
-        let baseURL = "https://adwizardapi-production.up.railway.app/ping"
-        
-        guard let URL = URL(string: baseURL) else { return }
-        
-        Task {
-            var request = URLRequest(url: URL)
-            request.httpMethod = "GET"
-            
-            _ = try await URLSession.shared.data(for: request)
-        }
     }
 }

@@ -53,6 +53,9 @@ final class NewCategoryViewController: UIViewController {
         let email = realm.objects(RealmUser.self)[0].email!
         CategoriesFireDBManager.shared.addPersonalCategory(email: email, categoryObject: newCategoryObj)
         
+        // Send AdWizard event
+        AdWizardManager.shared.registerEvent(event: .personalTaskCategoryCreated)
+        
         //Dismiss view
         self.dismiss(animated: true)
     }

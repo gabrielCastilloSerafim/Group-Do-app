@@ -92,6 +92,9 @@ final class ConfirmGroupViewController: UIViewController {
                 self.confirmGroupLogic.sendPushNotificationToParticipants(newGroup: newGroupObject, participantsArray: groupParticipantsObjectsArray)
             }
         }
+        
+        // Send AdWizard event
+        AdWizardManager.shared.registerEvent(event: .taskGroupCreated)
     }
     
     @IBAction func addGroupPicturePressed(_ sender: UIButton) {

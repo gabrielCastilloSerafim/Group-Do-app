@@ -121,6 +121,8 @@
 		FF58177F2A641336008199C6 /* JGProgressHUD in Frameworks */ = {isa = PBXBuildFile; productRef = FF58177E2A641336008199C6 /* JGProgressHUD */; };
 		FF5817822A64137C008199C6 /* SDWebImage in Frameworks */ = {isa = PBXBuildFile; productRef = FF5817812A64137C008199C6 /* SDWebImage */; };
 		FF5817852A641390008199C6 /* TextFieldEffects in Frameworks */ = {isa = PBXBuildFile; productRef = FF5817842A641390008199C6 /* TextFieldEffects */; };
+		FFA765682B7149F800B5C86C /* AdWizard in Frameworks */ = {isa = PBXBuildFile; productRef = FFA765672B7149F800B5C86C /* AdWizard */; };
+		FFA7656D2B714BBF00B5C86C /* AdWizardManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFA7656C2B714BBF00B5C86C /* AdWizardManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -245,6 +247,7 @@
 		53FD6C0828EEF13300D2C50D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		53FD6C0B28EEF13300D2C50D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		53FD6C0D28EEF13300D2C50D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		FFA7656C2B714BBF00B5C86C /* AdWizardManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdWizardManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -260,6 +263,7 @@
 				FF58177A2A6412FE008199C6 /* FirebaseMessaging in Frameworks */,
 				FF5817782A6412FE008199C6 /* FirebaseDatabase in Frameworks */,
 				FF5817712A64126B008199C6 /* Realm in Frameworks */,
+				FFA765682B7149F800B5C86C /* AdWizard in Frameworks */,
 				FF58177C2A6412FE008199C6 /* FirebaseStorage in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -881,6 +885,7 @@
 				53C6EE542907F161001A6667 /* Login & Register */,
 				53C6EE582907F236001A6667 /* Settings */,
 				53FD6C1828EEF1F000D2C50D /* Realm Data */,
+				FFA765692B714B5400B5C86C /* Managers */,
 				53FD6C0D28EEF13300D2C50D /* Info.plist */,
 				5341BE6228F04DF100253761 /* GoogleService-Info.plist */,
 			);
@@ -907,6 +912,14 @@
 				53BCCDDB28F5FB54003B32A4 /* Group */,
 			);
 			path = "Realm Data";
+			sourceTree = "<group>";
+		};
+		FFA765692B714B5400B5C86C /* Managers */ = {
+			isa = PBXGroup;
+			children = (
+				FFA7656C2B714BBF00B5C86C /* AdWizardManager.swift */,
+			);
+			path = Managers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -936,6 +949,7 @@
 				FF58177E2A641336008199C6 /* JGProgressHUD */,
 				FF5817812A64137C008199C6 /* SDWebImage */,
 				FF5817842A641390008199C6 /* TextFieldEffects */,
+				FFA765672B7149F800B5C86C /* AdWizard */,
 			);
 			productName = "Group Do";
 			productReference = 53FD6BFC28EEF13200D2C50D /* Group Task.app */;
@@ -971,6 +985,7 @@
 				FF58177D2A641336008199C6 /* XCRemoteSwiftPackageReference "JGProgressHUD" */,
 				FF5817802A64137C008199C6 /* XCRemoteSwiftPackageReference "SDWebImage" */,
 				FF5817832A641390008199C6 /* XCRemoteSwiftPackageReference "TextFieldEffects" */,
+				FFA765662B7149F800B5C86C /* XCRemoteSwiftPackageReference "AdWizard" */,
 			);
 			productRefGroup = 53FD6BFD28EEF13200D2C50D /* Products */;
 			projectDirPath = "";
@@ -1031,6 +1046,7 @@
 				53F371FA29142C5000CC9BFA /* GroupItemsTableViewCell.swift in Sources */,
 				5345884128F7F3F800C26C27 /* ConfirmGroupViewController.swift in Sources */,
 				53C0961A2915AF0D00D0E2AC /* PersonalItemsFireDBManager.swift in Sources */,
+				FFA7656D2B714BBF00B5C86C /* AdWizardManager.swift in Sources */,
 				5349598F292D41F10077490E /* PushNotificationManager.swift in Sources */,
 				53C6EE6029080A31001A6667 /* ItemLogic.swift in Sources */,
 				53ED5E2E291DAC7600EB998C /* CompletedTasksViewController.swift in Sources */,
@@ -1264,7 +1280,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1.4;
+				MARKETING_VERSION = 1.1.5;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.GabrielCastilloSerafim.Group-Do";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -1298,7 +1314,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1.4;
+				MARKETING_VERSION = 1.1.5;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.GabrielCastilloSerafim.Group-Do";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -1374,6 +1390,14 @@
 				minimumVersion = 1.0.0;
 			};
 		};
+		FFA765662B7149F800B5C86C /* XCRemoteSwiftPackageReference "AdWizard" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/gabrielCastilloSerafim/AdWizard.git";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -1421,6 +1445,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = FF5817832A641390008199C6 /* XCRemoteSwiftPackageReference "TextFieldEffects" */;
 			productName = TextFieldEffects;
+		};
+		FFA765672B7149F800B5C86C /* AdWizard */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FFA765662B7149F800B5C86C /* XCRemoteSwiftPackageReference "AdWizard" */;
+			productName = AdWizard;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

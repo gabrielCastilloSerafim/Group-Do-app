@@ -19,7 +19,7 @@ final class AdWizardManager {
     static let shared = AdWizardManager()
     private init() {}
     
-    private let adWizard = AdWizard()
+    private let adWizard = AdWizard(apiKey: "675c7c37-e8b2-4cbb-8402-984195a4450c")
     
     func registerDownload() {
         adWizard.registerDowload()

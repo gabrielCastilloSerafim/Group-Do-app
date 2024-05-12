@@ -204,7 +204,7 @@ extension AddParticipantViewController: UICollectionViewDelegate, UICollectionVi
                     cell.isUserInteractionEnabled = false
                 }
             }
-            spinner.dismiss(animated: true)
+            self?.spinner.dismiss(animated: true)
         }
         return cell
     }

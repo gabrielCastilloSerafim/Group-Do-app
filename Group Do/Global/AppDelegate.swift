@@ -9,6 +9,7 @@ import UIKit
 import FirebaseCore
 import FirebaseDatabase
 import FirebaseMessaging
+import AdWizard
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
@@ -21,7 +22,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         application.registerForRemoteNotifications()
         FirebaseApp.configure()
         Database.database().isPersistenceEnabled = true
-        AdWizardManager.shared.registerDownload()
+        
+        guard let adWizardApiKey = Bundle.main.object(forInfoDictionaryKey: "ADWIZARD_API_KEY") as? String else {
+            fatalError("ADWIZARD_API_KEY not found")
+        }
+        AdWizard.shared.configure(apiKey: adWizardApiKey)
         
         return true
     }

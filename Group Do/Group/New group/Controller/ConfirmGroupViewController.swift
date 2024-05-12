@@ -7,6 +7,7 @@
 
 import UIKit
 import RealmSwift
+import AdWizard
 
 final class ConfirmGroupViewController: UIViewController {
     
@@ -94,7 +95,7 @@ final class ConfirmGroupViewController: UIViewController {
         }
         
         // Send AdWizard event
-        AdWizardManager.shared.registerEvent(event: .taskGroupCreated)
+        AdWizard.shared.sendEvent(eventName: "taskGroupCreated")
     }
     
     @IBAction func addGroupPicturePressed(_ sender: UIButton) {

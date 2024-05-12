@@ -1,0 +1,10 @@
+//
+//  Config.xcconfig
+//  Group Do
+//
+//  Created by Gabriel Castillo Serafim on 12/5/24.
+//
+
+// Configuration settings file format documentation can be found at:
+// https://help.apple.com/xcode/#/dev745c5c974
+ADWIZARD_API_KEY = ddecc921-5e0f-4a0a-bfd1-1699b4861870

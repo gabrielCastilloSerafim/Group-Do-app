@@ -7,6 +7,7 @@
 
 import UIKit
 import RealmSwift
+import AdWizard
 
 final class NewCategoryViewController: UIViewController {
 
@@ -54,7 +55,7 @@ final class NewCategoryViewController: UIViewController {
         CategoriesFireDBManager.shared.addPersonalCategory(email: email, categoryObject: newCategoryObj)
         
         // Send AdWizard event
-        AdWizardManager.shared.registerEvent(event: .personalTaskCategoryCreated)
+        AdWizard.shared.sendEvent(eventName: "personalTaskCategoryCreated")
         
         //Dismiss view
         self.dismiss(animated: true)

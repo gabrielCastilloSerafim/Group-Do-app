@@ -9,6 +9,7 @@ import UIKit
 import FirebaseAuth
 import RealmSwift
 import JGProgressHUD
+import AdWizard
 
 final class RegisterViewController: UIViewController {
     
@@ -86,7 +87,7 @@ final class RegisterViewController: UIViewController {
             }
             
             // Send AdWizard event
-            AdWizardManager.shared.registerEvent(event: .registration)
+            AdWizard.shared.sendEvent(eventName: "registration")
             
             //Create user object
             let userObject = self?.registerLogic.getUserObject(email: email, firstName: firstName, lastName: lastName)

@@ -66,10 +66,6 @@ final class FireStoreManager {
     public func getUpdateImageURL(imageName: String, completion: @escaping (URL) -> Void) {
         
         guard let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { return }
-        
-        let fileName = imageName
-        let fileURL = documentsDirectory.appendingPathComponent(fileName)
-        
         let reference = storage.child("images/\(imageName)")
         
         reference.downloadURL { result in
